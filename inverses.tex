@@ -117,7 +117,7 @@ mathescape=true}
   \item For \(n>0\) and each \(n\)-cell \(f: x \to y\), there are \(n+1\)-cells, known as unitors, \(\lambda_f: \id_x \circ f \to f\) and \(\rho_f: f \circ \id_y \to f\).
   \item Given \(f,g,h,j\), \(n>1\)-cells composition defined, we have an associator \(a_{f,g,h,j} : (f \circ g) \circ (h \circ j) \to (f \circ (g \circ h) \circ j)\).
   \item For compatible morphisms \(f,g,h,j\), we have an interchanger \(i_{f,g,h,j}(f \circ_n g) \circ (h \circ_n j) \to (f \circ h) \circ_n (g \circ j)\).
-  \item For suitable \(f,g\) and \(n > 1\), there is a cell \(\id_f \circ_n \id_g \to \id_{f \circ_n g}\)
+  \item For suitable \(f,g\) and \(n > 1\), there is a cell \(\id_f \circ_{n+1} \id_g \to \id_{f \circ_n g}\)
   \end{itemize}
   These are all \emph{bi-invertible}.
 \end{definition}
@@ -188,7 +188,7 @@ We prove some helpful facts about \emph{bi-invertible} morphisms in higher categ
       \item \(\linv {(\alpha \circ_n \beta)} = \linv \alpha \circ_n \linv \beta\)
       \item Define \((\alpha \circ_n \beta)R\) as the following composition:
         \begin{equation*}
-          (\alpha \circ_n \beta) \circ (\rinv \alpha \circ_n \rinv \beta) \overset {i_{\alpha,\beta,\rinv \alpha, \rinv \beta}} \to (\alpha \circ \rinv \alpha) \circ_n (\beta \circ \rinv \beta) \overset {\alpha R \circ_{n+1} \beta R} \to \id_g \circ_n \id_j \to \id_{g \circ_n j}
+          (\alpha \circ_n \beta) \circ (\rinv \alpha \circ_n \rinv \beta) \overset {i_{\alpha,\beta,\rinv \alpha, \rinv \beta}} \to (\alpha \circ \rinv \alpha) \circ_n (\beta \circ \rinv \beta) \overset {\alpha R \circ_{n+1} \beta R} \to \id_g \circ_n \id_j \to \id_{g \circ_{n-1} j}
         \end{equation*}
       \item Similarly, define \((\alpha \circ_n \beta)L\) as the following composition:
         \begin{equation*}
