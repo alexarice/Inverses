@@ -41,8 +41,8 @@ mathescape=true}
 
 \DeclareMathOperator{\id}{id}
 
-\newcommand{\linv}[1]{{}^{-1}\!#1}
-\newcommand{\rinv}[1]{#1^{-1}}
+\newcommand{\linv}[1]{{}^\star\!#1}
+\newcommand{\rinv}[1]{#1^\star}
 
 
 \begin{document}
@@ -231,10 +231,10 @@ We prove some helpful facts about \emph{bi-invertible} morphisms in higher categ
 \begin{definition}
   We define the collection of \emph{half-adjoint invertible} morphisms coinductively as follows: For \(n > 0\), an \(n\)-cell \(f: x \to y\) is \emph{half-adjoint invertible} if:
   \begin{itemize}
-  \item There exists an \(n\)-cell \(g : y \to x\).
-  \item There exists an \(n+1\)-cell \(\alpha: f \circ g \to \id_y\).
-  \item There exists an \(n+1\)-cell \(\beta: \id_x \to g \circ f\).
-  \item There exists an \(n+2\)-cell \(\gamma: (\lambda_g \circ (\beta \circ_1 \id_g) \circ (\id_g \circ_1 \alpha) \circ \rho_g) \to \id_g\).
+  \item There exists an \(n\)-cell \(f' : y \to x\).
+  \item There exists an \(n+1\)-cell \(\alpha: f \circ f' \to \id_y\).
+  \item There exists an \(n+1\)-cell \(\beta: \id_x \to f' \circ f\).
+  \item There exists an \(n+2\)-cell \(\gamma: (\lambda_{f'} \circ (\beta \circ_1 \id_{f'}) \circ (\id_{f'} \circ_1 \alpha) \circ \rho_{f'}) \to \id_{f'}\).
   \item \(\alpha\) is \emph{half-adjoint invertible}.
   \item \(\beta\) is \emph{half-adjoint invertible}.
   \item \(\gamma\) is \emph{half-adjoint invertible}.
@@ -243,18 +243,18 @@ We prove some helpful facts about \emph{bi-invertible} morphisms in higher categ
   \(\gamma\) can be graphically represented by the following diagram:
   \begin{center}
     \begin{tikzpicture}
-      \node (Bottom) {\(g\)};
+      \node (Bottom) {\({f'}\)};
       \node[on grid, above left=1cm and 2.25cm of Bottom, draw] (Cup){\(\beta\)};
       \node[on grid, above right=2cm and 1.5cm of Cup,draw] (Cap){\(\alpha\)};
-      \node[on grid, above left=1cm and 2.25cm of Cap] (Top) {\(g\)};
+      \node[on grid, above left=1cm and 2.25cm of Cap] (Top) {\({f'}\)};
       \draw (Bottom) to++(0,2) to[out=90,in=0] (Cap);
       \draw (Cup) to[out=0,in=-90] ++(0.75,1) to[out=90,in=180] (Cap);
       \draw (Cup) to[out=180,in=-90] ++(-0.75,1) to (Top);
 
       \node[on grid, above right=2cm and 1cm of Bottom, font=\fontsize{20}{24}\selectfont] (Eq) {\(\Rightarrow\)};
       \node[above=0cm of Eq,font=\fontsize{15}{19}\selectfont] (Gamma) {\(\gamma\)};
-      \node[on grid, right=2cm of Bottom] (L1) {\(g\)};
-      \node[on grid, above=4cm of L1] (L2) {\(g\)};
+      \node[on grid, right=2cm of Bottom] (L1) {\({f'}\)};
+      \node[on grid, above=4cm of L1] (L2) {\({f'}\)};
       \draw (L1) to (L2);
     \end{tikzpicture}
   \end{center}
@@ -266,8 +266,8 @@ We prove some helpful facts about \emph{bi-invertible} morphisms in higher categ
 \begin{proof}
   Suppose \(f\) is \emph{half-adjoint invertible}. Then let:
   \begin{itemize}
-  \item \(\rinv f = g\)
-  \item \(\linv f = g\)
+  \item \(\rinv f = {f'}\)
+  \item \(\linv f = {f'}\)
   \item \(fR = \alpha\)
   \item \(fL = \rinv \beta\) (using that \(\beta\) is \emph{half-adjoint invertible} and hence \emph{bi-invertible})
   \end{itemize}
@@ -280,12 +280,12 @@ We prove some helpful facts about \emph{bi-invertible} morphisms in higher categ
 \begin{proof}
   Let \(f\) be \emph{bi-invertible}. Then let:
   \begin{itemize}
-  \item \(g = \rinv f\)
+  \item \({f'} = \rinv f\)
   \item \(\alpha = fR\)
   \item \(\beta\) is given by the following diagram:
     \begin{center}
       \begin{tikzpicture}
-        \node (Finv) {\(g\)};
+        \node (Finv) {\({f'}\)};
         \node [on grid, right=1cm of Finv] (F) {\(f\)};
         \node [on grid, below left=2cm and 0.75cm of Finv, draw] (FRInv) {\(\rinv {fR}\)};
         \node [on grid, above left=1.5cm and 1.5cm of FRInv, draw] (FL) {\(fL\)};
@@ -299,9 +299,9 @@ We prove some helpful facts about \emph{bi-invertible} morphisms in higher categ
   \item \(\gamma\) is given by the following diagram:
     \begin{center}
       \begin{tikzpicture}
-        \node (G) {\(g\)};
+        \node (G) {\({f'}\)};
         \node [on grid, below right=0.25cm and 1.75cm of G, draw] (FR) {\(fR\)};
-        \node [on grid, below right=5cm and 0.75cm of FR] (G') {\(g\)};
+        \node [on grid, below right=5cm and 0.75cm of FR] (G') {\({f'}\)};
         \node [on grid, below left=3cm and 0.75cm of G, draw] (FRInv) {\(\rinv {fR}\)};
         \node [on grid, above left=1.5cm and 1.5cm of FRInv, draw] (FL) {\(fL\)};
         \node [on grid, below right=2.75cm and 1.25cm of FL, draw] (FLInv) {\(\linv {fL}\)};
@@ -314,12 +314,12 @@ We prove some helpful facts about \emph{bi-invertible} morphisms in higher categ
         \node [on grid, below right=2.75cm and 3.75cm of G,font=\fontsize{20}{24}\selectfont] (A1) {\(\Rightarrow\)};
         \node [on grid, above=0.5cm of A1] (A1Text) {isotopy};
 
-        \node [on grid, right=8cm of G] (G1) {\(g\)};
+        \node [on grid, right=8cm of G] (G1) {\({f'}\)};
         \node [on grid, below left=2cm and 0.75cm of G1, draw] (FRInv1) {\(\rinv {fR}\)};
         \node [on grid, below=1cm of FRInv1, draw] (FR1) {\(fR\)};
         \node [on grid, above left=1.5cm and 1.5cm of FRInv1, draw] (FL1) {\(fL\)};
         \node [on grid, below left=1.5cm and 1.5cm of FR1, draw] (FLInv1) {\(\linv {fL}\)};
-        \node [on grid, below right=2cm and 0.75cm of FR1] (G'1) {\(g\)};
+        \node [on grid, below right=2cm and 0.75cm of FR1] (G'1) {\({f'}\)};
         \draw (G1) to ++(0,-1.25cm) to[out=-90,in=0] (FRInv1);
         \draw (FRInv1) to[out=180,in=-90] ++(-0.75cm,0.75cm) to[out=90,in=0] (FL1);
         \draw (FL1) to[out=180,in=90] ++(-0.75cm,-0.75cm) to ++(0,-2.5cm) to[out=-90,in=180] (FLInv1);
@@ -329,8 +329,8 @@ We prove some helpful facts about \emph{bi-invertible} morphisms in higher categ
         \node [on grid, rotate=-90, below left=1.5cm and 1.5cm of G'1,font=\fontsize{20}{24}\selectfont] (A2) {\(\Rightarrow\)};
         \node [on grid, left=1cm of A2] (A2Text) {\(fRR\)};
 
-        \node [on grid, below=8cm of G1] (G2) {\(g\)};
-        \node [on grid, below=3.5cm of G2] (G'2) {\(g\)};
+        \node [on grid, below=8cm of G1] (G2) {\({f'}\)};
+        \node [on grid, below=3.5cm of G2] (G'2) {\({f'}\)};
         \node [on grid, below left=1cm and 2.25cm of G2, draw] (FL2) {\(fL\)};
         \node [on grid, below=1.5cm of FL2, draw] (FLInv2) {\(\linv fL\)};
         \draw (G2) to (G'2);
@@ -340,8 +340,8 @@ We prove some helpful facts about \emph{bi-invertible} morphisms in higher categ
         \node [on grid, below left=0.75cm and 2.5cm of FL2,font=\fontsize{20}{24}\selectfont] (A3) {\(\Leftarrow\)};
         \node [on grid, above=0.5cm of A3] (A3Text) {\(fLL\)};
 
-        \node [on grid, below=8cm of G] (G3) {\(g\)};
-        \node [on grid, below=3.5cm of G3] (G'3) {\(g\)};
+        \node [on grid, below=8cm of G] (G3) {\({f'}\)};
+        \node [on grid, below=3.5cm of G3] (G'3) {\({f'}\)};
         \draw (G3) to (G'3);
       \end{tikzpicture}
     \end{center}
