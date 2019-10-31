@@ -89,10 +89,10 @@ mathescape=true}
   \begin{itemize}
   \item There exists an \(n\)-cell \(\rinv f: y \to x\).
   \item There exists an \(n\)-cell \(\linv f: y \to x\).
-  \item There exists an \((n+1)\)-cell \(fR: f \circ \rinv f \to \id_y\).
-  \item There exists an \((n+1)\)-cell \(fL: \linv f \circ f \to \id_x\).
-  \item \(fR\) is \emph{bi-invertible}.
-  \item \(fL\) is \emph{bi-invertible}.
+  \item There exists an \((n+1)\)-cell \(f_R: f \circ \rinv f \to \id_y\).
+  \item There exists an \((n+1)\)-cell \(f_L: \linv f \circ f \to \id_x\).
+  \item \(f_R\) is \emph{bi-invertible}.
+  \item \(f_L\) is \emph{bi-invertible}.
   \end{itemize}
 \end{definition}
 
@@ -103,10 +103,10 @@ mathescape=true}
     codata BiInvertible (f: x $\to$ y) where
       $\rinv {\mathtt{f}}$: y $\to$ x,
       $\linv {\mathtt{f}}$: y $\to$ x,
-      fR: $\mathtt f \circ \rinv {\mathtt {f}} \to \mathtt{id}_{\mathtt y}$,
-      fL: $\linv {\mathtt {f}} \circ {\mathtt {f}} \to \mathtt{id}_{\mathtt y}$,
-      fRProof: BiInvertible fR,
-      fLProof: BiInvertible fL
+      f_R: $\mathtt f \circ \rinv {\mathtt {f}} \to \mathtt{id}_{\mathtt y}$,
+      f_L: $\linv {\mathtt {f}} \circ {\mathtt {f}} \to \mathtt{id}_{\mathtt y}$,
+      f_RProof: BiInvertible f_R,
+      f_LProof: BiInvertible f_L
   \end{lstlisting}
 \end{remark}
 
@@ -130,7 +130,7 @@ We prove some helpful facts about \emph{bi-invertible} morphisms in higher categ
 \end{lemma}
 
 \begin{proof}
-  Let \(x\) be any cell. Take \(\rinv {\id_x} = \linv {\id_x} = \id_x\) and \((\id_x)R = (\id_x)L = \lambda_{id_x}\). By assumption, \(\lambda_{id_x}\) is \emph{bi-invertible}. Hence \(\id_x\) is \emph{bi-invertible}.
+  Let \(x\) be any cell. Take \(\rinv {\id_x} = \linv {\id_x} = \id_x\) and \((\id_x)_R = (\id_x)_L = \lambda_{id_x}\). By assumption, \(\lambda_{id_x}\) is \emph{bi-invertible}. Hence \(\id_x\) is \emph{bi-invertible}.
 \end{proof}
 
 \begin{theorem}[Composition of \emph{Bi-invertible} Morphisms]
@@ -145,12 +145,12 @@ We prove some helpful facts about \emph{bi-invertible} morphisms in higher categ
     \begin{itemize}
       \item \(\rinv {(g \circ f)} = \rinv f \circ \rinv g\)
       \item \(\linv {(g \circ f)} = \linv f \circ \linv g\)
-      \item \((g \circ f)R : g \circ f \circ \rinv f \circ \rinv g\) is the morphism given by the diagram
+      \item \((g \circ f)_R : g \circ f \circ \rinv f \circ \rinv g\) is the morphism given by the diagram
         \begin{center}
           \begin{tikzpicture}
-            \node[draw] (GR) {\(gR\)};
+            \node[draw] (GR) {\(g_R\)};
             \node[on grid, below=1 of GR, draw] (P) {\(\rho_g\)};
-            \node[on grid, below=1 of P, draw] (FR) {\(fR\)};
+            \node[on grid, below=1 of P, draw] (FR) {\(f_R\)};
             \node[on grid, below=1 of FR, draw] (A) {\(a_{g,f,\rinv f,\rinv g}\)};
             \node[on grid, below left=2cm and 2.25cm of FR] (Base1) {\(g\)};
             \node[on grid, right=0.75cm of Base1] (Base2) {\(f\)};
@@ -162,12 +162,12 @@ We prove some helpful facts about \emph{bi-invertible} morphisms in higher categ
             \draw (Base3) to ++(0,1.25cm) to [out=90,in=0] (FR);
           \end{tikzpicture}
         \end{center}
-      \item \((g \circ f)L\) is the morphism given by the diagram
+      \item \((g \circ f)_L\) is the morphism given by the diagram
         \begin{center}
           \begin{tikzpicture}
-            \node[draw] (GL) {\(gL\)};
+            \node[draw] (GL) {\(g_L\)};
             \node[on grid, below=1 of GL, draw] (P) {\(\rho_{\linv g}\)};
-            \node[on grid, below=1 of P, draw] (FL) {\(fL\)};
+            \node[on grid, below=1 of P, draw] (FL) {\(f_L\)};
             \node[on grid, below=1 of FL, draw] {\(a_{\linv g,\linv f, f,g}\)};
             \node[on grid, below left=2cm and 2.25cm of FL] (Base1) {\(\linv g\)};
             \node[on grid, right=0.75cm of Base1] (Base2) {\(\linv f\)};
@@ -181,21 +181,21 @@ We prove some helpful facts about \emph{bi-invertible} morphisms in higher categ
         \end{center}
       \end{itemize}
 
-      Using both the coinductive hypothesis that \(fL\), \(gL\), \(fR\),\(gR\) are \emph{bi-invertible} and further using the other coinductive hypothesis that \emph{bi-invertibility} is preserved by both \(\circ_0\) and \(\circ_1\) for \((k'+1)\)-cells, we deduce that both \((g \circ f)R\) and \((g \circ f)L\) are \emph{bi-invertible} and so \(g \circ f\) is \emph{bi-invertible}.
+      Using both the coinductive hypothesis that \(f_L\), \(g_L\), \(f_R\),\(g_R\) are \emph{bi-invertible} and further using the other coinductive hypothesis that \emph{bi-invertibility} is preserved by both \(\circ_0\) and \(\circ_1\) for \((k'+1)\)-cells, we deduce that both \((g \circ f)_R\) and \((g \circ f)_L\) are \emph{bi-invertible} and so \(g \circ f\) is \emph{bi-invertible}.
     \item \(\alpha \circ_n \beta\) where \(n > 0\), \(\alpha: f \to g\), and \(\beta: h \to j\): Let:
       \begin{itemize}
       \item \(\rinv {(\alpha \circ_n \beta)} = \rinv \alpha \circ_n \rinv \beta\)
       \item \(\linv {(\alpha \circ_n \beta)} = \linv \alpha \circ_n \linv \beta\)
-      \item Define \((\alpha \circ_n \beta)R\) as the following composition:
+      \item Define \((\alpha \circ_n \beta)_R\) as the following composition:
         \begin{equation*}
-          (\alpha \circ_n \beta) \circ (\rinv \alpha \circ_n \rinv \beta) \overset {i_{\alpha,\beta,\rinv \alpha, \rinv \beta}} \to (\alpha \circ \rinv \alpha) \circ_n (\beta \circ \rinv \beta) \overset {\alpha R \circ_{n+1} \beta R} \to \id_g \circ_n \id_j \to \id_{g \circ_{n-1} j}
+          (\alpha \circ_n \beta) \circ (\rinv \alpha \circ_n \rinv \beta) \overset {i_{\alpha,\beta,\rinv \alpha, \rinv \beta}} \to (\alpha \circ \rinv \alpha) \circ_n (\beta \circ \rinv \beta) \overset {\alpha _R \circ_{n+1} \beta _R} \to \id_g \circ_n \id_j \to \id_{g \circ_{n-1} j}
         \end{equation*}
-      \item Similarly, define \((\alpha \circ_n \beta)L\) as the following composition:
+      \item Similarly, define \((\alpha \circ_n \beta)_L\) as the following composition:
         \begin{equation*}
-          (\linv \alpha \circ_n \linv \beta) \circ (\alpha \circ_n \beta) \overset {i_{\linv \alpha, \linv \beta, \alpha, \beta}} \to (\linv \alpha \circ \alpha) \circ_n (\linv \beta \circ \beta) \overset {\alpha L \circ_{n+1} \beta L} \to \id_f \circ_n \id_h \to \id_{f \circ_n h}
+          (\linv \alpha \circ_n \linv \beta) \circ (\alpha \circ_n \beta) \overset {i_{\linv \alpha, \linv \beta, \alpha, \beta}} \to (\linv \alpha \circ \alpha) \circ_n (\linv \beta \circ \beta) \overset {\alpha _L \circ_{n+1} \beta _L} \to \id_f \circ_n \id_h \to \id_{f \circ_n h}
         \end{equation*}
     \end{itemize}
-    Now I claim that both \((\alpha \circ_n \beta)R\) and \((\alpha \circ_n \beta)L\) are both \emph{bi-invertible}. This is because these are compositions of cells that are \emph{bi-invertible} and these cells are of a higher order than \(k'\) and so we can apply the coinductive hypothesis. Hence \(\alpha \circ_n \beta\) is \emph{bi-invertible}.
+    Now I claim that both \((\alpha \circ_n \beta)_R\) and \((\alpha \circ_n \beta)_L\) are both \emph{bi-invertible}. This is because these are compositions of cells that are \emph{bi-invertible} and these cells are of a higher order than \(k'\) and so we can apply the coinductive hypothesis. Hence \(\alpha \circ_n \beta\) is \emph{bi-invertible}.
   \end{itemize}
 \end{proof}
 A comment should be made on why this is a valid coinductive proof. Whereas inductive objects are specified by how one constructs them, coinductive objects are specified by how they are destructed. We now note that the outer coinductive hypothesis was only used for defining the coinductive part of being \emph{bi-invertible}. This means that, all that can be done with a proof that a composite is \emph{bi-invertible} is extract parts of the proof. When extracting a part of the proof we can only ``look'' finitely far into the data structure. With the observation above this means that any use of this proof will only need to use the coinductive hypothesis a finite number of times (nesting a finite amount) before using a part of the proof that does not rely on the coinductive hypothesis.
@@ -209,23 +209,23 @@ A comment should be made on why this is a valid coinductive proof. Whereas induc
   \begin{itemize}
   \item \(\rinv {(\rinv f)} = f\)
   \item \(\linv {(\rinv f)} = f\)
-  \item \((\rinv f)R: \rinv f \circ f \to \id\) is given by:
+  \item \((\rinv f)_R: \rinv f \circ f \to \id\) is given by:
     \begin{center}
       \begin{tikzpicture}
         \node (Finv) {\(\rinv f\)};
         \node [on grid, right=1cm of Finv] (F) {\(f\)};
-        \node [on grid, above left=2cm and 0.75cm of Finv, draw] (FR) {\(fR\)};
-        \node [on grid, below left=1.5cm and 1.5cm of FR, draw] (FLInv) {\(\rinv {fL}\)};
-        \node [on grid, above right=2.75cm and 1.25cm of FLInv, draw] (FL) {\(fL\)};
+        \node [on grid, above left=2cm and 0.75cm of Finv, draw] (FR) {\(f_R\)};
+        \node [on grid, below left=1.5cm and 1.5cm of FR, draw] (FLInv) {\(\rinv {f_L}\)};
+        \node [on grid, above right=2.75cm and 1.25cm of FLInv, draw] (FL) {\(f_L\)};
         \draw (Finv) to ++(0,1.25cm) to[out=90,in=0] (FR);
         \draw (FR) to[out=180,in=90] ++(-0.75cm,-0.75cm) to[out=-90,in=0] (FLInv);
         \draw (FLInv) to[out=180,in=-90] ++(-0.75cm,0.75cm) to[out=90,in=180] (FL);
         \draw (F) to ++(0,1.25cm) to[out=90,in=0] (FL);
       \end{tikzpicture}
     \end{center}
-  \item \((\rinv f)L: f \circ \rinv f \to \id\) is given by \(fR\)
+  \item \((\rinv f)_L: f \circ \rinv f \to \id\) is given by \(f_R\)
   \end{itemize}
-  We get that \((\rinv f)R\) is \emph{bi-invertible} as it is a composite of \emph{bi-invertible} morphisms (where \(\rinv {fL}\) is \emph{bi-invertible} by coinductive hypothesis) and \((\rinv f)L\) is trivially \emph{bi-invertible}.
+  We get that \((\rinv f)_R\) is \emph{bi-invertible} as it is a composite of \emph{bi-invertible} morphisms (where \(\rinv {f_L}\) is \emph{bi-invertible} by coinductive hypothesis) and \((\rinv f)_L\) is trivially \emph{bi-invertible}.
 \end{proof}
 
 \begin{definition}
@@ -268,10 +268,10 @@ A comment should be made on why this is a valid coinductive proof. Whereas induc
   \begin{itemize}
   \item \(\rinv f = {f'}\)
   \item \(\linv f = {f'}\)
-  \item \(fR = \alpha\)
-  \item \(fL = \rinv \beta\) (using that \(\beta\) is \emph{half-adjoint invertible} and hence \emph{bi-invertible})
+  \item \(f_R = \alpha\)
+  \item \(f_L = \rinv \beta\) (using that \(\beta\) is \emph{half-adjoint invertible} and hence \emph{bi-invertible})
   \end{itemize}
-  Then by coinduction \(fR = \alpha\) is \emph{bi-invertible} and \(\beta\) is \emph{bi-invertible} and so, by \cref{lem:inverses}, \(\rinv \beta\) is also \emph{bi-invertible} which means \(f\) is too.
+  Then by coinduction \(f_R = \alpha\) is \emph{bi-invertible} and \(\beta\) is \emph{bi-invertible} and so, by \cref{lem:inverses}, \(\rinv \beta\) is also \emph{bi-invertible} which means \(f\) is too.
 \end{proof}
 
 \begin{theorem}
@@ -281,15 +281,15 @@ A comment should be made on why this is a valid coinductive proof. Whereas induc
   Let \(f\) be \emph{bi-invertible}. Then let:
   \begin{itemize}
   \item \({f'} = \rinv f\)
-  \item \(\alpha = fR\)
+  \item \(\alpha = f_R\)
   \item \(\beta\) is given by the following diagram:
     \begin{center}
       \begin{tikzpicture}
         \node (Finv) {\({f'}\)};
         \node [on grid, right=1cm of Finv] (F) {\(f\)};
-        \node [on grid, below left=2cm and 0.75cm of Finv, draw] (FRInv) {\(\rinv {fR}\)};
-        \node [on grid, above left=1.5cm and 1.5cm of FRInv, draw] (FL) {\(fL\)};
-        \node [on grid, below right=2.75cm and 1.25cm of FL, draw] (FLInv) {\(\linv {fL}\)};
+        \node [on grid, below left=2cm and 0.75cm of Finv, draw] (FRInv) {\(\rinv {f_R}\)};
+        \node [on grid, above left=1.5cm and 1.5cm of FRInv, draw] (FL) {\(f_L\)};
+        \node [on grid, below right=2.75cm and 1.25cm of FL, draw] (FLInv) {\(\linv {f_L}\)};
         \draw (Finv) to ++(0,-1.25cm) to[out=-90,in=0] (FRInv);
         \draw (FRInv) to[out=180,in=-90] ++(-0.75cm,0.75cm) to[out=90,in=0] (FL);
         \draw (FL) to[out=180,in=90] ++(-0.75cm,-0.75cm) to[out=-90,in=180] (FLInv);
@@ -300,11 +300,11 @@ A comment should be made on why this is a valid coinductive proof. Whereas induc
     \begin{center}
       \begin{tikzpicture}
         \node (G) {\({f'}\)};
-        \node [on grid, below right=0.25cm and 1.75cm of G, draw] (FR) {\(fR\)};
+        \node [on grid, below right=0.25cm and 1.75cm of G, draw] (FR) {\(f_R\)};
         \node [on grid, below right=5cm and 0.75cm of FR] (G') {\({f'}\)};
-        \node [on grid, below left=3cm and 0.75cm of G, draw] (FRInv) {\(\rinv {fR}\)};
-        \node [on grid, above left=1.5cm and 1.5cm of FRInv, draw] (FL) {\(fL\)};
-        \node [on grid, below right=2.75cm and 1.25cm of FL, draw] (FLInv) {\(\linv {fL}\)};
+        \node [on grid, below left=3cm and 0.75cm of G, draw] (FRInv) {\(\rinv {(f_R)}\)};
+        \node [on grid, above left=1.5cm and 1.5cm of FRInv, draw] (FL) {\(f_L\)};
+        \node [on grid, below right=2.75cm and 1.25cm of FL, draw] (FLInv) {\(\linv {(f_L)}\)};
         \draw (G) to ++(0,-2.25cm) to[out=-90,in=0] (FRInv);
         \draw (FRInv) to[out=180,in=-90] ++(-0.75cm,0.75cm) to[out=90,in=0] (FL);
         \draw (FL) to[out=180,in=90] ++(-0.75cm,-0.75cm) to[out=-90,in=180] (FLInv);
@@ -315,10 +315,10 @@ A comment should be made on why this is a valid coinductive proof. Whereas induc
         \node [on grid, above=0.5cm of A1] (A1Text) {isotopy};
 
         \node [on grid, right=8cm of G] (G1) {\({f'}\)};
-        \node [on grid, below left=2cm and 0.75cm of G1, draw] (FRInv1) {\(\rinv {fR}\)};
-        \node [on grid, below=1cm of FRInv1, draw] (FR1) {\(fR\)};
-        \node [on grid, above left=1.5cm and 1.5cm of FRInv1, draw] (FL1) {\(fL\)};
-        \node [on grid, below left=1.5cm and 1.5cm of FR1, draw] (FLInv1) {\(\linv {fL}\)};
+        \node [on grid, below left=2cm and 0.75cm of G1, draw] (FRInv1) {\(\rinv {(f_R)}\)};
+        \node [on grid, below=1cm of FRInv1, draw] (FR1) {\(f_R\)};
+        \node [on grid, above left=1.5cm and 1.5cm of FRInv1, draw] (FL1) {\(f_L\)};
+        \node [on grid, below left=1.5cm and 1.5cm of FR1, draw] (FLInv1) {\(\linv {(f_L)}\)};
         \node [on grid, below right=2cm and 0.75cm of FR1] (G'1) {\({f'}\)};
         \draw (G1) to ++(0,-1.25cm) to[out=-90,in=0] (FRInv1);
         \draw (FRInv1) to[out=180,in=-90] ++(-0.75cm,0.75cm) to[out=90,in=0] (FL1);
@@ -327,18 +327,18 @@ A comment should be made on why this is a valid coinductive proof. Whereas induc
         \draw (FR1) to[out=0,in=90] ++(0.75cm,-0.75cm) to (G'1);
 
         \node [on grid, rotate=-90, below left=1.5cm and 1.5cm of G'1,font=\fontsize{20}{24}\selectfont] (A2) {\(\Rightarrow\)};
-        \node [on grid, left=1cm of A2] (A2Text) {\(fRR\)};
+        \node [on grid, left=1cm of A2] (A2Text) {\((f_R)_R\)};
 
         \node [on grid, below=8cm of G1] (G2) {\({f'}\)};
         \node [on grid, below=3.5cm of G2] (G'2) {\({f'}\)};
-        \node [on grid, below left=1cm and 2.25cm of G2, draw] (FL2) {\(fL\)};
-        \node [on grid, below=1.5cm of FL2, draw] (FLInv2) {\(\linv fL\)};
+        \node [on grid, below left=1cm and 2.25cm of G2, draw] (FL2) {\(f_L\)};
+        \node [on grid, below=1.5cm of FL2, draw] (FLInv2) {\(\linv {(f_L)}\)};
         \draw (G2) to (G'2);
         \draw (FL2) to[out=0,in=90] ++(0.75cm,-0.75cm) to[out=-90,in=0] (FLInv2);
         \draw (FL2) to[out=180,in=90] ++(-0.75cm,-0.75cm) to[out=-90,in=180] (FLInv2);
 
         \node [on grid, below left=0.75cm and 2.5cm of FL2,font=\fontsize{20}{24}\selectfont] (A3) {\(\Leftarrow\)};
-        \node [on grid, above=0.5cm of A3] (A3Text) {\(fLL\)};
+        \node [on grid, above=0.5cm of A3] (A3Text) {\((f_L)_L\)};
 
         \node [on grid, below=8cm of G] (G3) {\({f'}\)};
         \node [on grid, below=3.5cm of G3] (G'3) {\({f'}\)};
