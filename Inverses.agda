@@ -1,3 +1,5 @@
+{-# OPTIONS --with-K --safe #-}
+
 module Inverses where
 open import Data.Nat
 open import Data.Product
