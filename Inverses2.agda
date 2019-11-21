@@ -1,10 +1,11 @@
-{-# OPTIONS --with-K --safe --guardedness #-}
+{-# OPTIONS --without-K --safe --guardedness #-}
 
 module Inverses2 where
 open import Agda.Primitive
 open import Data.Nat
 open import Data.Product
 open import Agda.Builtin.Unit
+open import Relation.Binary.PropositionalEquality.Core
 
 record GlobSet : Set₁ where
   coinductive
@@ -28,11 +29,11 @@ getSecond G (suc n) (a , g , g' , f , f') = morphisms (getSecond G n a) f f'
 getResult : {n : ℕ} {G : GlobSet} → (prevres : CompositionData G n → GlobSet) → (lowerComp : (a : CompositionData G n) → cells (getFirst G n a) → cells (getSecond G n a) → cells (prevres a)) → CompositionData G (suc n) → GlobSet
 getResult {n} {G} prevres lowerComp (a , g , g' , f , f') = morphisms (prevres a) (lowerComp a g f) (lowerComp a g' f')
 
-record CompFunc {n : ℕ} {G : GlobSet} (prevres' : CompositionData G n → GlobSet) (lowerComp' : (a : CompositionData G n) → cells (getFirst G n a) → cells (getSecond G n a) → cells (prevres' a)) : Set₁ where
+record CompFunc {n : ℕ} {G : GlobSet} (prevres : CompositionData G n → GlobSet) (lowerComp : (a : CompositionData G n) → cells (getFirst G n a) → cells (getSecond G n a) → cells (prevres a)) : Set₁ where
   coinductive
   field
-    comp' : (a : CompositionData G (suc n)) → cells (getFirst G (suc n) a) → cells (getSecond G (suc n) a) → cells (getResult prevres' lowerComp' a)
-    next' : CompFunc {suc n} {G} (getResult prevres' lowerComp') comp'
+    comp' : (a : CompositionData G (suc n)) → cells (getFirst G (suc n) a) → cells (getSecond G (suc n) a) → cells (getResult prevres lowerComp a)
+    next' : CompFunc {suc n} {G} (getResult prevres lowerComp) comp'
 
 open CompFunc
 
@@ -126,7 +127,54 @@ Composable.next compTerm = buildComp zero
     next' (buildComp n) = buildComp (suc n)
 Composable.coin compTerm tt tt = compTerm
 
+equality : (A : Set) → GlobSet
+cells (equality X) = X
+morphisms (equality X) y z = equality (y ≡ z)
 
+transport : {a : Level} {A B : Set a } → A ≡ B → A → B
+transport refl x = x
+
+myCong : {x y : GlobSet} {f f' : cells x} → (m : x ≡ y) → (F : (z : GlobSet) → cells z → cells z → GlobSet) → F x f f' ≡ F y (transport (cong cells m) f) (transport (cong cells m) f')
+myCong refl F = refl
+
+firstEqualityLem : (A : Set) → (n : ℕ) → (a : CompositionData (equality A) n) → (f f' : cells (getFirst (equality A) n a)) → morphisms (getFirst (equality A) n a) f f' ≡ equality (f ≡ f')
+firstEqualityLem A zero a f f' = refl
+firstEqualityLem A (suc n) (a , x , x' , y , y') f f' = helper (firstEqualityLem A n a x x')
+  where
+    helper2 : {A B : Set} {x y : A} → (p : A ≡ B) → (x ≡ y) ≡ (transport p x ≡ transport p y)
+    helper2 refl = refl
+    helper : morphisms (getFirst (equality A) n a) x x' ≡ equality (x ≡ x') → morphisms (getFirst (equality A) (suc n) (a , x , x' , y , y')) f f' ≡ equality (f ≡ f')
+    helper m = let test = myCong m morphisms in trans test (cong equality (sym (helper2 (cong cells m))))
+
+secondEqualityLem : (A : Set) → (n : ℕ) → (a : CompositionData (equality A) n) → (f f' : cells (getSecond (equality A) n a)) → morphisms (getSecond (equality A) n a) f f' ≡ equality (f ≡ f')
+secondEqualityLem A zero a f f' = refl
+secondEqualityLem A (suc n) (a , x , x' , y , y') f f' = helper (secondEqualityLem A n a y y')
+  where
+    helper2 : {A B : Set} {x y : A} → (p : A ≡ B) → (x ≡ y) ≡ (transport p x ≡ transport p y)
+    helper2 refl = refl
+    helper : morphisms (getSecond (equality A) n a) y y' ≡ equality (y ≡ y') → morphisms (getSecond (equality A) (suc n) (a , x , x' , y , y')) f f' ≡ equality (f ≡ f')
+    helper m = let test = myCong m morphisms in trans test (cong equality (sym (helper2 (cong cells m))))
+
+startComp : (A : Set) → (x y z : A) → y ≡ z → x ≡ y → x ≡ z
+startComp _ _ _ _ refl refl = refl
+
+compEq : (A : Set) → Composable (equality A)
+Composable.id (compEq A) x = refl
+Composable.comp (compEq A) = startComp A
+Composable.next (compEq A) = buildComp zero (λ a → (p1 a) ≡ (p3 a)) (modifyComp (equality A) (startComp A))
+  where
+    compHelper : (n : ℕ) → (prevres : CompositionData (equality A) n → Set) (lowerComp : (a : CompositionData (equality A) n) → cells (getFirst (equality A) n a) → cells (getSecond (equality A) n a) → cells (equality (prevres a))) → (a : CompositionData (equality A) (suc n)) → cells (getFirst (equality A) (suc n) a) → cells (getSecond (equality A) (suc n) a) → cells (getResult (λ a → equality (prevres a)) lowerComp a)
+    compHelper n prevres lowerComp (a , g , g' , f , f') α β = helper (transport (cong cells (firstEqualityLem A n a g g')) α) (transport (cong cells (secondEqualityLem A n a f f')) β) where
+        helper : g ≡ g' → f ≡ f' → lowerComp a g f ≡ lowerComp a g' f'
+        helper refl refl = refl
+    buildComp : (n : ℕ) → (prevres : CompositionData (equality A) n → Set) (lowerComp : (a : CompositionData (equality A) n) → cells (getFirst (equality A) n a) → cells (getSecond (equality A) n a) → cells (equality (prevres a))) → CompFunc {n} {equality A} (λ a → equality (prevres a)) lowerComp
+    comp' (buildComp n prevres lowerComp) = compHelper n prevres lowerComp
+    next' (buildComp n prevres lowerComp) = buildComp (suc n) (λ x → res x) (compHelper n prevres lowerComp)
+      where
+        res : CompositionData (equality A) (suc n) → Set
+        res (a , g , g' , f , f') = lowerComp a g f ≡ lowerComp a g' f'
+
+Composable.coin (compEq A) x y = compEq (x ≡ y)
 
 idIsBiInv : {G : GlobSet} {{_ : Composable G}} {{_ : HCat G}} → (x : cells G) → BiInvertible (id x)
 BiInvertible.f* (idIsBiInv x) = id x
