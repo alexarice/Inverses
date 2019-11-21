@@ -101,10 +101,10 @@ comps : {n : ℕ} {G : GlobSet} → (prevres : CompositionData G n → resultTyp
 head (comps prevres lowerComp cf) = prevres , lowerComp
 tail (comps prevres lowerComp cf) = comps (getResult prevres lowerComp) (comp' cf) (next' cf)
 
-getResultFromNat : {G : GlobSet} → (n : ℕ) → (c : (x y z : cells G) → cells (morphisms G y z) → cells (morphisms G x y) → cells (morphisms G x z)) → CompFunc {zero} {G} (getZeroResult G) (modifyComp G c) → CompositionData G n → GlobSet
-getResultFromNat {G} n c cf a = resultTypeToGlobSet (proj₁ (retrieve n (comps (getZeroResult G) (modifyComp G c) cf)) a)
+getResultFromNat : {G : GlobSet} → (n : ℕ) → (c : (x y z : cells G) → cells (morphisms G y z) → cells (morphisms G x y) → cells (morphisms G x z)) → CompFunc {zero} {G} (getZeroResult G) (modifyComp G c) → CompositionData G n → resultType
+getResultFromNat {G} n c cf a = proj₁ (retrieve n (comps (getZeroResult G) (modifyComp G c) cf)) a
 
-getCompFromNat : {G : GlobSet} → (n : ℕ) → (c : (x y z : cells G) → cells (morphisms G y z) → cells (morphisms G x y) → cells (morphisms G x z)) → (cf : CompFunc {zero} {G} (getZeroResult G) (modifyComp G c)) → (a : CompositionData G n) → cells (getFirst G n a) → cells (getSecond G n a) → cells (getResultFromNat n c cf a)
+getCompFromNat : {G : GlobSet} → (n : ℕ) → (c : (x y z : cells G) → cells (morphisms G y z) → cells (morphisms G x y) → cells (morphisms G x z)) → (cf : CompFunc {zero} {G} (getZeroResult G) (modifyComp G c)) → (a : CompositionData G n) → cells (getFirst G n a) → cells (getSecond G n a) → cells (resultTypeToGlobSet (getResultFromNat n c cf a))
 getCompFromNat {G} n c cf a g f = proj₂ (retrieve n (comps (getZeroResult G) (modifyComp G c) cf)) a g f
 
 record Composable (G : GlobSet) : Set₁ where
@@ -114,7 +114,9 @@ record Composable (G : GlobSet) : Set₁ where
     comp : (x y z : cells G) → cells (morphisms G y z) → cells (morphisms G x y) → cells (morphisms G x z)
     next : CompFunc {zero} {G} (getZeroResult G) (modifyComp G comp)
     coin : (x y : cells G) → Composable (morphisms G x y)
-  compn : (n : ℕ) → (a : CompositionData G n) → cells (getFirst G n a) → cells (getSecond G n a) → cells (getResultFromNat n comp next a)
+  resultn : (n : ℕ) → (a : CompositionData G n) → resultType
+  resultn n = getResultFromNat n comp next
+  compn : (n : ℕ) → (a : CompositionData G n) → cells (getFirst G n a) → cells (getSecond G n a) → cells (resultTypeToGlobSet (getResultFromNat n comp next a))
   compn n = getCompFromNat n comp next
 
 open Composable {{...}}
@@ -137,6 +139,8 @@ underlyingSecondComp G (suc n) (a , _) = secondComp G n a
 secondComp G zero (x , y , z) = coin x y
 secondComp G (suc n) a'@(a , g , g' , f , f') = Composable.coin (underlyingSecondComp G (suc n) a') f f'
 
+resultnComp : (G : GlobSet) {{_ : Composable G}} → (n : ℕ) → (a : CompositionData G n) → Composable (proj₁ (resultn n a))
+resultnComp G n a = {!!}
 
 record BiInvertible {G : GlobSet} {{_ : Composable G}} {x y : cells G} (f : cells (morphisms G x y)) : Set₁ where
   coinductive
@@ -234,5 +238,5 @@ BiInvertible.fL (idIsBiInv x) = ƛ (id x)
 BiInvertible.fRBiInv (idIsBiInv x) = ƛBiInv (id x)
 BiInvertible.fLBiInv (idIsBiInv x) = ƛBiInv (id x)
 
--- compIsBiInv : {G : GlobSet} {{_ : Composable G}} {{_ : HCat G}} {n : ℕ} → (a : CompositionData G n) → (g : cells (getFirst G n a)) → (f : cells (getSecond G n a)) → (BiInvertible {getUnderlyingFirst G n a} {{underlyingFirstComp a}} g) → (BiInvertible {getUnderlyingSecond G n a} {{underlyingSecondComp a}} f) → (BiInvertible (compn n a g f))
--- compIsBiInv = {!!}
+compIsBiInv : {G : GlobSet} {{_ : Composable G}} {{_ : HCat G}} {n : ℕ} → (a : CompositionData G n) → (g : cells (getFirst G n a)) → (f : cells (getSecond G n a)) → (BiInvertible {getUnderlyingFirst G n a} {{underlyingFirstComp G n a}} g) → (BiInvertible {getUnderlyingSecond G n a} {{underlyingSecondComp G n a}} f) → (BiInvertible {proj₁ (resultn n a)} {{resultnComp G n a}} (compn n a g f))
+compIsBiInv = {!!}
