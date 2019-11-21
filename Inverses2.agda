@@ -16,15 +16,36 @@ record GlobSet : Set₁ where
 open GlobSet
 
 CompositionData : (G : GlobSet) → ℕ → Set
+getUnderlyingFirst : (G : GlobSet) → (n : ℕ) → CompositionData G n → GlobSet
 getFirst : (G : GlobSet) → (n : ℕ) → CompositionData G n → GlobSet
+getUnderlyingSecond : (G : GlobSet) → (n : ℕ) → CompositionData G n → GlobSet
 getSecond : (G : GlobSet) → (n : ℕ) → CompositionData G n → GlobSet
 
 CompositionData G zero = cells G × cells G × cells G
 CompositionData G (suc n) = Σ[ a ∈ CompositionData G n ] cells (getFirst G n a) × cells (getFirst G n a) × cells (getSecond G n a) × cells (getSecond G n a)
-getFirst G zero (x , y , z) = morphisms G y z
-getFirst G (suc n) (a , g , g' , f , f') = morphisms (getFirst G n a) g g'
-getSecond G zero (x , y , z) = morphisms G x y
-getSecond G (suc n) (a , g , g' , f , f') = morphisms (getSecond G n a) f f'
+
+getUnderlyingFirst G zero a = G
+getUnderlyingFirst G (suc n) (a , _) = getFirst G n a
+
+getFirst G n a = morphisms (getUnderlyingFirst G n a) (c1 n a) (c2 n a)
+ where
+  c1 : (n : ℕ) → (a : CompositionData G n) → cells (getUnderlyingFirst G n a)
+  c1 zero (x , y , z) = y
+  c1 (suc n) (a , g , _) = g
+  c2 : (n : ℕ) → (a : CompositionData G n) → cells (getUnderlyingFirst G n a)
+  c2 zero (x , y , z) = z
+  c2 (suc n) (a , g , g' , _ )= g'
+getUnderlyingSecond G zero a = G
+getUnderlyingSecond G (suc n) (a , _) = getSecond G n a
+
+getSecond G n a = morphisms (getUnderlyingSecond G n a) (c1 n a) (c2 n a)
+ where
+  c1 : (n : ℕ) → (a : CompositionData G n) → cells (getUnderlyingSecond G n a)
+  c1 zero (x , y , z) = x
+  c1 (suc n) (a , g , g' , f , f') = f
+  c2 : (n : ℕ) → (a : CompositionData G n) → cells (getUnderlyingSecond G n a)
+  c2 zero (x , y , z) = y
+  c2 (suc n) (a , g , g' , f , f') = f'
 
 getResult : {n : ℕ} {G : GlobSet} → (prevres : CompositionData G n → GlobSet) → (lowerComp : (a : CompositionData G n) → cells (getFirst G n a) → cells (getSecond G n a) → cells (prevres a)) → CompositionData G (suc n) → GlobSet
 getResult {n} {G} prevres lowerComp (a , g , g' , f , f') = morphisms (prevres a) (lowerComp a g f) (lowerComp a g' f')
@@ -36,8 +57,6 @@ record CompFunc {n : ℕ} {G : GlobSet} (prevres : CompositionData G n → GlobS
     next' : CompFunc {suc n} {G} (getResult prevres lowerComp) comp'
 
 open CompFunc
-
-
 
 p1 : {a : Level} {A B C : Set a} → A × B × C → A
 p1 (x , y , z) = x
@@ -93,6 +112,25 @@ record Composable (G : GlobSet) : Set₁ where
   compn n = getCompFromNat n comp next
 
 open Composable {{...}}
+
+underlyingFirstComp : {G : GlobSet} {{_ : Composable G}} {n : ℕ} → (a : CompositionData G n) → Composable (getUnderlyingFirst G n a)
+firstComp : {G : GlobSet} {{_ : Composable G}} {n : ℕ} → (a : CompositionData G n) → Composable (getFirst G n a)
+
+underlyingFirstComp {{cmp}} {n = zero} a = cmp
+underlyingFirstComp {n = suc n}(a , _) = firstComp a
+
+firstComp {G} {n = zero} (x , y , z) = coin y z
+firstComp {G} {n = suc n} a'@(a , g , g' , _) = Composable.coin (underlyingFirstComp a') g g'
+
+underlyingSecondComp : {G : GlobSet} {{_ : Composable G}} {n : ℕ} → (a : CompositionData G n) → Composable (getUnderlyingSecond G n a)
+secondComp : {G : GlobSet} {{_ : Composable G}} {n : ℕ} → (a : CompositionData G n) → Composable (getSecond G n a)
+
+underlyingSecondComp {{cmp}} {n = zero} a = cmp
+underlyingSecondComp {n = suc n}(a , _) = secondComp a
+
+secondComp {G} {n = zero} (x , y , z) = coin x y
+secondComp {G} {n = suc n} a'@(a , g , g' , f , f') = Composable.coin (underlyingSecondComp a') f f'
+
 
 record BiInvertible {G : GlobSet} {{_ : Composable G}} {x y : cells G} (f : cells (morphisms G x y)) : Set₁ where
   coinductive
@@ -183,3 +221,6 @@ BiInvertible.fR (idIsBiInv x) = ƛ (id x)
 BiInvertible.fL (idIsBiInv x) = ƛ (id x)
 BiInvertible.fRBiInv (idIsBiInv x) = ƛBiInv (id x)
 BiInvertible.fLBiInv (idIsBiInv x) = ƛBiInv (id x)
+
+-- compIsBiInv : {G : GlobSet} {{_ : Composable G}} {{_ : HCat G}} {n : ℕ} → (a : CompositionData G n) → (g : cells (getFirst G n a)) → (f : cells (getSecond G n a)) → (BiInvertible {getUnderlyingFirst G n a} {{underlyingFirstComp a}} g) → (BiInvertible {getUnderlyingSecond G n a} {{underlyingSecondComp a}} f) → (BiInvertible (compn n a g f))
+-- compIsBiInv = {!!}
