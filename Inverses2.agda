@@ -47,13 +47,19 @@ getSecond G n a = morphisms (getUnderlyingSecond G n a) (c1 n a) (c2 n a)
   c2 zero (x , y , z) = y
   c2 (suc n) (a , g , g' , f , f') = f'
 
-getResult : {n : ℕ} {G : GlobSet} → (prevres : CompositionData G n → GlobSet) → (lowerComp : (a : CompositionData G n) → cells (getFirst G n a) → cells (getSecond G n a) → cells (prevres a)) → CompositionData G (suc n) → GlobSet
-getResult {n} {G} prevres lowerComp (a , g , g' , f , f') = morphisms (prevres a) (lowerComp a g f) (lowerComp a g' f')
+resultType : Set₁
+resultType = Σ[ G ∈ GlobSet ] cells G × cells G
 
-record CompFunc {n : ℕ} {G : GlobSet} (prevres : CompositionData G n → GlobSet) (lowerComp : (a : CompositionData G n) → cells (getFirst G n a) → cells (getSecond G n a) → cells (prevres a)) : Set₁ where
+resultTypeToGlobSet : resultType → GlobSet
+resultTypeToGlobSet (G , a , b) = morphisms G a b
+
+getResult : {n : ℕ} {G : GlobSet} → (prevres : CompositionData G n → resultType) → (lowerComp : (a : CompositionData G n) → cells (getFirst G n a) → cells (getSecond G n a) → cells (resultTypeToGlobSet (prevres a))) → CompositionData G (suc n) → resultType
+getResult {n} {G} prevres lowerComp (a , g , g' , f , f') = resultTypeToGlobSet (prevres a) , lowerComp a g f , lowerComp a g' f'
+
+record CompFunc {n : ℕ} {G : GlobSet} (prevres : CompositionData G n → resultType) (lowerComp : (a : CompositionData G n) → cells (getFirst G n a) → cells (getSecond G n a) → cells (resultTypeToGlobSet (prevres a))) : Set₁ where
   coinductive
   field
-    comp' : (a : CompositionData G (suc n)) → cells (getFirst G (suc n) a) → cells (getSecond G (suc n) a) → cells (getResult prevres lowerComp a)
+    comp' : (a : CompositionData G (suc n)) → cells (getFirst G (suc n) a) → cells (getSecond G (suc n) a) → cells (resultTypeToGlobSet (getResult prevres lowerComp a))
     next' : CompFunc {suc n} {G} (getResult prevres lowerComp) comp'
 
 open CompFunc
@@ -70,8 +76,8 @@ p3 (x , y , z) = z
 modifyComp : (G : GlobSet) → ((x y z : cells G) → cells (morphisms G y z) → cells (morphisms G x y) → cells (morphisms G x z)) → (a : CompositionData G zero) → cells (getFirst G zero a) → cells (getSecond G zero a) → cells (morphisms G (p1 a) (p3 a))
 modifyComp G oldComp (x , y , z) g f = oldComp x y z g f
 
-getZeroResult : (G : GlobSet) → CompositionData G zero → GlobSet
-getZeroResult G (x , y , z) = morphisms G x z
+getZeroResult : (G : GlobSet) → CompositionData G zero → resultType
+getZeroResult G (x , y , z) = G , x , z
 
 record IndexStream {a : Level} (n : ℕ) (A : ℕ → Set a) : Set a where
   coinductive
@@ -89,14 +95,14 @@ retrieve {_} {A} n i = head (helper n i)
     helper (suc m) i = tail (helper m i)
 
 compType : (G : GlobSet) → ℕ → Set₁
-compType G m = Σ[ r ∈ (CompositionData G m → GlobSet) ] ((a : CompositionData G m) → cells (getFirst G m a) → cells (getSecond G m a) → cells (r a))
+compType G m = Σ[ r ∈ (CompositionData G m → (Σ[ g ∈ GlobSet ] cells g × cells g)) ] ((a : CompositionData G m) → cells (getFirst G m a) → cells (getSecond G m a) → cells (let (g , g1 , g2) = r a in morphisms g g1 g2))
 
-comps : {n : ℕ} {G : GlobSet} → (prevres : CompositionData G n → GlobSet) → (lowerComp : (a : CompositionData G n) → cells (getFirst G n a) → cells (getSecond G n a) → cells (prevres a)) → (CompFunc {n} {G} prevres lowerComp) → IndexStream n (compType G)
+comps : {n : ℕ} {G : GlobSet} → (prevres : CompositionData G n → resultType) → (lowerComp : (a : CompositionData G n) → cells (getFirst G n a) → cells (getSecond G n a) → cells (resultTypeToGlobSet (prevres a))) → (CompFunc {n} {G} prevres lowerComp) → IndexStream n (compType G)
 head (comps prevres lowerComp cf) = prevres , lowerComp
 tail (comps prevres lowerComp cf) = comps (getResult prevres lowerComp) (comp' cf) (next' cf)
 
 getResultFromNat : {G : GlobSet} → (n : ℕ) → (c : (x y z : cells G) → cells (morphisms G y z) → cells (morphisms G x y) → cells (morphisms G x z)) → CompFunc {zero} {G} (getZeroResult G) (modifyComp G c) → CompositionData G n → GlobSet
-getResultFromNat {G} n c cf a = proj₁ (retrieve n (comps (getZeroResult G) (modifyComp G c) cf)) a
+getResultFromNat {G} n c cf a = resultTypeToGlobSet (proj₁ (retrieve n (comps (getZeroResult G) (modifyComp G c) cf)) a)
 
 getCompFromNat : {G : GlobSet} → (n : ℕ) → (c : (x y z : cells G) → cells (morphisms G y z) → cells (morphisms G x y) → cells (morphisms G x z)) → (cf : CompFunc {zero} {G} (getZeroResult G) (modifyComp G c)) → (a : CompositionData G n) → cells (getFirst G n a) → cells (getSecond G n a) → cells (getResultFromNat n c cf a)
 getCompFromNat {G} n c cf a g f = proj₂ (retrieve n (comps (getZeroResult G) (modifyComp G c) cf)) a g f
@@ -113,23 +119,23 @@ record Composable (G : GlobSet) : Set₁ where
 
 open Composable {{...}}
 
-underlyingFirstComp : {G : GlobSet} {{_ : Composable G}} {n : ℕ} → (a : CompositionData G n) → Composable (getUnderlyingFirst G n a)
-firstComp : {G : GlobSet} {{_ : Composable G}} {n : ℕ} → (a : CompositionData G n) → Composable (getFirst G n a)
+underlyingFirstComp : (G : GlobSet) {{_ : Composable G}} → (n : ℕ) → (a : CompositionData G n) → Composable (getUnderlyingFirst G n a)
+firstComp : (G : GlobSet) {{_ : Composable G}} (n : ℕ) → (a : CompositionData G n) → Composable (getFirst G n a)
 
-underlyingFirstComp {{cmp}} {n = zero} a = cmp
-underlyingFirstComp {n = suc n}(a , _) = firstComp a
+underlyingFirstComp G {{cmp}} zero a = cmp
+underlyingFirstComp G (suc n) (a , _) = firstComp G n a
 
-firstComp {G} {n = zero} (x , y , z) = coin y z
-firstComp {G} {n = suc n} a'@(a , g , g' , _) = Composable.coin (underlyingFirstComp a') g g'
+firstComp G zero (x , y , z) = coin y z
+firstComp G (suc n) a'@(a , g , g' , _) = Composable.coin (underlyingFirstComp G (suc n) a') g g'
 
-underlyingSecondComp : {G : GlobSet} {{_ : Composable G}} {n : ℕ} → (a : CompositionData G n) → Composable (getUnderlyingSecond G n a)
-secondComp : {G : GlobSet} {{_ : Composable G}} {n : ℕ} → (a : CompositionData G n) → Composable (getSecond G n a)
+underlyingSecondComp : (G : GlobSet) {{_ : Composable G}} → (n : ℕ) → (a : CompositionData G n) → Composable (getUnderlyingSecond G n a)
+secondComp : (G : GlobSet) {{_ : Composable G}} → (n : ℕ) → (a : CompositionData G n) → Composable (getSecond G n a)
 
-underlyingSecondComp {{cmp}} {n = zero} a = cmp
-underlyingSecondComp {n = suc n}(a , _) = secondComp a
+underlyingSecondComp G {{cmp}} zero a = cmp
+underlyingSecondComp G (suc n) (a , _) = secondComp G n a
 
-secondComp {G} {n = zero} (x , y , z) = coin x y
-secondComp {G} {n = suc n} a'@(a , g , g' , f , f') = Composable.coin (underlyingSecondComp a') f f'
+secondComp G zero (x , y , z) = coin x y
+secondComp G (suc n) a'@(a , g , g' , f , f') = Composable.coin (underlyingSecondComp G (suc n) a') f f'
 
 
 record BiInvertible {G : GlobSet} {{_ : Composable G}} {x y : cells G} (f : cells (morphisms G x y)) : Set₁ where
@@ -160,7 +166,7 @@ Composable.id compTerm tt = tt
 Composable.comp compTerm tt tt tt tt tt = tt
 Composable.next compTerm = buildComp zero
   where
-    buildComp : (n : ℕ) → CompFunc {n} {terminal} (λ _ → terminal) (λ _ _ _ → tt)
+    buildComp : (n : ℕ) → CompFunc {n} {terminal} (λ _ → terminal , tt , tt) (λ _ _ _ → tt)
     comp' (buildComp n) _ _ _ = tt
     next' (buildComp n) = buildComp (suc n)
 Composable.coin compTerm tt tt = compTerm
@@ -199,18 +205,24 @@ startComp _ _ _ _ refl refl = refl
 compEq : (A : Set) → Composable (equality A)
 Composable.id (compEq A) x = refl
 Composable.comp (compEq A) = startComp A
-Composable.next (compEq A) = buildComp zero (λ a → (p1 a) ≡ (p3 a)) (modifyComp (equality A) (startComp A))
+Composable.next (compEq A) = buildComp zero (λ a → A , p1 a , p3 a) (modifyComp (equality A) (startComp A))
   where
-    compHelper : (n : ℕ) → (prevres : CompositionData (equality A) n → Set) (lowerComp : (a : CompositionData (equality A) n) → cells (getFirst (equality A) n a) → cells (getSecond (equality A) n a) → cells (equality (prevres a))) → (a : CompositionData (equality A) (suc n)) → cells (getFirst (equality A) (suc n) a) → cells (getSecond (equality A) (suc n) a) → cells (getResult (λ a → equality (prevres a)) lowerComp a)
+    eqResultType : Set₁
+    eqResultType = Σ[ S ∈ Set ] S × S
+    eqResultTypeToResultType : eqResultType → resultType
+    eqResultTypeToResultType (S , a , b) = (equality S , a , b)
+    eqResultTypeToEquality : eqResultType → GlobSet
+    eqResultTypeToEquality (S , a , b) = equality (a ≡ b)
+    compHelper : (n : ℕ) → (prevres : CompositionData (equality A) n → eqResultType) (lowerComp : (a : CompositionData (equality A) n) → cells (getFirst (equality A) n a) → cells (getSecond (equality A) n a) → cells (eqResultTypeToEquality (prevres a))) → (a : CompositionData (equality A) (suc n)) → cells (getFirst (equality A) (suc n) a) → cells (getSecond (equality A) (suc n) a) → cells (resultTypeToGlobSet (getResult (λ a → eqResultTypeToResultType (prevres a)) lowerComp a))
     compHelper n prevres lowerComp (a , g , g' , f , f') α β = helper (transport (cong cells (firstEqualityLem A n a g g')) α) (transport (cong cells (secondEqualityLem A n a f f')) β) where
         helper : g ≡ g' → f ≡ f' → lowerComp a g f ≡ lowerComp a g' f'
         helper refl refl = refl
-    buildComp : (n : ℕ) → (prevres : CompositionData (equality A) n → Set) (lowerComp : (a : CompositionData (equality A) n) → cells (getFirst (equality A) n a) → cells (getSecond (equality A) n a) → cells (equality (prevres a))) → CompFunc {n} {equality A} (λ a → equality (prevres a)) lowerComp
+    buildComp : (n : ℕ) → (prevres : CompositionData (equality A) n → eqResultType) (lowerComp : (a : CompositionData (equality A) n) → cells (getFirst (equality A) n a) → cells (getSecond (equality A) n a) → cells (eqResultTypeToEquality (prevres a))) → CompFunc {n} {equality A} (λ a → eqResultTypeToResultType (prevres a)) lowerComp
     comp' (buildComp n prevres lowerComp) = compHelper n prevres lowerComp
     next' (buildComp n prevres lowerComp) = buildComp (suc n) (λ x → res x) (compHelper n prevres lowerComp)
       where
-        res : CompositionData (equality A) (suc n) → Set
-        res (a , g , g' , f , f') = lowerComp a g f ≡ lowerComp a g' f'
+        res : CompositionData (equality A) (suc n) → eqResultType
+        res (a , g , g' , f , f') = (proj₁ (proj₂ (prevres a)) ≡ proj₂ (proj₂ (prevres a))) , lowerComp a g f , lowerComp a g' f'
 
 Composable.coin (compEq A) x y = compEq (x ≡ y)
 
