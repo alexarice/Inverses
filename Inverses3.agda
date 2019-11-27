@@ -108,3 +108,11 @@ record HCat (G : GlobSet) {{_ : Composable G}} {{_ : Identities G}} : Set₁ whe
     hcoin : (x y : cells G) → HCat (morphisms G x y) {{compHigher x y}} {{idHigher x y}}
 
 open HCat {{...}}
+
+idIsBiInv : {G : GlobSet} {{_ : Composable G}} {{_ : Identities G}} {{_ : HCat G}} → (x : cells G) → BiInvertible (id x)
+f* (idIsBiInv x) = id x
+*f (idIsBiInv x) = id x
+fR (idIsBiInv x) = ƛ (id x)
+fL (idIsBiInv x) = ƛ (id x)
+fRBiInv (idIsBiInv x) = ƛBiInv (id x)
+fLBiInv (idIsBiInv x) = ƛBiInv (id x)
