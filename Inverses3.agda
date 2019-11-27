@@ -97,3 +97,14 @@ record BiInvertible {G : GlobSet} {{_ : Composable G}} {{_ : Identities G}} {x y
     fL : cells (morphisms (morphisms G x x) (comp1 *f f) (id x))
     fRBiInv : BiInvertible {morphisms G y y} {{compHigher y y}} {{idHigher y y}} fR
     fLBiInv : BiInvertible {morphisms G x x} {{compHigher x x}} {{idHigher x x}} fL
+
+open BiInvertible
+
+record HCat (G : GlobSet) {{_ : Composable G}} {{_ : Identities G}} : Set₁ where
+  coinductive
+  field
+    ƛ : {x y : cells G} → (f : cells (morphisms G x y)) → cells (morphisms (morphisms G x y) (comp1 (id y) f) f)
+    ƛBiInv : {x y : cells G} → (f : cells (morphisms G x y)) → BiInvertible {morphisms G x y} {{compHigher x y}} {{idHigher x y}} (ƛ f)
+    hcoin : (x y : cells G) → HCat (morphisms G x y) {{compHigher x y}} {{idHigher x y}}
+
+open HCat {{...}}
