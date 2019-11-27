@@ -36,6 +36,8 @@ record Composable (G : GlobSet) : Set where
   comp1 {x} {y} {z} g f = func (comp x y z) (g , f)
   comp2 : {x y z : cells G} {g g' : cells (morphisms G y z)} {f f' : cells (morphisms G x y)} → cells (morphisms (morphisms G y z) g g') → cells (morphisms (morphisms G x y) f f') → cells (morphisms (morphisms G x z) (comp1 g f) (comp1 g' f'))
   comp2 {x} {y} {z} {g} {g'} {f} {f'} α β = func (funcMorphisms (comp x y z) (g , f) (g' , f')) (α , β)
+  comp3 : {x y z : cells G} {g g' : cells (morphisms G y z)} {f f' : cells (morphisms G x y)} → {α α' : cells (morphisms (morphisms G y z) g g')} → {β β' : cells (morphisms (morphisms G x y) f f')} → cells (morphisms (morphisms (morphisms G y z) g g') α α') → cells (morphisms (morphisms (morphisms G x y) f f') β β') → cells (morphisms (morphisms (morphisms G x z) (comp1 g f) (comp1 g' f')) (comp2 α β) (comp2 α' β'))
+  comp3 {x} {y} {z} {g} {g'} {f} {f'} {α} {α'} {β} {β'} δ ε = func (funcMorphisms (funcMorphisms (comp x y z) (g , f) (g' , f')) (α , β) (α' , β')) (δ , ε)
 
 open Composable {{...}}
 
@@ -116,3 +118,8 @@ fR (idIsBiInv x) = ƛ (id x)
 fL (idIsBiInv x) = ƛ (id x)
 fRBiInv (idIsBiInv x) = ƛBiInv (id x)
 fLBiInv (idIsBiInv x) = ƛBiInv (id x)
+
+record BiInvertComp {A B C : GlobSet} {{_ : Composable A}}  {x x' : cells A} {y y' : cells B} {z z' : cells C} (composition :  GlobSetMorphism (morphisms A x x' ×G morphisms B y y') (morphisms C z z')) : Set₁ where
+  coinductive
+  field
+    biComp : {f : cells (morphisms A x x')} {g : cells (morphisms B y y')} → BiInvertible {{{!!}}} {{{!!}}} f → BiInvertible {{{!!}}} {{{!!}}} g → BiInvertible {{{!!}}} {{{!!}}} (func composition (f , g))
