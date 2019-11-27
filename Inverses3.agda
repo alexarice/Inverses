@@ -30,6 +30,7 @@ morphisms (G ×G H) (w , x) (y , z) = morphisms G w y ×G morphisms H x z
 record Composable (G : GlobSet) : Set where
   coinductive
   field
+    id : (x : cells G) → cells (morphisms G x x)
     comp : (x y z : cells G) → GlobSetMorphism (morphisms G y z ×G morphisms G x y) (morphisms G x z)
     compHigher : (x y : cells G) → Composable (morphisms G x y)
   comp1 : {x y z : cells G} → cells (morphisms G y z) → cells (morphisms G x y) → cells (morphisms G x z)
@@ -41,24 +42,12 @@ record Composable (G : GlobSet) : Set where
 
 open Composable {{...}}
 
-record Identities (G : GlobSet) : Set where
-  coinductive
-  field
-    id : (x : cells G) → cells (morphisms G x x)
-    idHigher : (x y : cells G) → Identities (morphisms G x y)
-
-open Identities {{...}}
-
-
 terminal : GlobSet
 cells terminal = ⊤
 morphisms terminal _ _ = terminal
 
-idTerminal : Identities terminal
-Identities.id idTerminal x = tt
-Identities.idHigher idTerminal x y = idTerminal
-
 compTerminal : Composable terminal
+Composable.id compTerminal x = tt
 Composable.comp compTerminal x y z = γ
  where
   γ : GlobSetMorphism (terminal ×G terminal) terminal
@@ -70,11 +59,8 @@ equality : Set → GlobSet
 cells (equality A) = A
 morphisms (equality A) x y = equality (x ≡ y)
 
-idEquality : (S : Set) → Identities (equality S)
-Identities.id (idEquality S) x = refl
-Identities.idHigher (idEquality S) x y = idEquality (x ≡ y)
-
 compEquality : (S : Set) → Composable (equality S)
+Composable.id (compEquality S) x = refl
 Composable.comp (compEquality S) x y z = γ
  where
   γ : GlobSetMorphism
@@ -90,28 +76,28 @@ Composable.comp (compEquality S) x y z = γ
     funcMorphisms (γ₂ A B C f f' g g' F) (α , β) (α' , β') = γ₂ (f ≡ f') (g ≡ g') (F (f , g) ≡ F (f' , g')) α α' β β' (helper A B C f f' g g' F)
 Composable.compHigher (compEquality S) x y = compEquality (x ≡ y)
 
-record BiInvertible {G : GlobSet} {{_ : Composable G}} {{_ : Identities G}} {x y : cells G} (f : cells (morphisms G x y)) : Set₁ where
+record BiInvertible {G : GlobSet} {{_ : Composable G}} {x y : cells G} (f : cells (morphisms G x y)) : Set₁ where
   coinductive
   field
     f* : cells (morphisms G y x)
     *f : cells (morphisms G y x)
     fR : cells (morphisms (morphisms G y y) (comp1 f f*) (id y))
     fL : cells (morphisms (morphisms G x x) (comp1 *f f) (id x))
-    fRBiInv : BiInvertible {morphisms G y y} {{compHigher y y}} {{idHigher y y}} fR
-    fLBiInv : BiInvertible {morphisms G x x} {{compHigher x x}} {{idHigher x x}} fL
+    fRBiInv : BiInvertible {morphisms G y y} {{compHigher y y}} fR
+    fLBiInv : BiInvertible {morphisms G x x} {{compHigher x x}} fL
 
 open BiInvertible
 
-record HCat (G : GlobSet) {{_ : Composable G}} {{_ : Identities G}} : Set₁ where
+record HCat (G : GlobSet) {{_ : Composable G}} : Set₁ where
   coinductive
   field
     ƛ : {x y : cells G} → (f : cells (morphisms G x y)) → cells (morphisms (morphisms G x y) (comp1 (id y) f) f)
-    ƛBiInv : {x y : cells G} → (f : cells (morphisms G x y)) → BiInvertible {morphisms G x y} {{compHigher x y}} {{idHigher x y}} (ƛ f)
-    hcoin : (x y : cells G) → HCat (morphisms G x y) {{compHigher x y}} {{idHigher x y}}
+    ƛBiInv : {x y : cells G} → (f : cells (morphisms G x y)) → BiInvertible {morphisms G x y} {{compHigher x y}} (ƛ f)
+    hcoin : (x y : cells G) → HCat (morphisms G x y) {{compHigher x y}}
 
 open HCat {{...}}
 
-idIsBiInv : {G : GlobSet} {{_ : Composable G}} {{_ : Identities G}} {{_ : HCat G}} → (x : cells G) → BiInvertible (id x)
+idIsBiInv : {G : GlobSet} {{_ : Composable G}} {{_ : HCat G}} → (x : cells G) → BiInvertible (id x)
 f* (idIsBiInv x) = id x
 *f (idIsBiInv x) = id x
 fR (idIsBiInv x) = ƛ (id x)
@@ -119,7 +105,8 @@ fL (idIsBiInv x) = ƛ (id x)
 fRBiInv (idIsBiInv x) = ƛBiInv (id x)
 fLBiInv (idIsBiInv x) = ƛBiInv (id x)
 
-record BiInvertComp {A B C : GlobSet} {{_ : Composable A}}  {x x' : cells A} {y y' : cells B} {z z' : cells C} (composition :  GlobSetMorphism (morphisms A x x' ×G morphisms B y y') (morphisms C z z')) : Set₁ where
+record BiInvertComp {A B C : GlobSet} {{_ : Composable A}} {{_ : Composable B}} {{_ : Composable C}} {x x' : cells A} {y y' : cells B} {z z' : cells C} (composition :  GlobSetMorphism (morphisms A x x' ×G morphisms B y y') (morphisms C z z')) : Set₁ where
   coinductive
   field
-    biComp : {f : cells (morphisms A x x')} {g : cells (morphisms B y y')} → BiInvertible {{{!!}}} {{{!!}}} f → BiInvertible {{{!!}}} {{{!!}}} g → BiInvertible {{{!!}}} {{{!!}}} (func composition (f , g))
+    biComp : {f : cells (morphisms A x x')} {g : cells (morphisms B y y')} → BiInvertible f → BiInvertible  g → BiInvertible (func composition (f , g))
+    biCompHigher : (f f' : cells (morphisms A x x')) → (g g' : cells (morphisms B y y')) → BiInvertComp {{compHigher x x'}} {{compHigher y y'}} {{compHigher z z'}} (funcMorphisms composition (f , g) (f' , g'))
