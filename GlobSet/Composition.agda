@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K --safe --sized-types #-}
+{-# OPTIONS --without-K  --sized-types --allow-unsolved-metas #-}
 
 module GlobSet.Composition where
 open import GlobSet
@@ -18,3 +18,8 @@ record Composable {i : Size} (G : GlobSet i) : Set where
   comp3 {_} {_} {_} {x} {y} {z} {g} {g'} {f} {f'} {α} {α'} {β} {β'} δ ε = func (funcMorphisms (funcMorphisms (comp x y z) (g , f) (g' , f')) (α , β) (α' , β')) (δ , ε)
 
 open Composable {{...}} public
+
+prodComp : ∀{i} → (A B : GlobSet i) {{_ : Composable A}} {{_ : Composable B}} → Composable (A ×G B)
+Composable.id (prodComp A B) (x , y) = (id x) , (id y)
+Composable.comp (prodComp A B) (x , x') (y , y') (z , z') = gComp ((comp x y z) ×GM (comp x' y' z')) (interchangeG (morphisms A y z) (morphisms B y' z') (morphisms A x y) (morphisms B x' y'))
+Composable.compHigher (prodComp A B) (x , x') (y , y') = prodComp (morphisms A x y) (morphisms B x' y') ⦃ compHigher x y ⦄ ⦃ compHigher x' y' ⦄

@@ -1,16 +1,10 @@
-{-# OPTIONS --without-K --safe --sized-types #-}
+{-# OPTIONS --without-K --sized-types #-}
 
 module Inverses3 where
 open import GlobSet
 open import GlobSet.Product
 open import GlobSet.Composition
 
-
-prodComp : ∀{i} → (A B : GlobSet i) {{_ : Composable A}} {{_ : Composable B}} → Composable (A ×G B)
-Composable.id (prodComp A B) (x , y) = (id x) , (id y)
-func (Composable.comp (prodComp A B) (x , x') (y , y') (z , z')) ((f , f') , (g , g')) = func (comp x y z) (f , g) , func (comp x' y' z') (f' , g')
-funcMorphisms (Composable.comp (prodComp A B) (x , x') (y , y') (z , z')) ((f₁ , f₁') , (g₁ , g₁')) ((f₂ , f₂') , (g₂ , g₂')) = {!!}
-Composable.compHigher (prodComp A B) (x , x') (y , y') = prodComp (morphisms A x y) (morphisms B x' y') ⦃ compHigher x y ⦄ ⦃ compHigher x' y' ⦄
 
 record BiInvertible {i : Size} {j : Size< i} {k : Size< j} (G : GlobSet i) {{_ : Composable G}} {x y : cells G} (f : cells (morphisms G x y)) : Set₁ where
   coinductive
