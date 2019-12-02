@@ -4,28 +4,9 @@ module Inverses3 where
 open import GlobSet
 open import GlobSet.Product
 open import GlobSet.Composition
+open import GlobSet.BiInvertible
+open import GlobSet.HCat
 
-
-record BiInvertible {i : Size} {j : Size< i} {k : Size< j} (G : GlobSet i) {{_ : Composable G}} {x y : cells G} (f : cells (morphisms G x y)) : Set₁ where
-  coinductive
-  field
-    f* : cells (morphisms G y x)
-    *f : cells (morphisms G y x)
-    fR : cells (morphisms (morphisms G y y) (comp1 f f*) (id y))
-    fL : cells (morphisms (morphisms G x x) (comp1 *f f) (id x))
-    fRBiInv : ∀ {l : Size< k} → BiInvertible (morphisms G y y) {{compHigher y y}} fR
-    fLBiInv : ∀ {l : Size< k} → BiInvertible (morphisms G x x) {{compHigher x x}} fL
-
-open BiInvertible
-
-record HCat {i : Size} (G : GlobSet i) {{_ : Composable G}} : Set₁ where
-  coinductive
-  field
-    ƛ : {j : Size< i} {k : Size< j} {x y : cells G} → (f : cells (morphisms {i} G {j} x y)) → cells (morphisms (morphisms G {j} x y) {k} (comp1 (id y) f) f)
-    ƛBiInv : {j : Size< i} {k : Size< j} {l : Size< k} {x y : cells G} → (f : cells (morphisms G {j} x y)) → BiInvertible (morphisms G x y) {{compHigher x y}} (ƛ f)
-    hcoin : {j : Size< i} → (x y : cells G) → HCat (morphisms G x y) {{compHigher x y}}
-
-open HCat {{...}}
 
 idIsBiInv : ∀{i} {j : Size< i} {k : Size< j} {G : GlobSet i} {{_ : Composable G}} {{_ : HCat G}} → (x : cells G) → BiInvertible G (id x)
 f* (idIsBiInv x) = id x
