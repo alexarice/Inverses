@@ -10,7 +10,6 @@ open import GlobSet.Descendant
 
 record SameMorphism {i : Size}
                     {G H : GlobSet i}
-                    ⦃ _ : Composable G ⦄
                     ⦃ _ : Composable H ⦄
                     (F₁ F₂ : GlobSetMorphism G H) : Set₁ where
   coinductive
@@ -60,11 +59,7 @@ record PreserveComp {i : Size}
     compPreserve : (j : Size< i)
                  → (k : Size< j)
                  → (x y z : cells G)
-                 → SameMorphism ⦃ prodComp (morphisms G j y z)
-                                           (morphisms G j x y)
-                                           ⦃ compHigher j y z ⦄
-                                           ⦃ compHigher j x y ⦄ ⦄
-                                ⦃ compHigher j (func F x) (func F z) ⦄
+                 → SameMorphism ⦃ compHigher j (func F x) (func F z) ⦄
                                 (gComp (comp j (func F x) (func F y) (func F z))
                                        (funcMorphisms F j y z ×GM funcMorphisms F j x y))
                                 (gComp (funcMorphisms F j x z) (comp j x y z))
@@ -131,29 +126,7 @@ record HCat {i : Size} (G : GlobSet i) ⦃ _ : Composable G ⦄ : Set₁ where
                                      γ
                                      α)))
   interchange₁ {j} {k} {l} {x} {y} {z} {a} {b} {c} {d} {e} {f} α β γ δ =
-    eq ⦃ prodComp (morphisms (morphisms G j y z ×G morphisms G j x y)
-                             k
-                             (e , b)
-                             (f , c))
-                  (morphisms (morphisms G j y z ×G morphisms G j x y)
-                             k
-                             (d , a)
-                             (e , b))
-                  ⦃ Composable.compHigher (prodComp (morphisms G j y z)
-                                                    (morphisms G j x y)
-                                                    ⦃ compHigher j y z ⦄
-                                                    ⦃ compHigher j x y ⦄)
-                                          k
-                                          (e , b)
-                                          (f , c) ⦄
-                  ⦃ Composable.compHigher (prodComp (morphisms G j y z)
-                                                    (morphisms G j x y)
-                                                    ⦃ compHigher j y z ⦄
-                                                    ⦃ compHigher j x y ⦄)
-                                          k
-                                          (d , a)
-                                          (e , b) ⦄ ⦄
-       ⦃ Composable.compHigher (compHigher j x z)
+    eq ⦃ Composable.compHigher (compHigher j x z)
                                k
                                (func (comp j x y z) (d , a))
                                (func (comp j x y z) (f , c)) ⦄
