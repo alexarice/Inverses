@@ -8,16 +8,18 @@ open import GlobSet.Composition
 open import GlobSet.BiInvertible
 open import GlobSet.Descendant
 
-record SameMorphism {i : Size}
-                    {G H : GlobSet i}
+record SameMorphism {h i : Size}
+                    {G : GlobSet i}
+                    {H : GlobSet h}
                     ⦃ _ : Composable H ⦄
-                    (F₁ F₂ : GlobSetMorphism G H) : Set₁ where
+                    (d₂ : Descendant H i)
+                    (F₁ F₂ : GlobSetMorphism G (realise d₂)) : Set₁ where
   coinductive
   field
     eq : (j : Size< i)
        → (x : cells G)
-       → cells (morphisms H j (func F₁ x) (func F₂ x))
-    eqBiInv : (j : Size< i) → (x : cells G) → BiInvertible j H (eq j x)
+       → cells (morphisms (realise d₂) j (func F₁ x) (func F₂ x))
+    eqBiInv : (j : Size< i) → (x : cells G) → BiInvertible j (realise d₂) {{{!!}}} (eq j x)
 
 open SameMorphism public
 
@@ -49,24 +51,26 @@ record PreserveIden {i : Size}
 
 open PreserveIden public
 
-record PreserveComp {i : Size}
-                    {G H : GlobSet i}
+record PreserveComp {h i : Size}
+                    {G H : GlobSet h}
                     ⦃ _ : Composable G ⦄
                     ⦃ _ : Composable H ⦄
-                    (F : GlobSetMorphism G H) : Set₁ where
+                    (d₁ : Descendant G i)
+                    (d₂ : Descendant H i)
+                    (F : GlobSetMorphism (realise d₁) (realise d₂)) : Set₁ where
   coinductive
   field
     compPreserve : (j : Size< i)
                  → (k : Size< j)
-                 → (x y z : cells G)
-                 → SameMorphism ⦃ compHigher j (func F x) (func F z) ⦄
-                                (gComp (comp j (func F x) (func F y) (func F z))
+                 → (x y z : cells (realise d₁))
+                 → SameMorphism (Child d₂ j (func F x) (func F z))
+                                (gComp (comp {{descComp d₂}} j (func F x) (func F y) (func F z))
                                        (funcMorphisms F j y z ×GM funcMorphisms F j x y))
-                                (gComp (funcMorphisms F j x z) (comp j x y z))
+                                (gComp (funcMorphisms F j x z) (comp {{descComp d₁}} j x y z))
     compPreserveCoin : (j : Size< i)
-                     → (x y : cells G)
-                     → PreserveComp ⦃ compHigher j x y ⦄
-                                    ⦃ compHigher j (func F x) (func F y) ⦄
+                     → (x y : cells (realise d₁))
+                     → PreserveComp (Child d₁ j x y)
+                                    (Child d₂ j (func F x) (func F y))
                                     (funcMorphisms F j x y)
 
 open PreserveComp public
@@ -94,11 +98,9 @@ record HCat {i : Size} (G : GlobSet i) ⦃ _ : Composable G ⦄ : Set₁ where
            → BiInvertible k (morphisms G j x y) ⦃ compHigher j x y ⦄ (ƛ k f)
     compPreserveComp : (j : Size< i)
                      → (x y z : cells G)
-                     → PreserveComp ⦃ prodComp (morphisms G j y z)
-                                               (morphisms G j x y)
-                                               ⦃ compHigher j y z ⦄
-                                               ⦃ compHigher j x y ⦄ ⦄
-                                    ⦃ compHigher j x z ⦄
+                     → PreserveComp (Prod (Child Orig j y z)
+                                          (Child Orig j x y))
+                                    (Child Orig j x z)
                                     (comp j x y z)
     hcoin : (j : Size< i)
           → (x y : cells G)
@@ -126,16 +128,7 @@ record HCat {i : Size} (G : GlobSet i) ⦃ _ : Composable G ⦄ : Set₁ where
                                      γ
                                      α)))
   interchange₁ {j} {k} {l} {x} {y} {z} {a} {b} {c} {d} {e} {f} α β γ δ =
-    eq ⦃ Composable.compHigher (compHigher j x z)
-                               k
-                               (func (comp j x y z) (d , a))
-                               (func (comp j x y z) (f , c)) ⦄
-       (compPreserve ⦃ prodComp (morphisms G j y z)
-                                (morphisms G j x y)
-                                ⦃ compHigher j y z ⦄
-                                ⦃ compHigher j x y ⦄ ⦄
-                     ⦃ compHigher j x z ⦄
-                     (compPreserveComp j x y z)
+    eq (compPreserve (compPreserveComp j x y z)
                      k
                      l
                      (d , a)
@@ -143,6 +136,5 @@ record HCat {i : Size} (G : GlobSet i) ⦃ _ : Composable G ⦄ : Set₁ where
                      (f , c))
        l
        ((δ , γ) , (β , α))
-
 
 open HCat ⦃ ... ⦄ public
