@@ -6,6 +6,7 @@ open import GlobSet
 open import GlobSet.Product
 open import GlobSet.Composition
 open import GlobSet.BiInvertible
+open import GlobSet.Descendant
 
 record SameMorphism {i : Size}
                     {G H : GlobSet i}
@@ -90,7 +91,7 @@ record HCat {i : Size} (G : GlobSet i) ⦃ _ : Composable G ⦄ : Set₁ where
       → (k : Size< j)
       → {x y : cells G}
       → (f : cells (morphisms G j x y))
-      → cells (morphisms (morphisms G j x y) k (comp1 (id j y) f) f)
+      → cells (morphisms (morphisms G j x y) k (comp1 Orig (id j y) f) f)
     ƛBiInv : {j : Size< i}
            → (k : Size< j)
            → {x y : cells G}
@@ -117,18 +118,16 @@ record HCat {i : Size} (G : GlobSet i) ⦃ _ : Composable G ⦄ : Set₁ where
                → (β : cells (morphisms (morphisms G j y z) k d e))
                → (γ : cells (morphisms (morphisms G j x y) k b c))
                → (δ : cells (morphisms (morphisms G j y z) k e f))
-               → cells (morphisms (morphisms (morphisms G j x z) k (comp1 d a) (comp1 f c))
+               → cells (morphisms (morphisms (morphisms G j x z) k (comp1 Orig d a) (comp1 Orig f c))
                        l
-                       (comp1 {G = morphisms G j x z}
-                              ⦃ compHigher j x z ⦄
-                              (comp2 δ γ)
-                              (comp2 β α))
-                       (comp2 (comp1 {G = morphisms G j y z}
-                                     ⦃ compHigher j y z ⦄
+                       (comp1 (Child Orig j x z)
+                              (comp2 Orig δ γ)
+                              (comp2 Orig β α))
+                       (comp2 Orig
+                              (comp1 (Child Orig j y z)
                                      δ
                                      β)
-                              (comp1 {G = morphisms G j x y}
-                                     ⦃ compHigher j x y ⦄
+                              (comp1 (Child Orig j x y)
                                      γ
                                      α)))
   interchange₁ {j} {k} {l} {x} {y} {z} {a} {b} {c} {d} {e} {f} α β γ δ =
