@@ -57,7 +57,7 @@ compBiInv : {i : Size} (j : Size< i) {G : GlobSet i} {{_ : Composable G}} {{_ : 
 biComp (compBiInv j x y z) = {!!}
 f* (biComp (biCompHigher (compBiInv j x y z) k f f' g g') α β bα bβ) = func (funcMorphisms (comp j x y z) k (f' , g') (f , g)) ((f* bα) , (f* bβ))
 *f (biComp (biCompHigher (compBiInv j x y z) k f f' g g') α β bα bβ) = func (funcMorphisms (comp j x y z) k (f' , g') (f , g)) ((*f bα) , *f bβ)
-fR (biComp (biCompHigher (compBiInv j x y z) k f f' g g') α β bα bβ) l = ? -- comp1 (Child (Child Orig {!!} {!!} {!!}) {!!} {!!} {!!}) (comp1 (Child (Child Orig j x z) k (comp1 Orig f' g') (comp1 Orig f' g')) (idenManip₁ g' f') (comp3 Orig (fR bα {!k₁!}) (fR bβ {!k₁!}))) (interchange₁ β α (f* bβ) (f* bα))
+fR (biComp (biCompHigher (compBiInv j x y z) k f f' g g') α β bα bβ) l = comp1 (Child (Child Orig j x z) k (comp1 Orig f g) (comp1 Orig f g)) (comp1 (Child (Child Orig j x z) k (comp1 Orig f g) (comp1 Orig f g)) (interchange₁ α β (f* bα) (f* bβ)) (comp3 Orig (fR bα l) (fR bβ l))) (idenManip₁ f g)
 fL (biComp (biCompHigher (compBiInv j x y z) k f f' g g') α β bα bβ) = {!!}
 fRBiInv (biComp (biCompHigher (compBiInv j x y z) k f f' g g') α β bα bβ) = {!!}
 fLBiInv (biComp (biCompHigher (compBiInv j x y z) k f f' g g') α β bα bβ) = {!!}

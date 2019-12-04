@@ -13,7 +13,7 @@ record Composable {i : Size} (G : GlobSet i) : Set where
        → cells (morphisms G j x x)
     comp : (j : Size< i)
          → (x y z : cells G)
-         → GlobSetMorphism (morphisms G j y z ×G morphisms G j x y)
+         → GlobSetMorphism (morphisms G j x y ×G morphisms G j y z)
                            (morphisms G j x z)
     compHigher : (j : Size< i)
                → (x y : cells G)
@@ -27,7 +27,7 @@ prodComp : {i : Size}
            {{_ : Composable B}}
          → Composable (A ×G B)
 Composable.id (prodComp A B) j (x , y) = (id j x) , (id j y)
-Composable.comp (prodComp A B) j (x , x') (y , y') (z , z') = gComp ((comp j x y z) ×GM (comp j x' y' z')) (interchangeG (morphisms A j y z) (morphisms B j y' z') (morphisms A j x y) (morphisms B j x' y'))
+Composable.comp (prodComp A B) j (x , x') (y , y') (z , z') = gComp ((comp j x y z) ×GM (comp j x' y' z')) (interchangeG (morphisms A j x y) (morphisms B j x' y') (morphisms A j y z) (morphisms B j y' z'))
 Composable.compHigher (prodComp A B) j (x , x') (y , y') = prodComp (morphisms A j x y) (morphisms B j x' y') ⦃ compHigher j x y ⦄ ⦃ compHigher j x' y' ⦄
 
 descComp : {i : Size}
@@ -57,10 +57,10 @@ comp1 : {h : Size}
         (d : Descendant G i)
         {j : Size< i}
         {x y z : cells (realise d)}
-      → cells (morphisms (realise d) j y z)
       → cells (morphisms (realise d) j x y)
+      → cells (morphisms (realise d) j y z)
       → cells (morphisms (realise d) j x z)
-comp1 d {j} {x} {y} {z} g f = func (Composable.comp (descComp d) j x y z) (g , f)
+comp1 d {j} {x} {y} {z} f g = func (Composable.comp (descComp d) j x y z) (f , g)
 comp2 : {h : Size}
         {G : GlobSet h}
         ⦃ _ : Composable G ⦄
@@ -69,11 +69,11 @@ comp2 : {h : Size}
         {j : Size< i}
         {k : Size< j}
         {x y z : cells (realise d)}
-        {g g' : cells (morphisms (realise d) j y z)}
         {f f' : cells (morphisms (realise d) j x y)}
-      → cells (morphisms (morphisms (realise d) j y z) k g g')
+        {g g' : cells (morphisms (realise d) j y z)}
       → cells (morphisms (morphisms (realise d) j x y) k f f')
-      → cells (morphisms (morphisms (realise d) j x z) k (comp1 d g f) (comp1 d g' f'))
+      → cells (morphisms (morphisms (realise d) j y z) k g g')
+        → cells (morphisms (morphisms (realise d) j x z) k (comp1 d f g) (comp1 d f' g'))
 comp2 d {j} {k} {x} {y} {z} {g} {g'} {f} {f'} α β =
   func (funcMorphisms (Composable.comp (descComp d) j x y z)
                       k
@@ -89,16 +89,16 @@ comp3 : {h : Size}
         {k : Size< j}
         {l : Size< k}
         {x y z : cells (realise d)}
-        {g g' : cells (morphisms (realise d) j y z)}
         {f f' : cells (morphisms (realise d) j x y)}
-      → {α α' : cells (morphisms (morphisms (realise d) j y z) k g g')}
-      → {β β' : cells (morphisms (morphisms (realise d) j x y) k f f')}
-      → cells (morphisms (morphisms (morphisms (realise d) j y z) k g g') l α α')
-      → cells (morphisms (morphisms (morphisms (realise d) j x y) k f f') l β β')
+        {g g' : cells (morphisms (realise d) j y z)}
+      → {α α' : cells (morphisms (morphisms (realise d) j x y) k f f')}
+      → {β β' : cells (morphisms (morphisms (realise d) j y z) k g g')}
+      → cells (morphisms (morphisms (morphisms (realise d) j x y) k f f') l α α')
+      → cells (morphisms (morphisms (morphisms (realise d) j y z) k g g') l β β')
       → cells (morphisms (morphisms (morphisms (realise d) j x z)
                                     k
-                                    (comp1 d g f)
-                                    (comp1 d g' f'))
+                                    (comp1 d f g)
+                                    (comp1 d f' g'))
                          l
                          (comp2 d α β)
                          (comp2 d α' β'))

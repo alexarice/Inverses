@@ -65,7 +65,7 @@ record PreserveComp {h i : Size}
                  → (x y z : cells (realise d₁))
                  → SameMorphism (Child d₂ j (func F x) (func F z))
                                 (gComp (comp {{descComp d₂}} j (func F x) (func F y) (func F z))
-                                       (funcMorphisms F j y z ×GM funcMorphisms F j x y))
+                                       (funcMorphisms F j x y ×GM funcMorphisms F j y z))
                                 (gComp (funcMorphisms F j x z) (comp {{descComp d₁}} j x y z))
     compPreserveCoin : (j : Size< i)
                      → (x y : cells (realise d₁))
@@ -80,14 +80,14 @@ record HCat {i : Size} (G : GlobSet i) ⦃ _ : Composable G ⦄ : Set₁ where
   field
     compPreserveId : (j : Size< i)
                    → {x y z : cells G}
-                   → PreserveIden (Prod (Child Orig j y z) (Child Orig j x y))
+                   → PreserveIden (Prod (Child Orig j x y) (Child Orig j y z))
                                   (Child Orig j x z)
                                   (comp j x y z)
     ƛ : {j : Size< i}
       → (k : Size< j)
       → {x y : cells G}
       → (f : cells (morphisms G j x y))
-      → cells (morphisms (morphisms G j x y) k (comp1 Orig (id j y) f) f)
+      → cells (morphisms (morphisms G j x y) k (comp1 Orig (id j x) f) f)
     ƛBiInv : {j : Size< i}
            → (k : Size< j)
            → {x y : cells G}
@@ -95,8 +95,8 @@ record HCat {i : Size} (G : GlobSet i) ⦃ _ : Composable G ⦄ : Set₁ where
            → BiInvertible k (Child Orig j x y) (ƛ k f)
     compPreserveComp : (j : Size< i)
                      → (x y z : cells G)
-                     → PreserveComp (Prod (Child Orig j y z)
-                                          (Child Orig j x y))
+                     → PreserveComp (Prod (Child Orig j x y)
+                                          (Child Orig j y z))
                                     (Child Orig j x z)
                                     (comp j x y z)
     hcoin : (j : Size< i)
@@ -114,29 +114,27 @@ record HCat {i : Size} (G : GlobSet i) ⦃ _ : Composable G ⦄ : Set₁ where
                → (δ : cells (morphisms (morphisms G j y z) k e f))
                → cells (morphisms (morphisms (morphisms G j x z)
                                              k
-                                             (comp1 Orig d a)
-                                             (comp1 Orig f c))
+                                             (comp1 Orig a d)
+                                             (comp1 Orig c f))
                        l
                        (comp1 (Child Orig j x z)
-                              (comp2 Orig δ γ)
-                              (comp2 Orig β α))
+                              (comp2 Orig α β)
+                              (comp2 Orig γ δ))
                        (comp2 Orig
-                              (comp1 (Child Orig j y z)
-                                     δ
-                                     β)
                               (comp1 (Child Orig j x y)
-                                     γ
-                                     α)))
+                                     α
+                                     γ)
+                              (comp1 (Child Orig j y z)
+                                     β
+                                     δ)))
 
   interchange₁ {j} {k} {l} {x} {y} {z} {a} {b} {c} {d} {e} {f} α β γ δ =
     eq (compPreserve (compPreserveComp j x y z)
                      k
                      l
-                     (d , a)
-                     (e , b)
-                     (f , c))
+                     (a , d) (b , e) (c , f))
        l
-       ((δ , γ) , (β , α))
+       ((α , β) , γ , δ)
   interchange₂ : {j : Size< i}
                  {k : Size< j}
                  {l : Size< k}
@@ -152,34 +150,34 @@ record HCat {i : Size} (G : GlobSet i) ⦃ _ : Composable G ⦄ : Set₁ where
                → (ω : cells (morphisms (morphisms (morphisms G j y z) k c d) l ε ζ))
                → cells (morphisms (morphisms (morphisms (morphisms G j x z)
                                                         k
-                                                        (comp1 Orig c a)
-                                                        (comp1 Orig d b))
+                                                        (comp1 Orig a c)
+                                                        (comp1 Orig b d))
                                              l
-                                             (comp2 Orig δ α)
-                                             (comp2 Orig ζ γ))
+                                             (comp2 Orig α δ)
+                                             (comp2 Orig γ ζ))
                                   m
                                   (comp1 (Child (Child Orig j x z)
                                                 k
-                                                (comp1 Orig c a)
-                                                (comp1 Orig d b))
-                                         (comp3 Orig ω χ)
-                                         (comp3 Orig ψ ϕ))
+                                                (comp1 Orig a c)
+                                                (comp1 Orig b d))
+                                         (comp3 Orig ϕ ψ)
+                                         (comp3 Orig χ ω))
                                   (comp3 Orig
-                                         (comp1 (Child (Child Orig j y z) k c d) ω ψ)
-                                         (comp1 (Child (Child Orig j x y) k a b) χ ϕ)))
+                                         (comp1 (Child (Child Orig j x y) k a b) ϕ χ)
+                                         (comp1 (Child (Child Orig j y z) k c d) ψ ω)))
 
   interchange₂ {j} {k} {l} {m} {x} {y} {z} {a} {b} {c} {d} {α} {β} {γ} {δ} {ε} {ζ} ϕ χ ψ ω =
     eq (compPreserve (compPreserveCoin (compPreserveComp j x y z)
                                        k
-                                       (c , a)
-                                       (d , b))
+                                       (a , c)
+                                       (b , d))
                      l
                      m
-                     (δ , α)
-                     (ε , β)
-                     (ζ , γ))
+                     (α , δ)
+                     (β , ε)
+                     (γ , ζ))
        m
-       (((ω , χ) , (ψ , ϕ)))
+       ((ϕ , ψ) , χ , ω)
 
   idenManip₁ : {j : Size< i}
                {k : Size< j}
@@ -189,14 +187,14 @@ record HCat {i : Size} (G : GlobSet i) ⦃ _ : Composable G ⦄ : Set₁ where
              → (g : cells (morphisms G j y z))
              → cells (morphisms (morphisms (morphisms G j x z)
                                            k
-                                           (comp1 Orig g f)
-                                           (comp1 Orig g f))
+                                           (comp1 Orig f g)
+                                           (comp1 Orig f g))
                                 l
                                 (comp2 Orig
-                                       (idd (Child Orig j y z) k g)
-                                       (idd (Child Orig j x y) k f))
-                                (idd (Child Orig j x z) k (comp1 Orig g f)))
-  idenManip₁ {j} {k} {l} {x} {y} {z} f g = idPreserve (compPreserveId j) k l (g , f)
+                                       (idd (Child Orig j x y) k f)
+                                       (idd (Child Orig j y z) k g))
+                                (idd (Child Orig j x z) k (comp1 Orig f g)))
+  idenManip₁ {j} {k} {l} {x} {y} {z} f g = idPreserve (compPreserveId j) k l (f , g)
 
   idenManip₂ : {j : Size< i}
                {k : Size< j}
@@ -209,23 +207,23 @@ record HCat {i : Size} (G : GlobSet i) ⦃ _ : Composable G ⦄ : Set₁ where
              → (β : cells (morphisms (morphisms G j y z) k c d))
              → cells (morphisms (morphisms (morphisms (morphisms G j x z)
                                                       k
-                                                      (comp1 Orig c a)
-                                                      (comp1 Orig d b))
+                                                      (comp1 Orig a c)
+                                                      (comp1 Orig b d))
                                            l
-                                           (comp2 Orig β α)
-                                           (comp2 Orig β α))
+                                           (comp2 Orig α β)
+                                           (comp2 Orig α β))
                                 m
                                 (comp3 Orig
-                                       (idd (Child (Child Orig j y z) k c d) l β)
-                                       (idd (Child (Child Orig j x y) k a b) l α))
+                                       (idd (Child (Child Orig j x y) k a b) l α)
+                                       (idd (Child (Child Orig j y z) k c d) l β))
                                 (idd (Child (Child Orig j x z)
                                             k
-                                            (comp1 Orig c a)
-                                            (comp1 Orig d b))
+                                            (comp1 Orig a c)
+                                            (comp1 Orig b d))
                                      l
-                                     (comp2 Orig β α)))
+                                     (comp2 Orig α β)))
   idenManip₂ {j} {k} {l} {m} {x} {y} {z} {a} {b} {c} {d} α β =
-    idPreserve (idPreserveCoin (compPreserveId j) k (c , a) (d , b)) l m (β , α)
+    idPreserve (idPreserveCoin (compPreserveId j) k (a , c) (b , d)) l m (α , β)
 
 
 open HCat ⦃ ... ⦄ public
