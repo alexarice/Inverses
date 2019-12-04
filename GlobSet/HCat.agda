@@ -23,30 +23,32 @@ record SameMorphism {h i : Size}
 
 open SameMorphism public
 
-record PreserveIden {i : Size}
-                    {G H : GlobSet i}
+record PreserveIden {h i : Size}
+                    {G H : GlobSet h}
                     ⦃ _ : Composable G ⦄
                     ⦃ _ : Composable H ⦄
-                    (F : GlobSetMorphism G H) : Set₁ where
+                    (d₁ : Descendant G i)
+                    (d₂ : Descendant H i)
+                    (F : GlobSetMorphism (realise d₁) (realise d₂)) : Set₁ where
   coinductive
   field
     idPreserve : (j : Size< i)
                → (k : Size< j)
-               → (x : cells G)
-               → cells (morphisms (morphisms H j (func F x) (func F x))
+               → (x : cells (realise d₁))
+               → cells (morphisms (morphisms (realise d₂) j (func F x) (func F x))
                        k
-                       (func (funcMorphisms F j x x) (id j x)) (id j (func F x)))
+                       (func (funcMorphisms F j x x) (idd d₁ j x)) (idd d₂ j (func F x)))
     idPreserveBiInv : (j : Size< i)
                     → (k : Size< j)
-                    → (x : cells G)
+                    → (x : cells (realise d₁))
                     → BiInvertible k
-                                   (morphisms H j (func F x) (func F x))
-                                   ⦃ compHigher j (func F x) (func F x) ⦄
+                                   (morphisms (realise d₂) j (func F x) (func F x))
+                                   ⦃ Composable.compHigher (descComp d₂) j (func F x) (func F x) ⦄
                                    (idPreserve j k x)
     idPreserveCoin : (j : Size< i)
-                   → (x y : cells G)
-                   → PreserveIden ⦃ compHigher j x y ⦄
-                                  ⦃ compHigher j (func F x) (func F y) ⦄
+                   → (x y : cells (realise d₁))
+                   → PreserveIden (Child d₁ j x y)
+                                  (Child d₂ j (func F x) (func F y))
                                   (funcMorphisms F j x y)
 
 open PreserveIden public
@@ -80,11 +82,8 @@ record HCat {i : Size} (G : GlobSet i) ⦃ _ : Composable G ⦄ : Set₁ where
   field
     compPreserveId : (j : Size< i)
                    → {x y z : cells G}
-                   → PreserveIden ⦃ prodComp (morphisms G j y z)
-                                             (morphisms G j x y)
-                                             ⦃ compHigher j y z ⦄
-                                             ⦃ compHigher j x y ⦄ ⦄
-                                  ⦃ compHigher j x z ⦄
+                   → PreserveIden (Prod (Child Orig j y z) (Child Orig j x y))
+                                  (Child Orig j x z)
                                   (comp j x y z)
     ƛ : {j : Size< i}
       → (k : Size< j)
