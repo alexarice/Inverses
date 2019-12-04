@@ -180,6 +180,7 @@ record HCat {i : Size} (G : GlobSet i) ⦃ _ : Composable G ⦄ : Set₁ where
                      (ζ , γ))
        m
        (((ω , χ) , (ψ , ϕ)))
+
   idenManip₀ : {j : Size< i}
                {k : Size< j}
                {l : Size< k}
@@ -188,7 +189,9 @@ record HCat {i : Size} (G : GlobSet i) ⦃ _ : Composable G ⦄ : Set₁ where
              → (f : cells (morphisms G j x y))
              → (g : cells (morphisms G j y z))
              → cells (morphisms (morphisms (morphisms G j x z) k (comp1 Orig g f) (comp1 Orig g f)) l (comp2 Orig (idd (Child Orig j y z) k g) (idd (Child Orig j x y) k f)) (idd (Child Orig j x z) k (comp1 Orig g f)))
-  idenManip₀ {j} {k} {l} {m} {x} {y} {z} f g = {!!}
+  idenManip₀ {j} {k} {l} {m} {x} {y} {z} f g = idPreserve (compPreserveId j) k l (g , f)
+
+
 
 
 open HCat ⦃ ... ⦄ public
