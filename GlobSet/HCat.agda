@@ -183,16 +183,51 @@ record HCat {i : Size} (G : GlobSet i) ⦃ _ : Composable G ⦄ : Set₁ where
        m
        (((ω , χ) , (ψ , ϕ)))
 
-  idenManip₀ : {j : Size< i}
+  idenManip₁ : {j : Size< i}
                {k : Size< j}
                {l : Size< k}
                {x y z : cells G}
              → (f : cells (morphisms G j x y))
              → (g : cells (morphisms G j y z))
-             → cells (morphisms (morphisms (morphisms G j x z) k (comp1 Orig g f) (comp1 Orig g f)) l (comp2 Orig (idd (Child Orig j y z) k g) (idd (Child Orig j x y) k f)) (idd (Child Orig j x z) k (comp1 Orig g f)))
-  idenManip₀ {j} {k} {l} {x} {y} {z} f g = idPreserve (compPreserveId j) k l (g , f)
+             → cells (morphisms (morphisms (morphisms G j x z)
+                                           k
+                                           (comp1 Orig g f)
+                                           (comp1 Orig g f))
+                                l
+                                (comp2 Orig
+                                       (idd (Child Orig j y z) k g)
+                                       (idd (Child Orig j x y) k f))
+                                (idd (Child Orig j x z) k (comp1 Orig g f)))
+  idenManip₁ {j} {k} {l} {x} {y} {z} f g = idPreserve (compPreserveId j) k l (g , f)
 
-
+  idenManip₂ : {j : Size< i}
+               {k : Size< j}
+               {l : Size< k}
+               {m : Size< l}
+               {x y z : cells G}
+               {a b : cells (morphisms G j x y)}
+               {c d : cells (morphisms G j y z)}
+             → (α : cells (morphisms (morphisms G j x y) k a b))
+             → (β : cells (morphisms (morphisms G j y z) k c d))
+             → cells (morphisms (morphisms (morphisms (morphisms G j x z)
+                                                      k
+                                                      (comp1 Orig c a)
+                                                      (comp1 Orig d b))
+                                           l
+                                           (comp2 Orig β α)
+                                           (comp2 Orig β α))
+                                m
+                                (comp3 Orig
+                                       (idd (Child (Child Orig j y z) k c d) l β)
+                                       (idd (Child (Child Orig j x y) k a b) l α))
+                                (idd (Child (Child Orig j x z)
+                                            k
+                                            (comp1 Orig c a)
+                                            (comp1 Orig d b))
+                                     l
+                                     (comp2 Orig β α)))
+  idenManip₂ {j} {k} {l} {m} {x} {y} {z} {a} {b} {c} {d} α β =
+    idPreserve (idPreserveCoin (compPreserveId j) k (c , a) (d , b)) l m (β , α)
 
 
 open HCat ⦃ ... ⦄ public
