@@ -19,7 +19,7 @@ record SameMorphism {h i : Size}
     eq : (j : Size< i)
        → (x : cells G)
        → cells (morphisms (realise d) j (func F₁ x) (func F₂ x))
-    eqBiInv : (j : Size< i) → (x : cells G) → BiInvertible j (realise d) {{descComp d}} (eq j x)
+    eqBiInv : (j : Size< i) → (x : cells G) → BiInvertible j d (eq j x)
 
 open SameMorphism public
 
@@ -41,9 +41,7 @@ record PreserveIden {h i : Size}
     idPreserveBiInv : (j : Size< i)
                     → (k : Size< j)
                     → (x : cells (realise d₁))
-                    → BiInvertible k
-                                   (morphisms (realise d₂) j (func F x) (func F x))
-                                   ⦃ Composable.compHigher (descComp d₂) j (func F x) (func F x) ⦄
+                    → BiInvertible k (Child d₂ j (func F x) (func F x))
                                    (idPreserve j k x)
     idPreserveCoin : (j : Size< i)
                    → (x y : cells (realise d₁))
@@ -94,7 +92,7 @@ record HCat {i : Size} (G : GlobSet i) ⦃ _ : Composable G ⦄ : Set₁ where
            → (k : Size< j)
            → {x y : cells G}
            → (f : cells (morphisms G j x y))
-           → BiInvertible k (morphisms G j x y) ⦃ compHigher j x y ⦄ (ƛ k f)
+           → BiInvertible k (Child Orig j x y) (ƛ k f)
     compPreserveComp : (j : Size< i)
                      → (x y z : cells G)
                      → PreserveComp (Prod (Child Orig j y z)
