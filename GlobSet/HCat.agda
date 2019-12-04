@@ -115,7 +115,10 @@ record HCat {i : Size} (G : GlobSet i) ⦃ _ : Composable G ⦄ : Set₁ where
                → (β : cells (morphisms (morphisms G j y z) k d e))
                → (γ : cells (morphisms (morphisms G j x y) k b c))
                → (δ : cells (morphisms (morphisms G j y z) k e f))
-               → cells (morphisms (morphisms (morphisms G j x z) k (comp1 Orig d a) (comp1 Orig f c))
+               → cells (morphisms (morphisms (morphisms G j x z)
+                                             k
+                                             (comp1 Orig d a)
+                                             (comp1 Orig f c))
                        l
                        (comp1 (Child Orig j x z)
                               (comp2 Orig δ γ)
@@ -136,5 +139,57 @@ record HCat {i : Size} (G : GlobSet i) ⦃ _ : Composable G ⦄ : Set₁ where
                      (f , c))
        l
        ((δ , γ) , (β , α))
+  interchange₂ : {j : Size< i}
+                 {k : Size< j}
+                 {l : Size< k}
+                 {m : Size< l}
+                 {x y z : cells G}
+                 {a b : cells (morphisms G j x y)}
+                 {c d : cells (morphisms G j y z)}
+                 {α β γ : cells (morphisms (morphisms G j x y) k a b)}
+                 {δ ε ζ : cells (morphisms (morphisms G j y z) k c d)}
+               → (ϕ : cells (morphisms (morphisms (morphisms G j x y) k a b) l α β))
+               → (χ : cells (morphisms (morphisms (morphisms G j x y) k a b) l β γ))
+               → (ψ : cells (morphisms (morphisms (morphisms G j y z) k c d) l δ ε))
+               → (ω : cells (morphisms (morphisms (morphisms G j y z) k c d) l ε ζ))
+               → cells (morphisms (morphisms (morphisms (morphisms G j x z)
+                                                        k
+                                                        (comp1 Orig c a)
+                                                        (comp1 Orig d b))
+                                             l
+                                             (comp2 Orig δ α)
+                                             (comp2 Orig ζ γ))
+                                  m
+                                  (comp1 (Child (Child Orig j x z)
+                                                k
+                                                (comp1 Orig c a)
+                                                (comp1 Orig d b))
+                                         (comp3 Orig ω χ)
+                                         (comp3 Orig ψ ϕ))
+                                  (comp3 Orig
+                                         (comp1 (Child (Child Orig j y z) k c d) ω ψ)
+                                         (comp1 (Child (Child Orig j x y) k a b) χ ϕ)))
+  interchange₂ {j} {k} {l} {m} {x} {y} {z} {a} {b} {c} {d} {α} {β} {γ} {δ} {ε} {ζ} ϕ χ ψ ω =
+    eq (compPreserve (compPreserveCoin (compPreserveComp j x y z)
+                                       k
+                                       (c , a)
+                                       (d , b))
+                     l
+                     m
+                     (δ , α)
+                     (ε , β)
+                     (ζ , γ))
+       m
+       (((ω , χ) , (ψ , ϕ)))
+  idenManip₀ : {j : Size< i}
+               {k : Size< j}
+               {l : Size< k}
+               {m : Size< l}
+               {x y z : cells G}
+             → (f : cells (morphisms G j x y))
+             → (g : cells (morphisms G j y z))
+             → cells (morphisms (morphisms (morphisms G j x z) k (comp1 Orig g f) (comp1 Orig g f)) l (comp2 Orig (idd (Child Orig j y z) k g) (idd (Child Orig j x y) k f)) (idd (Child Orig j x z) k (comp1 Orig g f)))
+  idenManip₀ {j} {k} {l} {m} {x} {y} {z} f g = {!!}
+
 
 open HCat ⦃ ... ⦄ public

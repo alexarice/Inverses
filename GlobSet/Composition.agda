@@ -40,6 +40,16 @@ descComp ⦃ c ⦄ Orig = c
 descComp {j = j} (Child d k x y) = Composable.compHigher (descComp d) j x y
 descComp (Prod d₁ d₂) = prodComp (realise d₁) (realise d₂) ⦃ descComp d₁ ⦄ ⦃ descComp d₂ ⦄
 
+idd : {h : Size}
+      {G : GlobSet h}
+      ⦃ _ : Composable G ⦄
+      {i : Size}
+    → (d : Descendant G i)
+    → (j : Size< i)
+    → (x : cells (realise d))
+    → cells (morphisms (realise d) j x x)
+idd d j x = Composable.id (descComp d) j x
+
 comp1 : {h : Size}
         {G : GlobSet h}
         ⦃ _ : Composable G ⦄
