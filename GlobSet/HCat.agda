@@ -12,14 +12,14 @@ record SameMorphism {h i : Size}
                     {G : GlobSet i}
                     {H : GlobSet h}
                     ⦃ _ : Composable H ⦄
-                    (d₂ : Descendant H i)
-                    (F₁ F₂ : GlobSetMorphism G (realise d₂)) : Set₁ where
+                    (d : Descendant H i)
+                    (F₁ F₂ : GlobSetMorphism G (realise d)) : Set₁ where
   coinductive
   field
     eq : (j : Size< i)
        → (x : cells G)
-       → cells (morphisms (realise d₂) j (func F₁ x) (func F₂ x))
-    eqBiInv : (j : Size< i) → (x : cells G) → BiInvertible j (realise d₂) {{{!!}}} (eq j x)
+       → cells (morphisms (realise d) j (func F₁ x) (func F₂ x))
+    eqBiInv : (j : Size< i) → (x : cells G) → BiInvertible j (realise d) {{descComp d}} (eq j x)
 
 open SameMorphism public
 
