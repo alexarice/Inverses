@@ -129,6 +129,7 @@ record HCat {i : Size} (G : GlobSet i) ⦃ _ : Composable G ⦄ : Set₁ where
                               (comp1 (Child Orig j x y)
                                      γ
                                      α)))
+
   interchange₁ {j} {k} {l} {x} {y} {z} {a} {b} {c} {d} {e} {f} α β γ δ =
     eq (compPreserve (compPreserveComp j x y z)
                      k
@@ -168,6 +169,7 @@ record HCat {i : Size} (G : GlobSet i) ⦃ _ : Composable G ⦄ : Set₁ where
                                   (comp3 Orig
                                          (comp1 (Child (Child Orig j y z) k c d) ω ψ)
                                          (comp1 (Child (Child Orig j x y) k a b) χ ϕ)))
+
   interchange₂ {j} {k} {l} {m} {x} {y} {z} {a} {b} {c} {d} {α} {β} {γ} {δ} {ε} {ζ} ϕ χ ψ ω =
     eq (compPreserve (compPreserveCoin (compPreserveComp j x y z)
                                        k
@@ -184,12 +186,11 @@ record HCat {i : Size} (G : GlobSet i) ⦃ _ : Composable G ⦄ : Set₁ where
   idenManip₀ : {j : Size< i}
                {k : Size< j}
                {l : Size< k}
-               {m : Size< l}
                {x y z : cells G}
              → (f : cells (morphisms G j x y))
              → (g : cells (morphisms G j y z))
              → cells (morphisms (morphisms (morphisms G j x z) k (comp1 Orig g f) (comp1 Orig g f)) l (comp2 Orig (idd (Child Orig j y z) k g) (idd (Child Orig j x y) k f)) (idd (Child Orig j x z) k (comp1 Orig g f)))
-  idenManip₀ {j} {k} {l} {m} {x} {y} {z} f g = idPreserve (compPreserveId j) k l (g , f)
+  idenManip₀ {j} {k} {l} {x} {y} {z} f g = idPreserve (compPreserveId j) k l (g , f)
 
 
 
