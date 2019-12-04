@@ -83,6 +83,12 @@ record HCat {i : Size} (G : GlobSet i) ⦃ _ : Composable G ⦄ : Set₁ where
                    → PreserveIden (Prod (Child Orig j x y) (Child Orig j y z))
                                   (Child Orig j x z)
                                   (comp j x y z)
+    compPreserveComp : (j : Size< i)
+                     → (x y z : cells G)
+                     → PreserveComp (Prod (Child Orig j x y)
+                                          (Child Orig j y z))
+                                    (Child Orig j x z)
+                                    (comp j x y z)
     ƛ : {j : Size< i}
       → (k : Size< j)
       → {x y : cells G}
@@ -93,12 +99,30 @@ record HCat {i : Size} (G : GlobSet i) ⦃ _ : Composable G ⦄ : Set₁ where
            → {x y : cells G}
            → (f : cells (morphisms G j x y))
            → BiInvertible k (Child Orig j x y) (ƛ k f)
-    compPreserveComp : (j : Size< i)
-                     → (x y z : cells G)
-                     → PreserveComp (Prod (Child Orig j x y)
-                                          (Child Orig j y z))
-                                    (Child Orig j x z)
-                                    (comp j x y z)
+    assoc : {j : Size< i}
+            {k : Size< j}
+            {u v x y z : cells G}
+          → (a : cells (morphisms G j u v))
+          → (b : cells (morphisms G j v x))
+          → (c : cells (morphisms G j x y))
+          → (d : cells (morphisms G j y z))
+          → cells (morphisms (morphisms G j u z)
+                             k
+                             (comp1 Orig
+                                    (comp1 Orig a b)
+                                    (comp1 Orig c d))
+                             (comp1 Orig
+                                    a (comp1 Orig
+                                             (comp1 Orig b c)
+                                             d)))
+    assocBiInv : {j : Size< i}
+                 {k : Size< j}
+                 {u v x y z : cells G}
+               → (a : cells (morphisms G j u v))
+               → (b : cells (morphisms G j v x))
+               → (c : cells (morphisms G j x y))
+               → (d : cells (morphisms G j y z))
+               → BiInvertible k (Child Orig j u z) (assoc a b c d)
     hcoin : (j : Size< i)
           → (x y : cells G)
           → HCat (morphisms G j x y) ⦃ compHigher j x y ⦄
