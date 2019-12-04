@@ -38,8 +38,8 @@ record BiInvertComp {h i : Size}
   coinductive
   field
     biComp : {k : Size< j}
-             {f : cells (morphisms (realise A) j x x')}
-             {g : cells (morphisms (realise B) j y y')}
+           → (f : cells (morphisms (realise A) j x x'))
+           → (g : cells (morphisms (realise B) j y y'))
            → BiInvertible j A f
            → BiInvertible j B g
            → BiInvertible j C (func composition (f , g))
@@ -55,10 +55,10 @@ open BiInvertComp
 
 compBiInv : {i : Size} (j : Size< i) {G : GlobSet i} {{_ : Composable G}} {{_ : HCat G}} (x y z : cells G) → BiInvertComp j Orig Orig Orig (comp j x y z)
 biComp (compBiInv j x y z) = {!!}
-f* (biComp (biCompHigher (compBiInv j x y z) k f f' g g') bα bβ) = func (funcMorphisms (comp j x y z) k (f' , g') (f , g)) ((f* bα) , (f* bβ))
-*f (biComp (biCompHigher (compBiInv j x y z) k f f' g g') bα bβ) = func (funcMorphisms (comp j x y z) k (f' , g') (f , g)) ((*f bα) , *f bβ)
-fR (biComp (biCompHigher (compBiInv j x y z) k f f' g g') bα bβ) = {!!}
-fL (biComp (biCompHigher (compBiInv j x y z) k f f' g g') bα bβ) = {!!}
-fRBiInv (biComp (biCompHigher (compBiInv j x y z) k f f' g g') bα bβ) = {!!}
-fLBiInv (biComp (biCompHigher (compBiInv j x y z) k f f' g g') bα bβ) = {!!}
+f* (biComp (biCompHigher (compBiInv j x y z) k f f' g g') α β bα bβ) = func (funcMorphisms (comp j x y z) k (f' , g') (f , g)) ((f* bα) , (f* bβ))
+*f (biComp (biCompHigher (compBiInv j x y z) k f f' g g') α β bα bβ) = func (funcMorphisms (comp j x y z) k (f' , g') (f , g)) ((*f bα) , *f bβ)
+fR (biComp (biCompHigher (compBiInv j x y z) k f f' g g') α β bα bβ) l = ? -- comp1 (Child (Child Orig {!!} {!!} {!!}) {!!} {!!} {!!}) (comp1 (Child (Child Orig j x z) k (comp1 Orig f' g') (comp1 Orig f' g')) (idenManip₁ g' f') (comp3 Orig (fR bα {!k₁!}) (fR bβ {!k₁!}))) (interchange₁ β α (f* bβ) (f* bα))
+fL (biComp (biCompHigher (compBiInv j x y z) k f f' g g') α β bα bβ) = {!!}
+fRBiInv (biComp (biCompHigher (compBiInv j x y z) k f f' g g') α β bα bβ) = {!!}
+fLBiInv (biComp (biCompHigher (compBiInv j x y z) k f f' g g') α β bα bβ) = {!!}
 biCompHigher (biCompHigher (compBiInv j x y z) k f f' g g') = {!!}
