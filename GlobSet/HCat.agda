@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K #-}
+{-# OPTIONS --without-K --sized-types #-}
 
 module GlobSet.HCat where
 
@@ -27,21 +27,21 @@ record PreserveIden {h i : Size}
                     {G H : GlobSet h}
                     ⦃ _ : Composable G ⦄
                     ⦃ _ : Composable H ⦄
-                    (d₁ : Descendant G i)
-                    (d₂ : Descendant H i)
-                    (F : GlobSetMorphism (realise d₁) (realise d₂)) : Set₁ where
+                    (d₁ : ExDescendant G i)
+                    (d₂ : ExDescendant H i)
+                    (F : GlobSetMorphism (realiseEx d₁) (realiseEx d₂)) : Set₁ where
   coinductive
   field
     idPreserve : (j : Size< i)
                → (k : Size< j)
-               → (x : cells (realise d₁))
-               → cells (morphisms (morphisms (realise d₂) j (func F x) (func F x))
+               → (x : cells (realiseEx d₁))
+               → cells (morphisms (morphisms (realiseEx d₂) j (func F x) (func F x))
                        k
-                       (func (funcMorphisms F j x x) (idd d₁ j x)) (idd d₂ j (func F x)))
+                       (func (funcMorphisms F j x x) (idde d₁ j x)) (idde d₂ j (func F x)))
     idPreserveBiInv : (j : Size< i)
                     → (k : Size< j)
-                    → (x : cells (realise d₁))
-                    → BiInvertible k (Child d₂ j (func F x) (func F x))
+                    → (x : cells (realiseEx d₁))
+                    → BiInvertible k (ChildEx d₂ j (func F x) (func F x))
                                    (idPreserve j k x)
     idPreserveCoin : (j : Size< i)
                    → (x y : cells (realise d₁))
@@ -79,7 +79,7 @@ record HCat {i : Size} (G : GlobSet i) ⦃ _ : Composable G ⦄ : Set₁ where
   coinductive
   field
     compPreserveId : (j : Size< i)
-                   → {x y z : cells G}
+                   → (x y z : cells G)
                    → PreserveIden (Prod (Child Orig j x y) (Child Orig j y z))
                                   (Child Orig j x z)
                                   (comp j x y z)
@@ -203,22 +203,7 @@ record HCat {i : Size} (G : GlobSet i) ⦃ _ : Composable G ⦄ : Set₁ where
        m
        ((ϕ , ψ) , χ , ω)
 
-  idenManip₁ : {j : Size< i}
-               {k : Size< j}
-               {l : Size< k}
-               {x y z : cells G}
-             → (f : cells (morphisms G j x y))
-             → (g : cells (morphisms G j y z))
-             → cells (morphisms (morphisms (morphisms G j x z)
-                                           k
-                                           (comp1 Orig f g)
-                                           (comp1 Orig f g))
-                                l
-                                (comp2 Orig
-                                       (idd (Child Orig j x y) k f)
-                                       (idd (Child Orig j y z) k g))
-                                (idd (Child Orig j x z) k (comp1 Orig f g)))
-  idenManip₁ {j} {k} {l} {x} {y} {z} f g = idPreserve (compPreserveId j) k l (f , g)
+
 
   idenManip₂ : {j : Size< i}
                {k : Size< j}
@@ -247,7 +232,53 @@ record HCat {i : Size} (G : GlobSet i) ⦃ _ : Composable G ⦄ : Set₁ where
                                      l
                                      (comp2 Orig α β)))
   idenManip₂ {j} {k} {l} {m} {x} {y} {z} {a} {b} {c} {d} α β =
-    idPreserve (idPreserveCoin (compPreserveId j) k (a , c) (b , d)) l m (α , β)
+    idPreserve (idPreserveCoin (compPreserveId j x y z) k (a , c) (b , d)) l m (α , β)
+
+
 
 
 open HCat ⦃ ... ⦄ public
+
+descHCat : {h : Size}
+           {G : GlobSet h}
+           ⦃ _ : Composable G ⦄
+           ⦃ _ : HCat G ⦄
+           {i : Size}
+         → (d : Descendant G i)
+         → HCat (realise d) ⦃ descComp d ⦄
+descHCat ⦃ _ ⦄ ⦃ hcat ⦄ Orig = hcat
+descHCat {i = i} (Child d k x y) = HCat.hcoin ⦃ descComp d ⦄ (descHCat d) i x y
+
+compPreserveIdD : {h : Size}
+                  {G : GlobSet h}
+                  ⦃ _ : Composable G ⦄
+                  {i : Size}
+                → (des : Descendant G i)
+                → (j : Size< i)
+                → (x y z : cells (realise des))
+                → PreserveIden (Prod (Child des j x y) (Child des j y z))
+                                  (Child des j x z)
+                                  (compd des j x y z)
+compPreserveIdD des j x y z = {!!} -- HCat.compPreserveId (descHCat) ? ? ? ?
+
+idenManip₁ : {h : Size}
+             {G : GlobSet h}
+             ⦃ _ : Composable G ⦄
+             {i : Size}
+             (des : Descendant G i)
+             {j : Size< i}
+             {k : Size< j}
+             {l : Size< k}
+             {x y z : cells (realise des)}
+           → (f : cells (morphisms (realise des) j x y))
+           → (g : cells (morphisms (realise des) j y z))
+           → cells (morphisms (morphisms (morphisms (realise des) j x z)
+                                           k
+                                           (comp1 des f g)
+                                           (comp1 des f g))
+                                l
+                                (comp2 des
+                                       (idd (Child des j x y) k f)
+                                       (idd (Child des j y z) k g))
+                                (idd (Child des j x z) k (comp1 des f g)))
+idenManip₁ des {j} {k} {l} {x} {y} {z} f g = idPreserve (compPreserveIdD des j x y z) k l (f , g)
