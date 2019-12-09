@@ -5,7 +5,7 @@ module GlobSet.BiInvertible where
 open import GlobSet
 open import GlobSet.Composition
 
-record BiInvertible {i : Size}
+record BiInvertible (i : Size)
                     {G : GlobSet i}
                     (c : Composable G)
                     (j : Size< i)
@@ -17,7 +17,7 @@ record BiInvertible {i : Size}
     *f : cells (morphisms G j y x)
     fR : (k : Size< j) → cells (morphisms (morphisms G j x x) k (comp1 c f f*) (id c j x))
     fL : (k : Size< j) → cells (morphisms (morphisms G j y y) k (comp1 c *f f) (id c j y))
-    fRBiInv : (k : Size< j) → BiInvertible (compHigher c j x x) k (fR k)
-    fLBiInv : (k : Size< j) → BiInvertible (compHigher c j y y) k (fL k)
+    fRBiInv : (k : Size< j) → BiInvertible j (compHigher c j x x) k (fR k)
+    fLBiInv : (k : Size< j) → BiInvertible j (compHigher c j y y) k (fL k)
 
 open BiInvertible public

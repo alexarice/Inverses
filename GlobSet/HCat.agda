@@ -17,7 +17,7 @@ record SameMorphism {i : Size}
     eq : (j : Size< i)
        → (x : cells G)
        → cells (morphisms H j (func F₁ x) (func F₂ x))
-    eqBiInv : (j : Size< i) → (x : cells G) → BiInvertible c j (eq j x)
+    eqBiInv : (j : Size< i) → (x : cells G) → BiInvertible i c j (eq j x)
 
 open SameMorphism public
 
@@ -37,7 +37,7 @@ record PreserveIden {i : Size}
     idPreserveBiInv : (j : Size< i)
                     → (k : Size< j)
                     → (x : cells G)
-                    → BiInvertible (compHigher ch j (func F x) (func F x))
+                    → BiInvertible j (compHigher ch j (func F x) (func F x))
                                    k
                                    (idPreserve j k x)
     idPreserveCoin : (j : Size< i)
@@ -92,7 +92,7 @@ record HCat {i : Size} (G : GlobSet i) (com : Composable G) : Set₁ where
            → (k : Size< j)
            → {x y : cells G}
            → (f : cells (morphisms G j x y))
-           → BiInvertible (compHigher com j x y) k (ƛ k f)
+           → BiInvertible j (compHigher com j x y) k (ƛ k f)
     assoc : {j : Size< i}
             {k : Size< j}
             {u v x y z : cells G}
@@ -116,7 +116,7 @@ record HCat {i : Size} (G : GlobSet i) (com : Composable G) : Set₁ where
                → (b : cells (morphisms G j v x))
                → (c : cells (morphisms G j x y))
                → (d : cells (morphisms G j y z))
-               → BiInvertible (compHigher com j u z) k (assoc a b c d)
+               → BiInvertible j (compHigher com j u z) k (assoc a b c d)
     hcoin : (j : Size< i)
           → (x y : cells G)
           → HCat (morphisms G j x y) (compHigher com j x y)
