@@ -51,6 +51,22 @@ record BiInvertComp (i : Size)
 
 open BiInvertComp
 
+generateBiComp : (i : Size)
+                 (j : Size< i)
+                 {A B C : GlobSet i}
+                 {x x' : cells A}
+                 {y y' : cells B}
+                 {z z' : cells C}
+                 (cA : Composable A)
+                 (cB : Composable B)
+                 (cC : Composable C)
+                 (composition : GlobSetMorphism (morphisms A j x x'
+                                                 ×G
+                                                 morphisms B j y y')
+                                                (morphisms C j z z'))
+               → BiInvertComp i j cA cB cC composition
+generateBiComp i j cA cB cC composition = ?
+
 compBiInv : {i : Size}
           → (j : Size< i)
             {G : GlobSet i}
@@ -172,15 +188,33 @@ f* (biComp (biCompHigher (compBiInv j c h x y z) k f f' g g') α β bα bβ) = f
 fR (biComp (biCompHigher (compBiInv j c h x y z) k f f' g g') α β bα bβ) l =
   comp1 (compHigher (compHigher c j x z) k (comp1 c f g) (comp1 c f g))
         (comp1 (compHigher (compHigher c j x z) k (comp1 c f g) (comp1 c f g))
-               (interchange₁ h α β (f* bα) (f* bβ))
+               (eq (compPreserve (compPreserveComp h j x y z) k l (f , g) (f' , g') (f , g)) l ((α , β) , f* bα , f* bβ))
                (comp3 c (fR bα l) (fR bβ l)))
-        (idenManip₁ h f g)
-fL (biComp (biCompHigher (compBiInv j c h x y z) k f f' g g') α β bα bβ) l =
-  comp1 (compHigher (compHigher c j x z) k (comp1 c f' g') (comp1 c f' g'))
-        (comp1 (compHigher (compHigher c j x z) k (comp1 c f' g') (comp1 c f' g'))
-               (interchange₁ h (*f bα) (*f bβ) α β)
-               (comp3 c (fL bα l) (fL bβ l)))
-        (idenManip₁ h f' g')
+        (idPreserve (compPreserveId h j) k l (f , g))
+fL (biComp (biCompHigher (compBiInv j c h x y z) k f f' g g') α β bα bβ) l = {!!}
 fRBiInv (biComp (biCompHigher (compBiInv j c h x y z) k f f' g g') α β bα bβ) l = {!!}
 fLBiInv (biComp (biCompHigher (compBiInv j c h x y z) k f f' g g') α β bα bβ) l = {!!}
-biCompHigher (biCompHigher (compBiInv j c h x y z) k f f' g g') = {!!}
+f* (biComp (biCompHigher (biCompHigher (compBiInv j c h x y z) k f f' g g') l α α' β β') γ ζ bγ bζ) =
+  func (funcMorphisms (funcMorphisms (comp c j x y z) k (f , g) (f' , g')) l (α' , β') (α , β)) ((f* bγ) , (f* bζ))
+*f (biComp (biCompHigher (biCompHigher (compBiInv j c h x y z) k f f' g g') l α α' β β') γ ζ bγ bζ) =
+  func (funcMorphisms (funcMorphisms (comp c j x y z) k (f , g) (f' , g')) l (α' , β') (α , β)) ((*f bγ) , (*f bζ))
+fR (biComp (biCompHigher (biCompHigher (compBiInv j c h x y z) k f f' g g') l α α' β β') γ ζ bγ bζ) m =
+  comp1 (compHigher (compHigher (compHigher c j x z) k (func (comp c j x y z) (f , g)) (func (comp c j x y z) (f' , g'))) l (func (funcMorphisms (comp c j x y z) k (f , g) (f' , g')) (α , β)) (func (funcMorphisms (comp c j x y z) k (f , g) (f' , g')) (α , β)))
+        (comp1 (compHigher (compHigher (compHigher c j x z) k (func (comp c j x y z) (f , g)) (func (comp c j x y z) (f' , g'))) l (func (funcMorphisms (comp c j x y z) k (f , g) (f' , g')) (α , β)) (func (funcMorphisms (comp c j x y z) k (f , g) (f' , g')) (α , β)))
+               (eq (compPreserve (compPreserveCoin (compPreserveComp h j x y z) k (f , g) (f' , g')) l m (α , β) (α' , β') (α , β)) m ((γ , ζ) , f* bγ , f* bζ))
+               (func (funcMorphisms (funcMorphisms (funcMorphisms (comp c j x y z)
+                                                                  k
+                                                                  (f , g)
+                                                                  (f' , g'))
+                                                   l
+                                                   (α , β)
+                                                   (α , β))
+                                    m
+                                    (comp1 (compHigher (compHigher c j x y) k f f') γ (f* bγ) , comp1 (compHigher (compHigher c j y z) k g g') ζ (f* bζ))
+                                    (id (compHigher (compHigher c j x y) k f f') l α , id (compHigher (compHigher c j y z) k g g') l β))
+                     ((fR bγ m) , (fR bζ m))))
+        (idPreserve (idPreserveCoin (compPreserveId h j) k {!f , g!} (f' , g')) l m (α , β))
+fL (biComp (biCompHigher (biCompHigher (compBiInv j c h x y z) k f f' g g') l α α' β β') γ ζ bγ bζ) = {!!}
+fRBiInv (biComp (biCompHigher (biCompHigher (compBiInv j c h x y z) k f f' g g') l α α' β β') γ ζ bγ bζ) = {!!}
+fLBiInv (biComp (biCompHigher (biCompHigher (compBiInv j c h x y z) k f f' g g') l α α' β β') γ ζ bγ bζ) = {!!}
+biCompHigher (biCompHigher (biCompHigher (compBiInv j c h x y z) k f f' g g') l α α' β β') = {!!}
