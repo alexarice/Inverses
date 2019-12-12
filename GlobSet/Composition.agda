@@ -4,7 +4,7 @@ module GlobSet.Composition where
 open import GlobSet
 open import GlobSet.Product
 
-record Composable {i : Size} (G : GlobSet i) : Set where
+record Composable (i : Size) (G : GlobSet i) : Set where
   coinductive
   field
     id : (j : Size< i)
@@ -16,22 +16,22 @@ record Composable {i : Size} (G : GlobSet i) : Set where
                            (morphisms G j x z)
     compHigher : (j : Size< i)
                → (x y : cells G)
-               → Composable (morphisms G j x y)
+               → Composable j (morphisms G j x y)
 
 open Composable public
 
 prodComp : {i : Size}
          → {A B : GlobSet i}
-         → (ca : Composable A)
-           (cb : Composable B)
-         → Composable (A ×G B)
+         → (ca : Composable i A)
+           (cb : Composable i B)
+         → Composable i (A ×G B)
 Composable.id (prodComp ca cb) j (x , y) = (id ca j x) , (id cb j y)
 Composable.comp (prodComp {_} {A} {B} ca cb) j (x , x') (y , y') (z , z') = gComp ((comp ca j x y z) ×GM (comp cb j x' y' z')) (interchangeG (morphisms A j x y) (morphisms B j x' y') (morphisms A j y z) (morphisms B j y' z'))
 Composable.compHigher (prodComp {_} {A} {B} ca cb) j (x , x') (y , y') = prodComp (compHigher ca j x y) (compHigher cb j x' y')
 
 comp1 : {i : Size}
         {G : GlobSet i}
-        (c : Composable G)
+        (c : Composable i G)
         {j : Size< i}
         {x y z : cells G}
       → cells (morphisms G j x y)
@@ -41,7 +41,7 @@ comp1 c {j} {x} {y} {z} f g = func (comp c j x y z) (f , g)
 
 comp2 : {i : Size}
         {G : GlobSet i}
-        (c : Composable G)
+        (c : Composable i G)
         {j : Size< i}
         {k : Size< j}
         {x y z : cells G}
@@ -59,7 +59,7 @@ comp2 c {j} {k} {x} {y} {z} {g} {g'} {f} {f'} α β =
        (α , β)
 comp3 : {i : Size}
         {G : GlobSet i}
-        (c : Composable G)
+        (c : Composable i G)
         {j : Size< i}
         {k : Size< j}
         {l : Size< k}

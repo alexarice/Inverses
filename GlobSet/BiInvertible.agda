@@ -7,7 +7,7 @@ open import GlobSet.Composition
 
 record BiInvertible (i : Size)
                     {G : GlobSet i}
-                    (c : Composable G)
+                    (c : Composable i G)
                     (j : Size< i)
                     {x y : cells G}
                     (f : cells (morphisms G j x y)) : Set₁ where

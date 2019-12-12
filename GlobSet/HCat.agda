@@ -10,7 +10,7 @@ open import GlobSet.BiInvertible
 record SameMorphism {i : Size}
                     {G : GlobSet i}
                     {H : GlobSet i}
-                    (c : Composable H)
+                    (c : Composable i H)
                     (F₁ F₂ : GlobSetMorphism G H) : Set₁ where
   coinductive
   field
@@ -23,8 +23,8 @@ open SameMorphism public
 
 record PreserveIden {i : Size}
                     {G H : GlobSet i}
-                    (cg : Composable G)
-                    (ch  : Composable H)
+                    (cg : Composable i G)
+                    (ch  : Composable i H)
                     (F : GlobSetMorphism G H) : Set₁ where
   coinductive
   field
@@ -50,8 +50,8 @@ open PreserveIden public
 
 record PreserveComp {i : Size}
                     {G H : GlobSet i}
-                    (cg : Composable G)
-                    (ch : Composable H)
+                    (cg : Composable i G)
+                    (ch : Composable i H)
                     (F : GlobSetMorphism G H) : Set₁ where
   coinductive
   field
@@ -70,7 +70,7 @@ record PreserveComp {i : Size}
 
 open PreserveComp public
 
-record HCat {i : Size} (G : GlobSet i) (com : Composable G) : Set₁ where
+record HCat {i : Size} (G : GlobSet i) (com : Composable i G) : Set₁ where
   coinductive
   field
     compPreserveId : (j : Size< i)
