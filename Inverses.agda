@@ -564,3 +564,33 @@ biCompHigher (compBiInv {i} j c h x y z) k f f' g g' =
                  f'
                  g
                  g'
+
+
+comp1BiInv : {i : Size}
+           → {G : GlobSet i}
+           → (c : Composable i G)
+           → HCat G c
+           → {x y z : cells G}
+           → {j : Size< i}
+           → {f : cells (morphisms G j x y)}
+           → {g : cells (morphisms G j y z)}
+           → BiInvertible i c j f
+           → BiInvertible i c j g
+           → BiInvertible i c j (comp1 c f g)
+comp1BiInv c h {x} {y} {z} {j} bf bg = biComp (compBiInv j c h x y z) bf bg
+
+comp2BiInv : {i : Size}
+           → {G : GlobSet i}
+           → (c : Composable i G)
+           → HCat G c
+           → {x y z : cells G}
+           → {j : Size< i}
+           → {f f' : cells (morphisms G j x y)}
+           → {g g' : cells (morphisms G j y z)}
+           → {k : Size< j}
+           → {α : cells (morphisms (morphisms G j x y) k f f')}
+           → {β : cells (morphisms (morphisms G j y z) k g g')}
+           → BiInvertible j (compHigher c j x y) k α
+           → BiInvertible j (compHigher c j y z) k β
+           → BiInvertible j (compHigher c j x z) k (comp2 c α β)
+comp2BiInv c h {x} {y} {z} {j} {f} {f'} {g} {g'} {k} bα bβ = biComp (biCompHigher (compBiInv j c h x y z) k f f' g g') bα bβ
