@@ -1,11 +1,10 @@
-{-# OPTIONS --without-K --sized-types #-}
+{-# OPTIONS --without-K --sized-types --safe #-}
 
 module Inverses where
 open import GlobSet
 open import GlobSet.Product
 open import GlobSet.Composition
 open import GlobSet.BiInvertible
-open import GlobSet.Descendant
 open import GlobSet.HCat
 
 

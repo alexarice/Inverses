@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K #-}
+{-# OPTIONS --without-K --sized-types --safe #-}
 
 module GlobSet.BiInvertible where
 

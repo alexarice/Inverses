@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K  --sized-types --allow-unsolved-metas #-}
+{-# OPTIONS --without-K  --sized-types --safe #-}
 
 module GlobSet.Composition where
 open import GlobSet

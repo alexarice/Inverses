@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K --allow-unsolved-metas --sized-types #-}
+{-# OPTIONS --without-K --safe --sized-types #-}
 
 module GlobSet.Product where
 open import Data.Product public
