@@ -10,16 +10,16 @@ equality : (i : Size) → Set → GlobSet i
 cells (equality i A) = A
 morphisms (equality i A) j x y = equality j (x ≡ y)
 
-compEquality : ∀{i} → (S : Set) → Composable (equality i S)
+compEquality : ∀{i} → (S : Set) → Composable i (equality i S)
 Composable.id (compEquality S) j x = refl
-Composable.comp (compEquality S) j x y z = γ
+Composable.comp (compEquality {i} S) j x y z = γ
  where
-  γ : GlobSetMorphism (morphisms (equality (↑ j) S) j y z
+  γ : GlobSetMorphism (morphisms (equality i S) j x y
                        ×G
-                       morphisms (equality (↑ j) S) j x y)
-                      (morphisms (equality (↑ j) S) j x z)
+                       morphisms (equality i S) j y z)
+                      (morphisms (equality i S) j x z)
   func γ (refl , refl) = refl
-  funcMorphisms γ j (f , g) (f' , g') = γ₂ (y ≡ z) (x ≡ y) (x ≡ z) f f' g g' (func γ)
+  funcMorphisms γ j (f , g) (f' , g') = γ₂ (x ≡ y) (y ≡ z) (x ≡ z) f f' g g' (func γ)
    where
     γ₂ : {k : Size}
        → (A B C : Set)

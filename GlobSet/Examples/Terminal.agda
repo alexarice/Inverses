@@ -10,7 +10,7 @@ terminal : (i : Size) → GlobSet i
 cells (terminal i)= ⊤
 morphisms (terminal i) j _ _ = terminal j
 
-compTerminal : {i : Size} → Composable (terminal i)
+compTerminal : {i : Size} → Composable i (terminal i)
 Composable.id compTerminal j x = tt
 Composable.comp compTerminal j x y z = γ
  where
