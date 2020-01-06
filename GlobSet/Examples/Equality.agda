@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K  --sized-types #-}
+{-# OPTIONS --safe --without-K --sized-types #-}
 
 module GlobSet.Examples.Equality where
 open import GlobSet
