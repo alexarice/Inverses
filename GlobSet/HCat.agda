@@ -32,8 +32,9 @@ record PreserveIden {i : Size}
                → (k : Size< j)
                → (x : cells G)
                → cells (morphisms (morphisms H j (func F x) (func F x))
-                       k
-                       (func (funcMorphisms F j x x) (id cg j x)) (id ch j (func F x)))
+                                  k
+                                  (func (funcMorphisms F j x x) (id cg j x))
+                                  (id ch j (func F x)))
     idPreserveBiInv : (j : Size< i)
                     → (k : Size< j)
                     → (x : cells G)
@@ -74,7 +75,7 @@ record HCat {i : Size} (G : GlobSet i) (com : Composable i G) : Set₁ where
   coinductive
   field
     compPreserveId : (j : Size< i)
-                   → {x y z : cells G}
+                   → (x y z : cells G)
                    → PreserveIden (prodComp (compHigher com j x y) (compHigher com j y z))
                                   (compHigher com j x z)
                                   (comp com j x y z)
@@ -212,7 +213,7 @@ record HCat {i : Size} (G : GlobSet i) (com : Composable i G) : Set₁ where
                                        (id (compHigher com j x y) k f)
                                        (id (compHigher com j y z) k g))
                                 (id (compHigher com j x z) k (comp1 com f g)))
-  idenManip₁ {j} {k} {l} {x} {y} {z} f g = idPreserve (compPreserveId j) k l (f , g)
+  idenManip₁ {j} {k} {l} {x} {y} {z} f g = idPreserve (compPreserveId j x y z) k l (f , g)
 
   idenManip₂ : {j : Size< i}
                {k : Size< j}
@@ -238,7 +239,7 @@ record HCat {i : Size} (G : GlobSet i) (com : Composable i G) : Set₁ where
                                     l
                                     (comp2 com α β)))
   idenManip₂ {j} {k} {l} {m} {x} {y} {z} {a} {b} {c} {d} α β =
-    idPreserve (idPreserveCoin (compPreserveId j) k (a , c) (b , d)) l m (α , β)
+    idPreserve (idPreserveCoin (compPreserveId j x y z) k (a , c) (b , d)) l m (α , β)
 
 
 open HCat public
