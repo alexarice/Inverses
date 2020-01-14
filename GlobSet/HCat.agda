@@ -5,7 +5,7 @@ module GlobSet.HCat where
 open import GlobSet
 open import GlobSet.Product
 open import GlobSet.Composition
-open import GlobSet.BiInvertible
+open import GlobSet.BiInvertible.Core
 
 record SameMorphism {a b : Level}
                     {i : Size}
