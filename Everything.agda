@@ -9,3 +9,4 @@ import GlobSet.BiInvertible.Core
 import GlobSet.HCat
 import GlobSet.Examples.Equality
 import GlobSet.Examples.Terminal
+import GlobSet.Examples.Empty
