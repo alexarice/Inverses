@@ -8,9 +8,10 @@ open import GlobSet.BiInvertible
 open import GlobSet.HCat
 
 
-idIsBiInv : {i : Size}
+idIsBiInv : {a : Level}
+            {i : Size}
             (j : Size< i)
-            {G : GlobSet i}
+            {G : GlobSet a i}
             (c : Composable i G)
             (h : HCat G c)
           → (x : cells G)
@@ -22,9 +23,12 @@ fL (idIsBiInv j c h x) k = ƛ h k (id c j x)
 fRBiInv (idIsBiInv j c h x) k = ƛBiInv h k (id c j x)
 fLBiInv (idIsBiInv j c h x) k = ƛBiInv h k (id c j x)
 
-record BiInvertComp (i : Size)
+record BiInvertComp {a b c : Level}
+                    (i : Size)
                     (j : Size< i)
-                    {A B C : GlobSet i}
+                    {A : GlobSet a i}
+                    {B : GlobSet b i}
+                    {C : GlobSet c i}
                     {x x' : cells A}
                     {y y' : cells B}
                     {z z' : cells C}
@@ -34,7 +38,7 @@ record BiInvertComp (i : Size)
                     (composition : GlobSetMorphism (morphisms A j x x'
                                                     ×G
                                                     morphisms B j y y')
-                                                   (morphisms C j z z')) : Set₁ where
+                                                   (morphisms C j z z')) : Set (suc (a ⊔ b ⊔ c)) where
   coinductive
   field
     biComp : {f : cells (morphisms A j x x')}
@@ -50,18 +54,22 @@ record BiInvertComp (i : Size)
 
 open BiInvertComp
 
-compBiInv : {i : Size}
+compBiInv : {a : Level}
+            {i : Size}
           → (j : Size< i)
-            {G : GlobSet i}
+            {G : GlobSet a i}
           → (c : Composable i G)
           → (h : HCat G c)
           → (x y z : cells G)
           → BiInvertComp i j c c c (comp c j x y z)
 
-generateBiComp : (i : Size)
+generateBiComp : {a b c : Level}
+               → (i : Size)
                → (j : Size< i)
                → (k : Size< j)
-               → {A B C : GlobSet i}
+               → {A : GlobSet a i}
+               → {B : GlobSet b i}
+               → {C : GlobSet c i}
                → {x x' : cells A}
                → {y y' : cells B}
                → {z z' : cells C}
@@ -407,7 +415,7 @@ fL (biComp (compBiInv j c h x y z) {f} {g} bf bg) k =
                              (id (compHigher c j z y) k (*f bg))
                              (ƛ h k g))
                       (fL bg k)))
-fRBiInv (biComp (compBiInv {i} j c h x y z) {f} {g} bf bg) k =
+fRBiInv (biComp (compBiInv {i = i} j c h x y z) {f} {g} bf bg) k =
   biComp (compBiInv k
                     (compHigher c j x x)
                     (hcoin h j x x)
@@ -431,7 +439,7 @@ fRBiInv (biComp (compBiInv {i} j c h x y z) {f} {g} bf bg) k =
                                          h
                                          (comp c j x y x)
                                          (compPreserveComp h j x y x)
-                                         (compPreserveId h j)
+                                         (compPreserveId h j x y x)
                                          f
                                          f
                                          (func (comp c j y y x) (func (comp c j y z y) (g , f* bg) , f* bf))
@@ -446,7 +454,7 @@ fRBiInv (biComp (compBiInv {i} j c h x y z) {f} {g} bf bg) k =
                                                  h
                                                  (comp c j y y x)
                                                  (compPreserveComp h j y y x)
-                                                 (compPreserveId h j)
+                                                 (compPreserveId h j y y x)
                                                  (comp1 c g (f* bg))
                                                  (id c j y)
                                                  (f* bf)
@@ -468,7 +476,7 @@ fRBiInv (biComp (compBiInv {i} j c h x y z) {f} {g} bf bg) k =
                                                  h
                                                  (comp c j x y x)
                                                  (compPreserveComp h j x y x)
-                                                 (compPreserveId h j)
+                                                 (compPreserveId h j x y x)
                                                  f
                                                  f
                                                  (comp1 c (id c j y) (f* bf))
@@ -477,7 +485,7 @@ fRBiInv (biComp (compBiInv {i} j c h x y z) {f} {g} bf bg) k =
                                  (ƛBiInv h k (f* bf)))
                          (fRBiInv bf k)))
 
-fLBiInv (biComp (compBiInv {i} j c h x y z) {f} {g} bf bg) k =
+fLBiInv (biComp (compBiInv {i = i} j c h x y z) {f} {g} bf bg) k =
   biComp (compBiInv k
                     (compHigher c j z z)
                     (hcoin h j z z)
@@ -503,7 +511,7 @@ fLBiInv (biComp (compBiInv {i} j c h x y z) {f} {g} bf bg) k =
                                          h
                                          (comp c j z y z)
                                          (compPreserveComp h j z y z)
-                                         (compPreserveId h j)
+                                         (compPreserveId h j z y z)
                                          (*f bg)
                                          (*f bg)
                                          (func (comp c j y y z) (func (comp c j y x y) (*f bf , f) , g))
@@ -518,7 +526,7 @@ fLBiInv (biComp (compBiInv {i} j c h x y z) {f} {g} bf bg) k =
                                                  h
                                                  (comp c j y y z)
                                                  (compPreserveComp h j y y z)
-                                                 (compPreserveId h j)
+                                                 (compPreserveId h j y y z)
                                                  (func (comp c j y x y) (*f bf , f))
                                                  (id c j y)
                                                  g
@@ -541,7 +549,7 @@ fLBiInv (biComp (compBiInv {i} j c h x y z) {f} {g} bf bg) k =
                                                  h
                                                  (comp c j z y z)
                                                  (compPreserveComp h j z y z)
-                                                 (compPreserveId h j)
+                                                 (compPreserveId h j z y z)
                                                  (*f bg)
                                                  (*f bg)
                                                  (func (comp c j y y z) (id c j y , g))
@@ -549,7 +557,7 @@ fLBiInv (biComp (compBiInv {i} j c h x y z) {f} {g} bf bg) k =
                                  (idIsBiInv k (compHigher c j z y) (hcoin h j z y) (*f bg))
                                  (ƛBiInv h k g))
                          (fLBiInv bg k)))
-biCompHigher (compBiInv {i} j c h x y z) k f f' g g' =
+biCompHigher (compBiInv {i = i} j c h x y z) k f f' g g' =
   generateBiComp i
                  j
                  k
@@ -559,15 +567,16 @@ biCompHigher (compBiInv {i} j c h x y z) k f f' g g' =
                  h
                  (comp c j x y z)
                  (compPreserveComp h j x y z)
-                 (compPreserveId h j)
+                 (compPreserveId h j x y z)
                  f
                  f'
                  g
                  g'
 
 
-comp1BiInv : {i : Size}
-           → {G : GlobSet i}
+comp1BiInv : {a : Level}
+           → {i : Size}
+           → {G : GlobSet a i}
            → (c : Composable i G)
            → HCat G c
            → {x y z : cells G}
@@ -579,8 +588,9 @@ comp1BiInv : {i : Size}
            → BiInvertible i c j (comp1 c f g)
 comp1BiInv c h {x} {y} {z} {j} bf bg = biComp (compBiInv j c h x y z) bf bg
 
-comp2BiInv : {i : Size}
-           → {G : GlobSet i}
+comp2BiInv : {a : Level}
+           → {i : Size}
+           → {G : GlobSet a i}
            → (c : Composable i G)
            → HCat G c
            → {x y z : cells G}

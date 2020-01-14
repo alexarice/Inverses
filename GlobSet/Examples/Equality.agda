@@ -8,7 +8,7 @@ open import GlobSet.BiInvertible
 open import GlobSet.HCat
 open import Relation.Binary.PropositionalEquality.Core
 
-equality : (i : Size) → Set → GlobSet i
+equality : {a : Level} → (i : Size) → Set a → GlobSet a i
 cells (equality i A) = A
 morphisms (equality i A) j x y = equality j (x ≡ y)
 

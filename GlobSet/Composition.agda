@@ -4,7 +4,7 @@ module GlobSet.Composition where
 open import GlobSet
 open import GlobSet.Product
 
-record Composable (i : Size) (G : GlobSet i) : Set where
+record Composable {a : Level} (i : Size) (G : GlobSet a i) : Set a where
   coinductive
   field
     id : (j : Size< i)
@@ -20,17 +20,25 @@ record Composable (i : Size) (G : GlobSet i) : Set where
 
 open Composable public
 
-prodComp : {i : Size}
-         → {A B : GlobSet i}
+prodComp : {a b : Level}
+         → {i : Size}
+         → {A : GlobSet a i}
+         → {B : GlobSet b i}
          → (ca : Composable i A)
-           (cb : Composable i B)
+         → (cb : Composable i B)
          → Composable i (A ×G B)
 Composable.id (prodComp ca cb) j (x , y) = (id ca j x) , (id cb j y)
-Composable.comp (prodComp {_} {A} {B} ca cb) j (x , x') (y , y') (z , z') = gComp ((comp ca j x y z) ×GM (comp cb j x' y' z')) (interchangeG (morphisms A j x y) (morphisms B j x' y') (morphisms A j y z) (morphisms B j y' z'))
+Composable.comp (prodComp {A = A} {B = B} ca cb) j (x , x') (y , y') (z , z') =
+  gComp ((comp ca j x y z) ×GM (comp cb j x' y' z'))
+        (interchangeG (morphisms A j x y)
+                      (morphisms B j x' y')
+                      (morphisms A j y z)
+                      (morphisms B j y' z'))
 Composable.compHigher (prodComp {_} {A} {B} ca cb) j (x , x') (y , y') = prodComp (compHigher ca j x y) (compHigher cb j x' y')
 
-comp1 : {i : Size}
-        {G : GlobSet i}
+comp1 : {a : Level}
+        {i : Size}
+        {G : GlobSet a i}
         (c : Composable i G)
         {j : Size< i}
         {x y z : cells G}
@@ -39,8 +47,9 @@ comp1 : {i : Size}
       → cells (morphisms G j x z)
 comp1 c {j} {x} {y} {z} f g = func (comp c j x y z) (f , g)
 
-comp2 : {i : Size}
-        {G : GlobSet i}
+comp2 : {a : Level}
+        {i : Size}
+        {G : GlobSet a i}
         (c : Composable i G)
         {j : Size< i}
         {k : Size< j}
@@ -49,7 +58,7 @@ comp2 : {i : Size}
         {g g' : cells (morphisms G j y z)}
       → cells (morphisms (morphisms G j x y) k f f')
       → cells (morphisms (morphisms G j y z) k g g')
-      → cells (morphisms (morphisms G j x z) k (comp1 {i} c f g) (comp1 {i} c f' g'))
+      → cells (morphisms (morphisms G j x z) k (comp1 {a} {i} c f g) (comp1 {a} {i} c f' g'))
 
 comp2 c {j} {k} {x} {y} {z} {g} {g'} {f} {f'} α β =
   func (funcMorphisms (comp c j x y z)
@@ -57,8 +66,9 @@ comp2 c {j} {k} {x} {y} {z} {g} {g'} {f} {f'} α β =
                       (g , f)
                       (g' , f'))
        (α , β)
-comp3 : {i : Size}
-        {G : GlobSet i}
+comp3 : {a : Level}
+      {i : Size}
+        {G : GlobSet a i}
         (c : Composable i G)
         {j : Size< i}
         {k : Size< j}
@@ -72,7 +82,7 @@ comp3 : {i : Size}
       → cells (morphisms (morphisms (morphisms G j y z) k g g') l β β')
       → cells (morphisms (morphisms (morphisms G j x z)
                                     k
-                                    (comp1 {i} c f g)
+                                    (comp1 {a} {i} c f g)
                                     (comp1 c f' g'))
                          l
                          (comp2 c α β)

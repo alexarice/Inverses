@@ -8,7 +8,7 @@ open import GlobSet.Composition
 open import GlobSet.BiInvertible
 open import GlobSet.HCat
 
-terminal : (i : Size) → GlobSet i
+terminal : (i : Size) → GlobSet 0ℓ i
 cells (terminal i)= ⊤
 morphisms (terminal i) j _ _ = terminal j
 

@@ -5,12 +5,13 @@ module GlobSet.BiInvertible where
 open import GlobSet
 open import GlobSet.Composition
 
-record BiInvertible (i : Size)
-                    {G : GlobSet i}
+record BiInvertible {a : Level}
+                    (i : Size)
+                    {G : GlobSet a i}
                     (c : Composable i G)
                     (j : Size< i)
                     {x y : cells G}
-                    (f : cells (morphisms G j x y)) : Set₁ where
+                    (f : cells (morphisms G j x y)) : Set (suc a) where
   coinductive
   field
     f* : cells (morphisms G j y x)

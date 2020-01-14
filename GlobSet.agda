@@ -2,16 +2,17 @@
 
 module GlobSet where
 open import Agda.Builtin.Size public
+open import Level public
 
-record GlobSet (i : Size) : Set₁ where
+record GlobSet (a : Level) (i : Size) : Set (suc a)  where
   coinductive
   field
-    cells : Set
-    morphisms : (j : Size< i) → cells → cells → GlobSet j
+    cells : Set a
+    morphisms : (j : Size< i) → cells → cells → GlobSet a j
 
 open GlobSet public
 
-record GlobSetMorphism {i : Size} (G H : GlobSet i) : Set where
+record GlobSetMorphism {a b : Level} {i : Size} (G : GlobSet a i) (H : GlobSet b i) : Set (a ⊔ b) where
   coinductive
   field
     func : cells G → cells H
@@ -22,10 +23,10 @@ record GlobSetMorphism {i : Size} (G H : GlobSet i) : Set where
 
 open GlobSetMorphism public
 
-idMorph : {i : Size} → (G : GlobSet i) → GlobSetMorphism G G
+idMorph : {a : Level} {i : Size} → (G : GlobSet a i) → GlobSetMorphism G G
 func (idMorph G) x = x
 funcMorphisms (idMorph G) j x y = idMorph (morphisms G j x y)
 
-gComp : {i : Size} → {G H I : GlobSet i} → GlobSetMorphism H I → GlobSetMorphism G H → GlobSetMorphism G I
+gComp : {a b c : Level} {i : Size} {G : GlobSet a i} {H : GlobSet b i} {I : GlobSet c i} → GlobSetMorphism H I → GlobSetMorphism G H → GlobSetMorphism G I
 func (gComp ϕ ψ) x = func ϕ (func ψ x)
 funcMorphisms (gComp ϕ ψ) j x y = gComp (funcMorphisms ϕ j (func ψ x) (func ψ y)) (funcMorphisms ψ j x y)

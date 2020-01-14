@@ -7,11 +7,12 @@ open import GlobSet.Product
 open import GlobSet.Composition
 open import GlobSet.BiInvertible
 
-record SameMorphism {i : Size}
-                    {G : GlobSet i}
-                    {H : GlobSet i}
+record SameMorphism {a b : Level}
+                    {i : Size}
+                    {G : GlobSet a i}
+                    {H : GlobSet b i}
                     (c : Composable i H)
-                    (F₁ F₂ : GlobSetMorphism G H) : Set₁ where
+                    (F₁ F₂ : GlobSetMorphism G H) : Set (suc (a ⊔ b)) where
   coinductive
   field
     eq : (j : Size< i)
@@ -21,11 +22,13 @@ record SameMorphism {i : Size}
 
 open SameMorphism public
 
-record PreserveIden {i : Size}
-                    {G H : GlobSet i}
+record PreserveIden {a b : Level}
+                    {i : Size}
+                    {G : GlobSet a i}
+                    {H : GlobSet b i}
                     (cg : Composable i G)
                     (ch  : Composable i H)
-                    (F : GlobSetMorphism G H) : Set₁ where
+                    (F : GlobSetMorphism G H) : Set (suc (a ⊔ b)) where
   coinductive
   field
     idPreserve : (j : Size< i)
@@ -49,11 +52,13 @@ record PreserveIden {i : Size}
 
 open PreserveIden public
 
-record PreserveComp {i : Size}
-                    {G H : GlobSet i}
+record PreserveComp {a b : Level}
+                    {i : Size}
+                    {G : GlobSet a i}
+                    {H : GlobSet b i}
                     (cg : Composable i G)
                     (ch : Composable i H)
-                    (F : GlobSetMorphism G H) : Set₁ where
+                    (F : GlobSetMorphism G H) : Set (suc (a ⊔ b)) where
   coinductive
   field
     compPreserve : (j : Size< i)
@@ -71,7 +76,7 @@ record PreserveComp {i : Size}
 
 open PreserveComp public
 
-record HCat {i : Size} (G : GlobSet i) (com : Composable i G) : Set₁ where
+record HCat {a : Level} {i : Size} (G : GlobSet a i) (com : Composable i G) : Set (suc a) where
   coinductive
   field
     compPreserveId : (j : Size< i)
