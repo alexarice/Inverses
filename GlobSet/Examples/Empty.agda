@@ -22,7 +22,5 @@ hCatEmpty : (i : Size) → HCat (emptyGlobSet i) (compEmpty i)
 compPreserveId (hCatEmpty i) _ x = ⊥-elim x
 compPreserveComp (hCatEmpty i) _ x = ⊥-elim x
 ƛ (hCatEmpty i) _ {x} = ⊥-elim x
-ƛBiInv (hCatEmpty i) _ {x} = ⊥-elim x
 assoc (hCatEmpty i) {x = x} = ⊥-elim x
-assocBiInv (hCatEmpty i) {x = x} = ⊥-elim x
 hcoin (hCatEmpty i) _ x = ⊥-elim x
