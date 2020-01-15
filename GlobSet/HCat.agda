@@ -33,16 +33,12 @@ record PreserveIden {a b : Level}
     idPreserve : (j : Size< i)
                → (k : Size< j)
                → (x : cells G)
-               → BiInvertibleCell {!!} {!!} {!!} {!!} {!!} -- cells (morphisms (morphisms H j (func F x) (func F x))
-                                  -- k
-                                  -- (func (funcMorphisms F j x x) (id cg j x))
-                                  -- (id ch j (func F x)))
-    -- idPreserveBiInv : (j : Size< i)
-    --                 → (k : Size< j)
-    --                 → (x : cells G)
-    --                 → BiInvertible j (compHigher ch j (func F x) (func F x))
-    --                                k
-    --                                (idPreserve j k x)
+               → BiInvertibleCell j
+                                  (compHigher ch j (func F x) (func F x))
+                                  k
+                                  (func (funcMorphisms F j x x) (id cg j x))
+                                  (id ch j (func F x))
+
     idPreserveCoin : (j : Size< i)
                    → (x y : cells G)
                    → PreserveIden (compHigher cg j x y)
@@ -92,12 +88,11 @@ record HCat {a : Level} {i : Size} (G : GlobSet a i) (com : Composable i G) : Se
       → (k : Size< j)
       → {x y : cells G}
       → (f : cells (morphisms G j x y))
-      → cells (morphisms (morphisms G j x y) k (comp1 com (id com j x) f) f)
-    ƛBiInv : {j : Size< i}
-           → (k : Size< j)
-           → {x y : cells G}
-           → (f : cells (morphisms G j x y))
-           → BiInvertible j (compHigher com j x y) k (ƛ k f)
+      → BiInvertibleCell j
+                         (compHigher com j x y)
+                         k
+                         (comp1 com (id com j x) f)
+                         f
     assoc : {j : Size< i}
             {k : Size< j}
             {u v x y z : cells G}
@@ -105,23 +100,11 @@ record HCat {a : Level} {i : Size} (G : GlobSet a i) (com : Composable i G) : Se
           → (b : cells (morphisms G j v x))
           → (c : cells (morphisms G j x y))
           → (d : cells (morphisms G j y z))
-          → cells (morphisms (morphisms G j u z)
+          → BiInvertibleCell j
+                             (compHigher com j u z)
                              k
-                             (comp1 com
-                                    (comp1 com a b)
-                                    (comp1 com c d))
-                             (comp1 com
-                                    a (comp1 com
-                                             (comp1 com b c)
-                                             d)))
-    assocBiInv : {j : Size< i}
-                 {k : Size< j}
-                 {u v x y z : cells G}
-               → (a : cells (morphisms G j u v))
-               → (b : cells (morphisms G j v x))
-               → (c : cells (morphisms G j x y))
-               → (d : cells (morphisms G j y z))
-               → BiInvertible j (compHigher com j u z) k (assoc a b c d)
+                             (comp1 com (comp1 com a b) (comp1 com c d))
+                             (comp1 com a (comp1 com (comp1 com b c) d))
     hcoin : (j : Size< i)
           → (x y : cells G)
           → HCat (morphisms G j x y) (compHigher com j x y)
