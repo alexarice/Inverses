@@ -237,5 +237,21 @@ record HCat {a : Level} {i : Size} (G : GlobSet a i) (com : Composable i G) : Se
   idenManip₂ {j} {k} {l} {m} {x} {y} {z} {a} {b} {c} {d} α β =
     idPreserve (idPreserveCoin (compPreserveId j x y z) k (a , c) (b , d)) l m (α , β)
 
-
 open HCat public
+
+record HigherCat {a : Level} (i : Size) (G : GlobSet a i) : Set (suc a) where
+  field
+    com : Composable i G
+    hCat : HCat G com
+
+open HigherCat public
+
+coin : {a : Level}
+     → {i : Size}
+     → {G : GlobSet a i}
+     → HigherCat i G
+     → (j : Size< i)
+     → (x y : cells G)
+     → HigherCat j (morphisms G j x y)
+com (coin h j x y) = compHigher (com h) j x y
+hCat (coin h j x y) = hcoin (hCat h) j x y
