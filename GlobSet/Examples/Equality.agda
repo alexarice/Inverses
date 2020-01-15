@@ -12,13 +12,14 @@ equality : {a : Level} → (i : Size) → Set a → GlobSet a i
 cells (equality i A) = A
 morphisms (equality i A) j x y = equality j (x ≡ y)
 
-equalityCompHelper₂ : {k : Size}
-       → {A B C : Set}
-       → (f f' : A)
-       → (g g' : B)
-       → (F : A × B → C)
-       → GlobSetMorphism (equality k (f ≡ f') ×G equality k (g ≡ g'))
-                         (equality k (F (f , g) ≡ F (f' , g')))
+equalityCompHelper₂ : {a : Level}
+                    → {k : Size}
+                    → {A B C : Set a}
+                    → (f f' : A)
+                    → (g g' : B)
+                    → (F : A × B → C)
+                    → GlobSetMorphism (equality k (f ≡ f') ×G equality k (g ≡ g'))
+                                      (equality k (F (f , g) ≡ F (f' , g')))
 func (equalityCompHelper₂ f .f g .g F) (refl , refl) = refl
 funcMorphisms (equalityCompHelper₂ f f' g g' F) j (α , β) (α' , β') =
   equalityCompHelper₂ α
@@ -27,8 +28,9 @@ funcMorphisms (equalityCompHelper₂ f f' g g' F) j (α , β) (α' , β') =
                       β'
                       (func (equalityCompHelper₂ f f' g g' F))
 
-equalityCompHelper : (i : Size)
-                   → (S : Set)
+equalityCompHelper : {a : Level}
+                   → (i : Size)
+                   → (S : Set a)
                    → (j : Size< i)
                    → (x y z : S)
                    → GlobSetMorphism (morphisms (equality i S) j x y
@@ -41,14 +43,15 @@ funcMorphisms (equalityCompHelper i S j x y z) k (f , g) (f' , g') =
 
 
 
-compEquality : (i : Size) → (S : Set) → Composable i (equality i S)
+compEquality : {a : Level} → (i : Size) → (S : Set a) → Composable i (equality i S)
 Composable.id (compEquality i S) j x = refl
 Composable.comp (compEquality i S) j x y z = equalityCompHelper i S j x y z
 
 Composable.compHigher (compEquality i S) j x y = compEquality j (x ≡ y)
 
-equalityInvertibleMorphisms : (i : Size)
-                            → {S : Set}
+equalityInvertibleMorphisms : {a : Level}
+                            → (i : Size)
+                            → {S : Set a}
                             → (j : Size< i)
                             → (x : S)
                             → BiInvertibleCell i (compEquality i S) j x x
@@ -58,13 +61,14 @@ f* (biInv (equalityInvertibleMorphisms i S j)) = refl
 fR (biInv (equalityInvertibleMorphisms i S j)) k = equalityInvertibleMorphisms S k refl
 fL (biInv (equalityInvertibleMorphisms i S j)) k = equalityInvertibleMorphisms S k refl
 
-hCatEquality : (i : Size) → (S : Set) → HCat (equality i S) (compEquality i S)
+hCatEquality : {a : Level} → (i : Size) → (S : Set a) → HCat (equality i S) (compEquality i S)
 idPreserve (compPreserveId (hCatEquality i S) j x y z) k l w = equalityInvertibleMorphisms k l refl
 idPreserveCoin (compPreserveId (hCatEquality i S) j x y z) k (a , b) (c , d) = γ j k (λ v → trans (proj₁ v) (proj₂ v)) a c b d
  where
-  γ : (j : Size)
+  γ : {l : Level}
+    → (j : Size)
     → (k : Size< j)
-    → {A B C : Set}
+    → {A B C : Set l}
     → (t : A × B → C)
     → (a c : A)
     → (b d : B)
@@ -77,9 +81,10 @@ idPreserveCoin (compPreserveId (hCatEquality i S) j x y z) k (a , b) (c , d) = �
 eq (compPreserve (compPreserveComp (hCatEquality i S) j x y z) k l (a , b) (.a , .b) (.a , .b)) m ((refl , refl) , (refl , refl)) = equalityInvertibleMorphisms k m refl
 compPreserveCoin (compPreserveComp (hCatEquality i S) j x y z) k (a , b) (c , d) = γ j k (λ {(v₁ , v₂) → trans v₁ v₂}) a c b d
  where
-  γ : (j : Size)
+  γ : {l : Level}
+    → (j : Size)
     → (k : Size< j)
-    → {A B C : Set}
+    → {A B C : Set l}
     → (t : A × B → C)
     → (a c : A)
     → (b d : B)
