@@ -67,7 +67,7 @@ comp2 c {j} {k} {x} {y} {z} {g} {g'} {f} {f'} α β =
                       (g' , f'))
        (α , β)
 comp3 : {a : Level}
-      {i : Size}
+        {i : Size}
         {G : GlobSet a i}
         (c : Composable i G)
         {j : Size< i}
