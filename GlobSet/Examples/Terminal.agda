@@ -23,13 +23,12 @@ Composable.compHigher (compTerminal i) j x y = (compTerminal j)
 
 terminalInvertibleMorphisms : (i : Size)
                               (j : Size< i)
-                            → BiInvertible i (compTerminal i) j tt
-f* (terminalInvertibleMorphisms i j) = tt
-*f (terminalInvertibleMorphisms i j) = tt
-fR (terminalInvertibleMorphisms i j) k = tt
-fL (terminalInvertibleMorphisms i j) k = tt
-fRBiInv (terminalInvertibleMorphisms i j) k = terminalInvertibleMorphisms j k
-fLBiInv (terminalInvertibleMorphisms i j) k = terminalInvertibleMorphisms j k
+                            → BiInvertibleCell i (compTerminal i) j tt tt
+cell (terminalInvertibleMorphisms i j) = tt
+f* (biInv (terminalInvertibleMorphisms i j)) = tt
+*f (biInv (terminalInvertibleMorphisms i j)) = tt
+fR (biInv (terminalInvertibleMorphisms i j)) = terminalInvertibleMorphisms j
+fL (biInv (terminalInvertibleMorphisms i j)) = terminalInvertibleMorphisms j
 
 hCatTerminal : (i : Size) → HCat (terminal i) (compTerminal i)
 compPreserveId (hCatTerminal i) j x y z = γ i j
@@ -40,8 +39,7 @@ compPreserveId (hCatTerminal i) j x y z = γ i j
                              (compTerminal j))
                    (compTerminal j)
                    (terminalCompHelper j)
-  idPreserve (γ i j) k l w = tt
-  idPreserveBiInv (γ i j) k l w = terminalInvertibleMorphisms k l
+  idPreserve (γ i j) k l w = terminalInvertibleMorphisms k l
   idPreserveCoin (γ i j) k w₁ w₂ = γ j k
 compPreserveComp (hCatTerminal i) j x y z = γ i j
  where
@@ -51,11 +49,8 @@ compPreserveComp (hCatTerminal i) j x y z = γ i j
                              (compTerminal j))
                    (compTerminal j)
                    (terminalCompHelper j)
-  eq (compPreserve (γ i j) k l x y z) m w = tt
-  eqBiInv (compPreserve (γ i j) k l x y z) m w = terminalInvertibleMorphisms k m
+  eq (compPreserve (γ i j) k l x y z) m w = terminalInvertibleMorphisms k m
   compPreserveCoin (γ i j) k x y = γ j k
-ƛ (hCatTerminal i) k f = tt
-ƛBiInv (hCatTerminal i) {j} k f = terminalInvertibleMorphisms j k
-assoc (hCatTerminal i) a b c d = tt
-assocBiInv (hCatTerminal i) {j} {k} a b c d = terminalInvertibleMorphisms j k
+ƛ (hCatTerminal i) {j} k f = terminalInvertibleMorphisms j k
+assoc (hCatTerminal i) {j} {k} a b c d = terminalInvertibleMorphisms j k
 hcoin (hCatTerminal i) j x y = hCatTerminal j
