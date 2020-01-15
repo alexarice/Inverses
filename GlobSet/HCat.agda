@@ -17,8 +17,7 @@ record SameMorphism {a b : Level}
   field
     eq : (j : Size< i)
        → (x : cells G)
-       → cells (morphisms H j (func F₁ x) (func F₂ x))
-    eqBiInv : (j : Size< i) → (x : cells G) → BiInvertible i c j (eq j x)
+       → BiInvertibleCell i c j (func F₁ x) (func F₂ x)
 
 open SameMorphism public
 
@@ -136,29 +135,32 @@ record HCat {a : Level} {i : Size} (G : GlobSet a i) (com : Composable i G) : Se
                → (β : cells (morphisms (morphisms G j y z) k d e))
                → (γ : cells (morphisms (morphisms G j x y) k b c))
                → (δ : cells (morphisms (morphisms G j y z) k e f))
-               → cells (morphisms (morphisms (morphisms G j x z)
-                                             k
-                                             (comp1 com a d)
-                                             (comp1 com c f))
-                       l
-                       (comp1 (compHigher com j x z)
-                              (comp2 com α β)
-                              (comp2 com γ δ))
-                       (comp2 com
-                              (comp1 (compHigher com j x y)
-                                     α
-                                     γ)
-                              (comp1 (compHigher com j y z)
-                                     β
-                                     δ)))
+               → BiInvertibleCell k
+                                  (compHigher (compHigher com j x z)
+                                              k
+                                              (comp1 com a d)
+                                              (comp1 com c f))
+                                  l
+                                  (comp1 (compHigher com j x z)
+                                         (comp2 com α β)
+                                         (comp2 com γ δ))
+                                  (comp2 com
+                                         (comp1 (compHigher com
+                                                            j
+                                                            x
+                                                            y)
+                                                α
+                                                γ)
+                                         (comp1 (compHigher com
+                                                            j
+                                                            y
+                                                            z)
+                                                β
+                                                δ))
 
   interchange₁ {j} {k} {l} {x} {y} {z} {a} {b} {c} {d} {e} {f} α β γ δ =
-    eq (compPreserve (compPreserveComp j x y z)
-                     k
-                     l
-                     (a , d) (b , e) (c , f))
-       l
-       ((α , β) , γ , δ)
+    eq (compPreserve (compPreserveComp j x y z) k l (a , d) (b , e) (c , f)) l ((α , β) , γ , δ)
+
   interchange₂ : {j : Size< i}
                  {k : Size< j}
                  {l : Size< k}
@@ -172,36 +174,26 @@ record HCat {a : Level} {i : Size} (G : GlobSet a i) (com : Composable i G) : Se
                → (χ : cells (morphisms (morphisms (morphisms G j x y) k a b) l β γ))
                → (ψ : cells (morphisms (morphisms (morphisms G j y z) k c d) l δ ε))
                → (ω : cells (morphisms (morphisms (morphisms G j y z) k c d) l ε ζ))
-               → cells (morphisms (morphisms (morphisms (morphisms G j x z)
-                                                        k
-                                                        (comp1 com a c)
-                                                        (comp1 com b d))
-                                             l
-                                             (comp2 com α δ)
-                                             (comp2 com γ ζ))
-                                  m
-                                  (comp1 (compHigher (compHigher com j x z)
-                                                     k
-                                                     (comp1 com a c)
-                                                     (comp1 com b d))
-                                         (comp3 com ϕ ψ)
-                                         (comp3 com χ ω))
-                                  (comp3 com
-                                         (comp1 (compHigher (compHigher com j x y) k a b) ϕ χ)
-                                         (comp1 (compHigher (compHigher com j y z) k c d) ψ ω)))
+               → BiInvertibleCell l (compHigher (compHigher (compHigher com j x z)
+                                                            k
+                                                            (comp1 com a c)
+                                                            (comp1 com b d))
+                                                l
+                                                (comp2 com α δ)
+                                                (comp2 com γ ζ))
+                                    m
+                                    (comp1 (compHigher (compHigher com j x z)
+                                                       k
+                                                       (comp1 com a c)
+                                                       (comp1 com b d))
+                                           (comp3 com ϕ ψ)
+                                           (comp3 com χ ω))
+                                    (comp3 com
+                                           (comp1 (compHigher (compHigher com j x y) k a b) ϕ χ)
+                                           (comp1 (compHigher (compHigher com j y z) k c d) ψ ω))
 
   interchange₂ {j} {k} {l} {m} {x} {y} {z} {a} {b} {c} {d} {α} {β} {γ} {δ} {ε} {ζ} ϕ χ ψ ω =
-    eq (compPreserve (compPreserveCoin (compPreserveComp j x y z)
-                                       k
-                                       (a , c)
-                                       (b , d))
-                     l
-                     m
-                     (α , δ)
-                     (β , ε)
-                     (γ , ζ))
-       m
-       ((ϕ , ψ) , χ , ω)
+    eq (compPreserve (compPreserveCoin (compPreserveComp j x y z) k (a , c) (b , d)) l m (α , δ) (β , ε) (γ , ζ)) m ((ϕ , ψ) , χ , ω)
 
   idenManip₁ : {j : Size< i}
                {k : Size< j}
