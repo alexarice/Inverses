@@ -33,16 +33,16 @@ record PreserveIden {a b : Level}
     idPreserve : (j : Size< i)
                → (k : Size< j)
                → (x : cells G)
-               → cells (morphisms (morphisms H j (func F x) (func F x))
-                                  k
-                                  (func (funcMorphisms F j x x) (id cg j x))
-                                  (id ch j (func F x)))
-    idPreserveBiInv : (j : Size< i)
-                    → (k : Size< j)
-                    → (x : cells G)
-                    → BiInvertible j (compHigher ch j (func F x) (func F x))
-                                   k
-                                   (idPreserve j k x)
+               → BiInvertibleCell {!!} {!!} {!!} {!!} {!!} -- cells (morphisms (morphisms H j (func F x) (func F x))
+                                  -- k
+                                  -- (func (funcMorphisms F j x x) (id cg j x))
+                                  -- (id ch j (func F x)))
+    -- idPreserveBiInv : (j : Size< i)
+    --                 → (k : Size< j)
+    --                 → (x : cells G)
+    --                 → BiInvertible j (compHigher ch j (func F x) (func F x))
+    --                                k
+    --                                (idPreserve j k x)
     idPreserveCoin : (j : Size< i)
                    → (x y : cells G)
                    → PreserveIden (compHigher cg j x y)
@@ -201,15 +201,17 @@ record HCat {a : Level} {i : Size} (G : GlobSet a i) (com : Composable i G) : Se
                {x y z : cells G}
              → (f : cells (morphisms G j x y))
              → (g : cells (morphisms G j y z))
-             → cells (morphisms (morphisms (morphisms G j x z)
-                                           k
-                                           (comp1 com f g)
-                                           (comp1 com f g))
+             → BiInvertibleCell k
+                                (compHigher (compHigher com j x z)
+                                            k
+                                            (comp1 com f g)
+                                            (comp1 com f g))
                                 l
                                 (comp2 com
                                        (id (compHigher com j x y) k f)
                                        (id (compHigher com j y z) k g))
-                                (id (compHigher com j x z) k (comp1 com f g)))
+                                       (id (compHigher com j x z) k (comp1 com f g))
+
   idenManip₁ {j} {k} {l} {x} {y} {z} f g = idPreserve (compPreserveId j x y z) k l (f , g)
 
   idenManip₂ : {j : Size< i}
@@ -221,20 +223,34 @@ record HCat {a : Level} {i : Size} (G : GlobSet a i) (com : Composable i G) : Se
                {c d : cells (morphisms G j y z)}
              → (α : cells (morphisms (morphisms G j x y) k a b))
              → (β : cells (morphisms (morphisms G j y z) k c d))
-             → cells (morphisms (morphisms (morphisms (morphisms G j x z)
-                                                      k
-                                                      (comp1 com a c)
-                                                      (comp1 com b d))
-                                           l
-                                           (comp2 com α β)
-                                           (comp2 com α β))
-                                m
-                                (comp3 com
-                                       (id (compHigher (compHigher com j x y) k a b) l α)
-                                       (id (compHigher (compHigher com j y z) k c d) l β))
-                                (id (compHigher (compHigher com j x z) k (comp1 com a c) (comp1 com b d))
-                                    l
-                                    (comp2 com α β)))
+             → BiInvertibleCell l (compHigher (compHigher (compHigher com j x z)
+                                                             k
+                                                             (comp1 com a c)
+                                                             (comp1 com b d))
+                                                 l
+                                                 (comp2 com α β)
+                                                 (comp2 com α β))
+                                     m
+                                     (comp3 com
+                                            (id (compHigher (compHigher com j x y)
+                                                            k
+                                                            a
+                                                            b)
+                                                l
+                                                α)
+                                            (id (compHigher (compHigher com j y z)
+                                                            k
+                                                            c
+                                                            d)
+                                                l
+                                                β))
+                                     (id (compHigher (compHigher com j x z)
+                                                     k
+                                                     (comp1 com a c)
+                                                     (comp1 com b d))
+                                         l
+                                         (comp2 com α β))
+
   idenManip₂ {j} {k} {l} {m} {x} {y} {z} {a} {b} {c} {d} α β =
     idPreserve (idPreserveCoin (compPreserveId j x y z) k (a , c) (b , d)) l m (α , β)
 
