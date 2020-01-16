@@ -19,6 +19,23 @@ mathescape=true}
 
 \usetikzlibrary{positioning}
 
+\usepackage[
+backend=biber,
+style=numeric,
+citestyle=numeric,
+maxbibnames=99,
+isbn=false,
+doi=false,
+eprint=false,
+block=ragged
+]{biblatex}
+
+\addbibresource{../citations/citations.bib}
+
+\DefineBibliographyStrings{english}{%
+  bibliography = {References},
+}
+
 \newtheorem{theorem}{Theorem}
 \newtheorem{prop}{Proposition}
 \newtheorem{cor}{Corollary}
@@ -43,10 +60,41 @@ mathescape=true}
 
 \newcommand{\linv}[1]{{}^\star\!#1}
 \newcommand{\rinv}[1]{#1^\star}
+\newcommand{\inv}[1]{#1^{-1}}
 
 
 \begin{document}
 \maketitle
+
+\section{Introduction}\label{sec:intro}
+
+In the study of higher category theory, the notion of invertibility is central. It is common within higher category theory to not specify that two objects are equal, or that two sides of an equation are equal, but rather specify that there is a higher level equivalence between these two objects. It is usual to say that two objects are equivalent exactly when there is an invertible function between them.
+
+This idea can be seen even in the simplest examples of higher categories. Consider the definition of a monoidal category. It is our intention that given objects \(A\), \(B\) and \(C\) that \(A \otimes (B \otimes C)\) and \((A \otimes B) \otimes C\) represent the same object. However it is often the case that requiring equality between these objects (as in a strict monoidal category) is too restrictive and so the usual definition states that there is a natural isomorphism between them.
+
+This is our first example of invertibility. An isomorphism between \(A\) and \(B\) is a morphism \(f : A \to B\) such that there exists a morphisms \(g : B \to A\) with \(f \circ g = \id_B\) and \(g \circ f = \id_A\). This notion of isomorphism works well throughout standard category theory and even in monoidal categories.
+
+However if generalised higher categories are considered, it can be seen that the problem has just been pushed one level up. We have specified that \(g \circ f\) and \(\id_A\) should be equal, yet have already stated that equality is not the best notion of two objects in a higher category. Ideally we want a collection of data that specifies that \(f\) has an inverse \(g\), and that there is a higher morphisms \(\alpha : g \circ f \to \id_A\) and an inverse \(\beta : \id_A \to g \circ f\), and that there exists a morphism \(\alpha \circ \beta \to \id_{\id_A \to g \circ f}\) and continuing in this fashion. Unfortunately this generates a very unwieldy set of data that is difficult to describe.
+
+A natural way we can talk about data structures like this is through coinduction. The definition of equivalence above can be written nicely by saying that \(f : A \to B\) is an equivalence if there exists a \(g : B \to A\) and equivalences \(f \circ g \to \id_B\) and \(g \circ f \to \id_A\). This is a neat method of defining an equivalence, but also has the advantage of opening up more proof techniques to us. In particular, it allows us to structure proofs coinductively.
+
+Like inductive data structures, coinductive data structures are able to reference themselves in their definition. Whereas inductive data structures are initial algebras, coinductive data structures are terminal coalgebras. The key difference manifests itself as the difference between recursion and corecursion. Recursion gives a way to create a function with an inductive structure as it's domain. In contrast, corecursion allows us to generate a function with a coinductive datatype as its codomain. Like recursion, it allows us the function to use itself on the (co)inductive parts of the datatype. A classic example of a coinductive datatype is a stream. A stream of objects of type \(N\) is a pair containing an element of \(N\) and a stream of \(N\). Suppose we wanted to create the function \(\text{const} : N \to \text{stream}(N)\), which takes an \(n : N\) and creates a stream with every element being \(n\). This can be defined using corecursion as \(\text{const}(n) = (n , \text{const}(n))\), where the \(\text{const}\) function has been used to generate the coinductive part of the stream datatype.
+
+Given this coinductive machinery, the definition of equivalence above seems very natural. If we start with our definition of isomorphism, then realise that the equalities introduced should themselves be weakened to equivalences, we end up with the proposed definition. However this is not only way we could have defined invertibility. In type theory and in particular in HoTT~\cite{hottbook}, there are 3 notions of invertibility defined:
+
+\begin{itemize}
+\item A quasi-inverse, which is similar to the notion of isomorphism presented already;
+\item A bi-inverse, where instead of specifying an inverse to the function \(f\), we instead present separate left and right inverses;
+\item A half-adjoint inverse, defined to be the same as the quasi-inverse but with an extra coherence condition.
+\end{itemize}
+
+There are certain properties about these invertibility conditions that are important in type theory. Firstly, all 3 definitions are equivalent, in that a function \(f\) has one of these 3 types of inverses, then it also has the other 2. Secondly, definitions 2 and 3 form contractible types. In essence, this means that there is only one way in which they hold up to propositional equality.
+
+Although it seems that these 3 are not applicable to generalised higher categories due to the use of equality in their definitions, they can nonetheless be modified into coinductive definitions suitable for such a category. This paper will present those definitions and to attempt to show that they are all equivalent. Further we will try to present an analogue to contractibility which is suitable for higher categories and investigate whether these data types are contractible.
+
+\section{Background}\label{sec:background}
+
+In this paper we want to talk about different structures on \(\omega\)-categories, however there are many different definitions of \(\omega\)-categories, a lot of which are very in depth and complicated. Therefore, similar in style to a paper by \citeauthor{Cheng2007}~\cite{Cheng2007}, we give a set of conditions that we expect to hold in any reasonable definition of a weak infinity category. We then prove results only using these conditions, and reason that given a precise definition of an infinity category, if one could show that these conditions hold, then our results should follow for free.
 
 \begin{definition}
   The globe category \(\mathbb{G}\) is the category where the objects are the natural numbers and morphisms are generated by
@@ -84,54 +132,64 @@ mathescape=true}
   \(\circ\) will be used to mean \(\circ_0\).
 \end{definition}
 
+Once we have a globular set with identities and composition, we have enough to define a notion of equivalence. The most basic notion of invertibility will be given here, as it will be needed to state the remainder of properties that we expect an higher category to obey.
+
 \begin{definition}
-  Given a globular set \(G\) with identities and composition, we define the collection of \emph{bi-invertible} cells of \(G\) coinductively as follows: For \(n > 0\), an \(n\)-cell \(f: x \to y\) is \emph{bi-invertible} if:
+  Given a globular set \(G\) with identities and composition, with an \(n > 0\) cell \(f : x \to y\), we say that \(f\) is invertible if:
   \begin{itemize}
-  \item There exists an \(n\)-cell \(\rinv f: y \to x\).
-  \item There exists an \(n\)-cell \(\linv f: y \to x\).
-  \item There exists an \((n+1)\)-cell \(f_R: f \circ \rinv f \to \id_y\).
-  \item There exists an \((n+1)\)-cell \(f_L: \linv f \circ f \to \id_x\).
-  \item \(f_R\) is \emph{bi-invertible}.
-  \item \(f_L\) is \emph{bi-invertible}.
+  \item There exists an \(n\)-cell \(\inv f : y \to x\);
+  \item There exists an \((n+1)\)-cell \(f_R: f \circ \inv f \to \id_y\);
+  \item There exists an \((n+1)\)-cell \(f_L: \inv f \circ f \to \id_x\).
+  \item \(f_R\) is invertible.
+  \item \(f_L\) is invertible.
   \end{itemize}
 \end{definition}
 
 \begin{remark}
-  It can be useful to think of \emph{bi-invertibility} as a functional datatype which encodes a ``proof'' of bi-invertibility. This datatype will clearly be coinductive. We can define this datatype (in a pseudo-Agda syntax) as follows.
-
-  \begin{lstlisting}
-    codata BiInvertible (f: x $\to$ y) where
-      $\rinv {\mathtt{f}}$: y $\to$ x,
-      $\linv {\mathtt{f}}$: y $\to$ x,
-      f_R: $\mathtt f \circ \rinv {\mathtt {f}} \to \mathtt{id}_{\mathtt y}$,
-      f_L: $\linv {\mathtt {f}} \circ {\mathtt {f}} \to \mathtt{id}_{\mathtt y}$,
-      f_RProof: BiInvertible f_R,
-      f_LProof: BiInvertible f_L
-  \end{lstlisting}
+  The previous definition is a coinductive one. Formally, we have defined a coinductive data type, which we could call \(\text{Invertible}(f)\), which references itself (in saying that \(f_R\) and \(f_L\) are themselves invertible), and then have specified that \(f\) is invertible if there is a member of \(\text{Invertible}(f)\).
 \end{remark}
 
-\begin{definition}
-  \label{def:higher-cat}
-  We define an infinity category as a globular set with identities and composition that respects the graphical calculus in the following way. We may draw a diagram with nodes, lines, and areas where areas will represent \(n\)-cells, lines represent \((n+1)\)-cells, and nodes represent \((n+2)\)-cells. Then for any planar isotopy of this diagram there is an \((n+3)\)-cell from source of the isotopy to the target. Further, this cell is \emph{bi-invertible}. Further we assume the existence of the following morphisms.
+\begin{remark}\label{descendants}
+  Notice that in a globular set \(G\) with identities and composition, given two \(n\)-cells \(x\) and \(y\) with the same source and target, we can define a new globular set \(G\) as follows:
   \begin{itemize}
-  \item For \(n>0\) and each \(n\)-cell \(f: x \to y\), there are \(n+1\)-cells, known as unitors, \(\lambda_f: \id_y \circ f \to f\) and \(\rho_f: f \circ \id_x \to f\).
-  \item Given \(f,g,h,j\), \(n>1\)-cells composition defined, we have an associator \(a_{f,g,h,j} : (f \circ g) \circ (h \circ j) \to (f \circ (g \circ h) \circ j)\).
+  \item The \(0\)-cells are the \(n+1\)-cells in \(G\) with source \(x\) and target \(y\);
+  \item The \(m\)-cells are the \(n+m+1\)-cells in \(G\) whose source and target lie in the \(m-1\)-cells of the globular set being generated.
+  \end{itemize}
+  Further it is clear that we can carry over identities and composition to this new globular set.
+\end{remark}
+
+
+
+\begin{definition}\label{def:higher-cat}
+  Consider the standard string diagram diagrammatic calculus for bicategories. We can draw diagrams containing nodes, lines, and areas where areas represent \(0\)-cells, a line between areas representing cells \(x\) and \(y\) represents a \(1\)-cell between \(x\) and \(y\), and node between lines represent \(2\)-cells between the cells those lines represent. These diagrams still represent well formed morphisms in an globular set with identities and composition. In a bicategory we have the theorem that given a planar isotopy of string diagrams, the source and target morphisms are equal.
+
+  In this higher categorical setting we can instead require that given a well typed string diagram, and an isotopy of this diagram, there is a \(3\)-cell from source of the isotopy to the target. We require that this cell is invertible. We say that a globular set \emph{respects the graphical calculus} if it has this property.
+
+  We define a \emph{higher category} to be a globular set with identities and composition such that given any globular set generated as in \cref{descendants} respects the graphical calculus. Further we assume the existence of the following morphisms.
+  \begin{itemize}
+  \item For \(n>0\) and each \(n\)-cell \(f: x \to y\), there are \(n+1\)-cells, known as unitors, \(\lambda_f: \id_y \circ f \to f\).
+  \item Given \(f,g,h,j\), \(n>1\)-cells with suitable composition defined, we have an associator \(a_{f,g,h,j} : (f \circ g) \circ (h \circ j) \to (f \circ (g \circ h) \circ j)\).
   \item For compatible morphisms \(f,g,h,j\), we have an interchanger \(i_{f,g,h,j}(f \circ_n g) \circ (h \circ_n j) \to (f \circ h) \circ_n (g \circ j)\).
   \item For suitable \(f,g\) and \(n > 1\), there is a cell \(\id_f \circ_{n+1} \id_g \to \id_{f \circ_n g}\)
   \end{itemize}
-  These are all \emph{bi-invertible}.
-\end{definition}
+  All these further morphisms must be invertible.
+\end{definition}.
 
-We prove some helpful facts about \emph{bi-invertible} morphisms in higher categories.
+To end this section we give a small lemma, which demonstrates the use of these higher categories and will also be invaluable later.
 
-\begin{lemma}
-  \label{lem:identity}
-  Any identity morphism is \emph{bi-invertible}.
+\begin{lemma}\label{lem:identity}
+  Any identity morphism is invertible.
 \end{lemma}
 
 \begin{proof}
-  Let \(x\) be any cell. Take \(\rinv {\id_x} = \linv {\id_x} = \id_x\) and \((\id_x)_R = (\id_x)_L = \lambda_{id_x}\). By assumption, \(\lambda_{id_x}\) is \emph{bi-invertible}. Hence \(\id_x\) is \emph{bi-invertible}.
+  Let \(x\) be any cell. Take \(\inv {\id_x} = \id_x\) and \({(\id_x)}_R = {(\id_x)}_L = \lambda_{id_x}\). By assumption, \(\lambda_{id_x}\) is invertible. Hence \(\id_x\) is invertible.
 \end{proof}
+
+\section{Types of Invertibility}\label{sec:invertibility}
+
+We begin this section by proving a couple of helpful facts about invertible morphisms in higher categories.
+
+
 
 \begin{theorem}[Composition of \emph{Bi-invertible} Morphisms]
   For any \(n \in \mathbb{N}\) and \emph{bi-invertible} cells \(f,g\), \(f \circ_n g\) is \emph{bi-invertible} if it is well defined.
@@ -145,36 +203,37 @@ We prove some helpful facts about \emph{bi-invertible} morphisms in higher categ
     \begin{itemize}
       \item \(\rinv {(g \circ f)} = \rinv f \circ \rinv g\)
       \item \(\linv {(g \circ f)} = \linv f \circ \linv g\)
-      \item \((g \circ f)_R : g \circ f \circ \rinv f \circ \rinv g\) is the morphism given by the diagram
+      \item \({(g \circ f)}_R : g \circ f \circ \rinv f \circ \rinv g\) is the morphism given by the diagram
         \begin{center}
           \begin{tikzpicture}
             \node[draw] (GR) {\(g_R\)};
-            \node[on grid, below=1 of GR, draw] (P) {\(\rho_g\)};
-            \node[on grid, below=1 of P, draw] (FR) {\(f_R\)};
-            \node[on grid, below=1 of FR, draw] (A) {\(a_{g,f,\rinv f,\rinv g}\)};
+            \node[on grid, below=2 of GR, draw] (FR) {\(f_R\)};
+            \node[on grid, below=1 of FR, draw, dashed, minimum width=5cm, minimum height = 1cm] (A) {\(a_{g,f,\rinv f,\rinv g}\)};
             \node[on grid, below left=2cm and 2.25cm of FR] (Base1) {\(g\)};
             \node[on grid, right=0.75cm of Base1] (Base2) {\(f\)};
             \node[on grid, right=3cm of Base2] (Base3) {\(\rinv f\)};
             \node[on grid, right=0.75cm of Base3] (Base4) {\(\rinv g\)};
-            \draw (Base1) to ++(0,1.5cm) to [out=90,in=180] (GR);
-            \draw (Base4) to ++(0,1.5cm) to [out=90,in=0] (GR);
+            \draw (Base1) to ++(0,1.5cm) to [out=90,in=180]  (GR);
+            \draw (Base4) to ++(0,1.5cm) to [out=90,in=0] node[fill=white,pos=0.5,draw](L){\(\lambda_{\rinv g}\)} (GR);
+            \draw [dotted, thick, out=90,in=-150] (FR) to (L);
             \draw (Base2) to ++(0,1.25cm) to [out=90,in=180] (FR);
             \draw (Base3) to ++(0,1.25cm) to [out=90,in=0] (FR);
           \end{tikzpicture}
         \end{center}
-      \item \((g \circ f)_L\) is the morphism given by the diagram
+      \item \({(g \circ f)}_L\) is the morphism given by the diagram
         \begin{center}
           \begin{tikzpicture}
             \node[draw] (GL) {\(g_L\)};
-            \node[on grid, below=1 of GL, draw] (P) {\(\rho_{\linv g}\)};
-            \node[on grid, below=1 of P, draw] (FL) {\(f_L\)};
-            \node[on grid, below=1 of FL, draw] {\(a_{\linv g,\linv f, f,g}\)};
+            \node[on grid, below=2 of GL, draw] (FL) {\(f_L\)};
+            \node[on grid, below=1 of FL, draw, dashed, minimum width=5cm, minimum height = 1cm] {\(a_{\linv g,\linv f, f,g}\)};
             \node[on grid, below left=2cm and 2.25cm of FL] (Base1) {\(\linv g\)};
             \node[on grid, right=0.75cm of Base1] (Base2) {\(\linv f\)};
             \node[on grid, right=3cm of Base2] (Base3) {\(f\)};
             \node[on grid, right=0.75cm of Base3] (Base4) {\(g\)};
             \draw (Base1) to ++(0,1.5cm) to [out=90,in=180] (GL);
-            \draw (Base4) to ++(0,1.5cm) to [out=90,in=0] (GL);
+            \draw (Base4) to ++(0,1.5cm) to [out=90,in=0] node[fill=white,pos=0.5,draw](L){\(\lambda_{\rinv g}\)} (GL);
+
+            \draw [dotted, thick, out=90,in=-150] (FR) to (L);
             \draw (Base2) to ++(0,1.25cm) to [out=90,in=180] (FL);
             \draw (Base3) to ++(0,1.25cm) to [out=90,in=0] (FL);
           \end{tikzpicture}
@@ -348,4 +407,6 @@ A comment should be made on why this is a valid coinductive proof. Whereas induc
     \(\alpha\) is \emph{bi-invertible}. \(\beta\) is a composite of \emph{bi-invertible} morphisms and inverses of \emph{bi-invertible} morphisms so is itself \emph{bi-invertible}. \(\gamma\) consists of a composition of \emph{bi-invertible} morphisms and isotopies so is \emph{bi-invertible}. Therefore all of these are \emph{half-adjoint invertible} by coinduction and so \(f\) is \emph{half-adjoint invertible}.
   \end{itemize}
 \end{proof}
+
+\printbibliography
 \end{document}
