@@ -6,3 +6,7 @@ auto
 *.pdf
 *.synctex.gz
 *.agdai
+*.run.xml
+*.blg
+*.bcf
+*.bbl
