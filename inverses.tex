@@ -264,57 +264,52 @@ Next it is shown that invertibility implies bi-invertibility. This is fairly tri
 
   Now take a compatible composition. Split into cases on \(n\):
   \begin{itemize}
-  \item \(n = 0\): We need to show \(g \circ f\) is bi-invertible. Let:
+  \item \(n = 0\): It is required that given bi-invertible \(f : x \to y\) and \(g : y \to z\), that \(g \circ f : x \to z\) is bi-invertible. Let:
     \begin{itemize}
       \item \(\rinv {(g \circ f)} = \rinv f \circ \rinv g\)
       \item \(\linv {(g \circ f)} = \linv f \circ \linv g\)
-      \item \({(g \circ f)}_R : g \circ f \circ \rinv f \circ \rinv g\) is the morphism given by the diagram
+      \item \({(g \circ f)}_R : g \circ f \circ \rinv f \circ \rinv g \to \id_z\) is the morphism
+        \begin{equation*}
+          a_{g,f,\rinv f,\rinv g} \circ (\id_g \circ_1 (f_R \circ_1 \id_{\rinv g})) \circ (\id_g \circ_1 \lambda_{\rinv g}) \circ g_R
+        \end{equation*}
+        This may be easier to understand from its string diagram, which is given below:
         \begin{center}
           \begin{tikzpicture}
             \node[draw] (GR) {\(g_R\)};
-            \node[on grid, below=2 of GR, draw] (FR) {\(f_R\)};
-            \node[on grid, below=1 of FR, draw, dashed, minimum width=5cm, minimum height = 1cm] (A) {\(a_{g,f,\rinv f,\rinv g}\)};
-            \node[on grid, below left=2cm and 2.25cm of FR] (Base1) {\(g\)};
+            \node[on grid, below=1 of GR, draw] (FR) {\(f_R\)};
+            \node[on grid, below left=1.5cm and 2.25cm of FR] (Base1) {\(g\)};
             \node[on grid, right=0.75cm of Base1] (Base2) {\(f\)};
             \node[on grid, right=3cm of Base2] (Base3) {\(\rinv f\)};
             \node[on grid, right=0.75cm of Base3] (Base4) {\(\rinv g\)};
-            \draw (Base1) to ++(0,1.5cm) to [out=90,in=180]  (GR);
-            \draw (Base4) to ++(0,1.5cm) to [out=90,in=0] node[fill=white,pos=0.5,draw](L){\(\lambda_{\rinv g}\)} (GR);
-            \draw [dotted, thick, out=90,in=-150] (FR) to (L);
-            \draw (Base2) to ++(0,1.25cm) to [out=90,in=180] (FR);
-            \draw (Base3) to ++(0,1.25cm) to [out=90,in=0] (FR);
+            \draw (Base1) to ++(0,1cm) to [out=90,in=180]  (GR);
+            \draw (Base4) to ++(0,1cm) to [out=90,in=0] (GR);
+            \draw (Base2) to ++(0,0.75cm) to [out=90,in=180] (FR);
+            \draw (Base3) to ++(0,0.75cm) to [out=90,in=0] (FR);
           \end{tikzpicture}
         \end{center}
-        Here the associator and unitor have been added and a dotted line has been drawn for the identity, even though these would not appear on the standard graphical calculus. This is just to make precise which components of the higher category we are using. Written out in full this morphism is:
+      \item \({(g \circ f)}_L : \linv g \circ \linv f \circ f \circ g \to \id_x\) is the morphism
         \begin{equation*}
-          a_{g,f,\rinv f,\rinv g} \circ_0 (\id_g \circ_1 (f_R \circ_1 \id_{\rinv g})) \circ_0 (\id_g \circ_0 \lambda_{\rinv g}) \circ_0 g_R
+          a_{\linv g, \linv f, f ,g} \circ (\id_{\linv g} \circ_1 (f_L \circ_1 \id_g)) \circ (\id_{\linv g} \circ_1 \lambda_g) \circ g_L
         \end{equation*}
-      \item \({(g \circ f)}_L\) is the morphism given by the diagram:
+        which is given by the diagram:
         \begin{center}
           \begin{tikzpicture}
             \node[draw] (GL) {\(g_L\)};
-            \node[on grid, below=2 of GL, draw] (FL) {\(f_L\)};
-            \node[on grid, below=1 of FL, draw, dashed, minimum width=5cm, minimum height = 1cm] {\(a_{\linv g,\linv f, f,g}\)};
-            \node[on grid, below left=2cm and 2.25cm of FL] (Base1) {\(\linv g\)};
+            \node[on grid, below=1 of GL, draw] (FL) {\(f_L\)};
+            \node[on grid, below left=1.5cm and 2.25cm of FL] (Base1) {\(\linv g\)};
             \node[on grid, right=0.75cm of Base1] (Base2) {\(\linv f\)};
             \node[on grid, right=3cm of Base2] (Base3) {\(f\)};
             \node[on grid, right=0.75cm of Base3] (Base4) {\(g\)};
-            \draw (Base1) to ++(0,1.5cm) to [out=90,in=180] (GL);
-            \draw (Base4) to ++(0,1.5cm) to [out=90,in=0] node[fill=white,pos=0.5,draw](L){\(\lambda_{\rinv g}\)} (GL);
-
-            \draw [dotted, thick, out=90,in=-150] (FR) to (L);
-            \draw (Base2) to ++(0,1.25cm) to [out=90,in=180] (FL);
-            \draw (Base3) to ++(0,1.25cm) to [out=90,in=0] (FL);
+            \draw (Base1) to ++(0,1cm) to [out=90,in=180] (GL);
+            \draw (Base4) to ++(0,1cm) to [out=90,in=0] (GL);
+            \draw (Base2) to ++(0,0.75cm) to [out=90,in=180] (FL);
+            \draw (Base3) to ++(0,0.75cm) to [out=90,in=0] (FL);
           \end{tikzpicture}
         \end{center}
-        Similarly this is given by the equation:
-        \begin{equation*}
-          a_{\linv g, \linv f, f ,g}
-        \end{equation*}
       \end{itemize}
 
-      Using that \(f_L\), \(g_L\), \(f_R\),\(g_R\) are bi-invertible as \(f\) and \(g\) are bi-invertible and further using the coinductive hypothesis that bi-invertibility is preserved by both \(\circ_0\) and \(\circ_1\) for \((k'+1)\)-cells, we deduce that both \({(g \circ f)}_R\) and \({(g \circ f)}_L\) are bi-invertible and so \(g \circ f\) is bi-invertible.
-    \item \(\alpha \circ_n \beta\) where \(n > 0\), \(\alpha: f \to g\), and \(\beta: h \to j\): Let:
+      Using that \(f_L\), \(g_L\), \(f_R\), and \(g_R\) are bi-invertible as \(f\) and \(g\) are bi-invertible and further using the coinductive hypothesis that bi-invertibility is preserved by both \(\circ_0\) and \(\circ_1\) for \((k'+1)\)-cells, it can be deduce that both \({(g \circ f)}_R\) and \({(g \circ f)}_L\) are bi-invertible and so \(g \circ f\) is bi-invertible.
+    \item \(n > 0\): It is required that given bi-invertible \(\alpha: f \to g\) and \(\beta: h \to j\) where \(f \circ_{n-1} h\) and \(g \circ_{n-1} j\) are both well defined that \(\alpha \circ_n \beta\) bi-invertible. Let:
       \begin{itemize}
       \item \(\rinv {(\alpha \circ_n \beta)} = \rinv \alpha \circ_n \rinv \beta\)
       \item \(\linv {(\alpha \circ_n \beta)} = \linv \alpha \circ_n \linv \beta\)
@@ -327,7 +322,7 @@ Next it is shown that invertibility implies bi-invertibility. This is fairly tri
           (\linv \alpha \circ_n \linv \beta) \circ (\alpha \circ_n \beta) \overset {i_{\linv \alpha, \linv \beta, \alpha, \beta}} \to (\linv \alpha \circ \alpha) \circ_n (\linv \beta \circ \beta) \overset {\alpha _L \circ_{n+1} \beta _L} \to \id_f \circ_n \id_h \to \id_{f \circ_n h}
         \end{equation*}
     \end{itemize}
-    Now I claim that both \({(\alpha \circ_n \beta)}_R\) and \({(\alpha \circ_n \beta)}_L\) are both bi-invertible. This is because these are compositions of cells that are bi-invertible and these cells are of a higher order than \(k'\) and so we can apply the coinductive hypothesis. Hence \(\alpha \circ_n \beta\) is bi-invertible.
+    Now, both \({(\alpha \circ_n \beta)}_R\) and \({(\alpha \circ_n \beta)}_L\) are the composition of higher order bi-invertible cells. Therefore we are able to apply the coinductive hypothesis to get that both are bi-invertible. Hence \(\alpha \circ_n \beta\) is bi-invertible.
   \end{itemize}
 \end{proof}
 A comment should be made on why this is a valid coinductive proof.
