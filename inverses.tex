@@ -327,8 +327,7 @@ Next it is shown that invertibility implies bi-invertibility. This is fairly tri
 \end{proof}
 A comment should be made on why this is a valid coinductive proof.
 
-\begin{lemma}[Inverses are bi-invertible]
-  \label{lem:inverses}
+\begin{lemma}[Inverses are bi-invertible]\label{lem:inverses}
   Let \(f\) be a bi-invertible cell. Then \(\linv f\) and \(\rinv f\) are bi-invertible.
 \end{lemma}
 \begin{proof}
@@ -336,7 +335,7 @@ A comment should be made on why this is a valid coinductive proof.
   \begin{itemize}
   \item \(\rinv {(\rinv f)} = f\)
   \item \(\linv {(\rinv f)} = f\)
-  \item \((\rinv f)_R: \rinv f \circ f \to \id\) is given by:
+  \item \({(\rinv f)}_R: \rinv f \circ f \to \id\) is given by:
     \begin{center}
       \begin{tikzpicture}
         \node (Finv) {\(\rinv f\)};
@@ -350,10 +349,14 @@ A comment should be made on why this is a valid coinductive proof.
         \draw (F) to ++(0,1.25cm) to[out=90,in=0] (FL);
       \end{tikzpicture}
     \end{center}
-  \item \((\rinv f)_L: f \circ \rinv f \to \id\) is given by \(f_R\)
+  \item \({(\rinv f)}_L: f \circ \rinv f \to \id\) is given by \(f_R\)
   \end{itemize}
-  We get that \((\rinv f)_R\) is bi-invertible as it is a composite of bi-invertible morphisms (where \(\rinv {f_L}\) is bi-invertible by coinductive hypothesis) and \((\rinv f)_L\) is trivially bi-invertible.
+  We get that \({(\rinv f)}_R\) is bi-invertible as it is a composite of bi-invertible morphisms (where \(\rinv {f_L}\) is bi-invertible by coinductive hypothesis) and \((\rinv f)_L\) is trivially bi-invertible.
 \end{proof}
+
+\subsection{Half adjoint inverses}\label{sec:hai}
+
+
 
 \begin{definition}
   We define the collection of \emph{half-adjoint invertible} morphisms coinductively as follows: For \(n > 0\), an \(n\)-cell \(f: x \to y\) is \emph{half-adjoint invertible} if:
