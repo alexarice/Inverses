@@ -10,3 +10,5 @@ auto
 *.blg
 *.bcf
 *.bbl
+*.out
+*.tdo
