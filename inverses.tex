@@ -4,18 +4,19 @@
 \author{Alex Rice}
 
 \usepackage{verbatim}
-\usepackage[nomarginpar]{geometry}
+\usepackage{geometry}
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{amsfonts}
 \usepackage{mathtools}
 \usepackage{amsthm}
+\usepackage{hyperref}
 \usepackage{cleveref}
 \usepackage{tikz}
 \usepackage{listings}
-
-\lstset{basicstyle=\ttfamily,
-mathescape=true}
+\usepackage{color}
+\usepackage[colorinlistoftodos]{todonotes}
+\renewcommand{\comment}[1]{\todo[color=green!40]{#1}}
 
 \usetikzlibrary{positioning}
 
@@ -42,19 +43,9 @@ block=ragged
 \newtheorem{lemma}{Lemma}
 \theoremstyle{definition}
 \newtheorem{definition}{Definition}
+\theoremstyle{remark}
 \newtheorem{remark}{Remark}
-\newtheoremstyle{examplestyle}% name
-{20pt}% Space above
-{20pt}% Space below
-{\rmfamily}% Body font
-{}%Indent amount (empty = no indent, \parindent = para indent)
-{\bfseries}% Thm head font
-{.}% Punctuation after thm head
-{ }% Space after thm head: " " = normal interword space;
-% \newline = linebreak
-{}% Thm head spec
-\theoremstyle{examplestyle}
-\newtheorem{example}{Example}
+\newtheorem*{claim}{Claim}
 
 \DeclareMathOperator{\id}{id}
 
@@ -66,6 +57,12 @@ block=ragged
 \begin{document}
 \maketitle
 
+The todo list has things I think I should do in orange and questions in green
+\listoftodos{}
+
+\begin{abstract}
+  \todo{Writing one of these would be good}
+\end{abstract}
 \section{Introduction}\label{sec:intro}
 
 In the study of higher category theory, the notion of invertibility is central. It is common within higher category theory to not specify that two objects are equal, or that two sides of an equation are equal, but rather specify that there is a higher level equivalence between these two objects. It is usual to say that two objects are equivalent exactly when there is an invertible function between them.
@@ -119,7 +116,9 @@ Now it will be seen how this differs for coinductive types. For this we will use
 
 As an example of coinduction, suppose we wanted to prove every element of a stream was even. First we construct the predicate \(P : \mathsf{Stream}(\mathbb{N}) \to \mathcal{U}\) as having deconstructors \(\mathsf{headProof}(xs) = \mathsf{is-even}(\mathsf{head}(xs))\) and \(\mathsf{tailProof}(xs) = P(\mathsf{tail}(xs))\). This could then be proved by corecursion.
 
-\subsection{\(\omega\)-categories}\label{sec:categories}
+\comment{Should there be something on sized types, which are used in the agda formalisation?}
+
+\subsection{\(\omega\)-Categories}\label{sec:categories}
 
 In this paper we want to talk about different structures on \(\omega\)-categories, however there are many different definitions of \(\omega\)-categories, a lot of which are very in depth and complicated. Therefore, similar in style to a paper by \citeauthor{Cheng2007}~\cite{Cheng2007}, we give a set of conditions that we expect to hold in any reasonable definition of a weak infinity category. We then prove results only using these conditions, and reason that given a precise definition of an infinity category, if one could show that these conditions hold, then our results should follow for free.
 
@@ -156,7 +155,7 @@ In this paper we want to talk about different structures on \(\omega\)-categorie
     \item Given \(\alpha: f \to g\) and \(\beta: h \to j\), where the composites \(f \circ_n h\) and \(g \circ_n j\) are well defined, there is a morphism \(\alpha \circ_{n+1} \beta: (f \circ_n h) \to (g \circ_n j)\)
     \end{itemize}
   \end{itemize}
-  \(\circ\) will be used to mean \(\circ_0\).
+  \(\circ\) will be used to mean \(\circ_0\).\comment{Should I write \(\otimes\) for \(\circ_1\)}
 \end{definition}
 
 Once we have a globular set with identities and composition, we have enough to define a notion of equivalence. The most basic notion of invertibility will be given here, as it will be needed to state the remainder of properties that we expect an higher category to obey.
@@ -173,7 +172,7 @@ Once we have a globular set with identities and composition, we have enough to d
 \end{definition}
 
 \begin{remark}
-  The previous definition is a coinductive one. Formally, we have defined a coinductive data type, which we could call \(\text{Invertible}(f)\), which references itself (in saying that \(f_R\) and \(f_L\) are themselves invertible), and then have specified that \(f\) is invertible if there is a member of \(\text{Invertible}(f)\). Note that as \(\text{Invertible}\) is dependent on the parameter \(f\), it is in fact a coinductive type family as described in Section~\ref{sec:coinduction}.
+  The previous definition is a coinductive one. Formally, we have defined a coinductive data type, which we could call \(\text{Invertible}(f)\), which references itself (in saying that \(f_R\) and \(f_L\) are themselves invertible), and then have specified that \(f\) is invertible if there is a member of \(\text{Invertible}(f)\). Note that as \(\text{Invertible}\) is dependent on the parameter \(f\), it is in fact a coinductive type family as described in \Cref{sec:coinduction}.
 \end{remark}
 
 \begin{remark}\label{descendants}
@@ -192,31 +191,39 @@ Once we have a globular set with identities and composition, we have enough to d
 
   In this higher categorical setting we can instead require that given a well typed string diagram, and an isotopy of this diagram, there is a \(3\)-cell from source of the isotopy to the target. We require that this cell is invertible. We say that a globular set \emph{respects the graphical calculus} if it has this property.
 
-  We define a \emph{higher category} to be a globular set with identities and composition such that given any globular set generated as in \cref{descendants} respects the graphical calculus. Further we assume the existence of the following morphisms.
+  We define a \emph{higher category}\comment{Call this a higher precategory?} to be a globular set with identities and composition such that given any globular set generated as in \cref{descendants} respects the graphical calculus. Further we assume the existence of the following morphisms.
   \begin{itemize}
-  \item For \(n>0\) and each \(n\)-cell \(f: x \to y\), there are \(n+1\)-cells, known as unitors, \(\lambda_f: \id_y \circ f \to f\).
-  \item Given \(f,g,h,j\), \(n>1\)-cells with suitable composition defined, we have an associator \(a_{f,g,h,j} : (f \circ g) \circ (h \circ j) \to f \circ ((g \circ h) \circ j)\).
+  \item For \(n>0\) and each \(n\)-cell \(f: x \to y\), there are \(n+1\)-cells, known as unitors, \(\lambda_f: \id_y \circ f \to f\) and \(\rho_f: f \circ \id_x \to f\).
+  \item Given \(f,g,h\), \(n>1\)-cells with suitable composition defined, we have an associator \(a_{f,g,h} : (f \circ g) \circ h \to f \circ (g \circ h)\).
   \item For compatible morphisms \(f,g,h,j\), we have an interchanger \(i_{f,g,h,j}(f \circ_n g) \circ (h \circ_n j) \to (f \circ h) \circ_n (g \circ j)\).
   \item For suitable \(f,g\) and \(n > 1\), there is a cell \(\id_f \circ_{n+1} \id_g \to \id_{f \circ_n g}\)
   \end{itemize}
   All these further morphisms must be invertible.
-\end{definition}.
+\end{definition}
 
 To end this section we give a small lemma, which demonstrates the use of these higher categories and will also be invaluable later.
 
 \begin{lemma}\label{lem:identity}
-  Any identity morphism is invertible.
+  Any identity morphism in a higher category \(G\) is invertible.
 \end{lemma}
 
 \begin{proof}
   Let \(x\) be any cell. Take \(\inv {\id_x} = \id_x\) and \({(\id_x)}_R = {(\id_x)}_L = \lambda_{id_x}\). By assumption, \(\lambda_{id_x}\) is invertible. Hence \(\id_x\) is invertible.
 \end{proof}
 
+\begin{lemma}\label{lem:inverse-invert}
+  Suppose \(f\) is invertible. Then so is \(\inv f\).
+\end{lemma}
+
+\begin{proof}
+  Let \((\inv f, f_R, f_L, f_R{}I, f_L{}I)\) be a witness that \(f\) is invertible. Then \((f , f_L, f_R, f_L{}I, f_R{}I)\) is a witness that \(\inv f\) is invertible.
+\end{proof}
+
 \section{Types of Invertibility}\label{sec:invertibility}
 
-In this section we introduce 2 more types of invertibility. Some theorems are proved that help us to work with them and finally all 3 types of invertibility are shown to imply each other.
+In this section we introduce 2 more types of invertibility. Some theorems are proved that help us to work with them and finally all 3 types of invertibility are shown to imply each other. Throughout this section it will be assumed that we are working in a higher category \(G\).
 
-\subsection{Bi-invertibility}\label{sec:bi-invertibility}
+\subsection{Bi-Invertibility}\label{sec:bi-invertibility}
 
 Normally, throughout mathematics, when saying a map is invertible we specify a single inverse, and show that this cancels the function when composed on the left and the right. Instead we can consider a function either having a left inverse or a right inverse, meaning the inverse only cancels the function on when composed on the left (or right respectively). It usually does not make sense to consider functions which have both a separate left and right inverse as in most scenarios it can be proved that these are equal and any computations will be simplified by treating them as the same.
 
@@ -238,8 +245,8 @@ First, we must define what we mean for a morphism in a higher category to be bi-
 
 Next it is shown that invertibility implies bi-invertibility. This is fairly trivial though it will be written out to demonstrate proof by coinduction.
 
-\begin{lemma}
-  Let \(G\) be a globular set with identities and composition. Let \(f : x \to y\) be a cell of \(G\) and suppose \(f\) is invertible. Then \(f\) is bi-invertible.
+\begin{lemma}\label{lem:inv-to-bi-inv}
+  Let \(f : x \to y\) be invertible. Then \(f\) is bi-invertible.
 \end{lemma}
 
 \begin{proof}
@@ -260,17 +267,27 @@ Next it is shown that invertibility implies bi-invertibility. This is fairly tri
   For any \(n \in \mathbb{N}\) and bi-invertible cells \(f,g\), \(f \circ_n g\) is bi-invertible if it is well defined.
 \end{theorem}
 \begin{proof}
-  The proof has a nested coinductive structure. We wish to describe a procedure taking the data that a pair of compatible cells are bi-invertible cells to a proof of bi-invertibility of their composite. This is done by coinductively assuming that this can be done for all \(k\)-cells where \(k>k'\), then showing that such a procedure exists that works for \(k'\)-cells.
-
-  Now take a compatible composition. Split into cases on \(n\):
+  In order to prove the main theorem, the notion of pseudo-bi-invertible morphism is introduced. We define \(f\) to be \emph{pseudo-bi-invertible} if:
   \begin{itemize}
-  \item \(n = 0\): It is required that given bi-invertible \(f : x \to y\) and \(g : y \to z\), that \(g \circ f : x \to z\) is bi-invertible. Let:
+  \item There exist \(\rinv f\), \(\linv f\), \(f_L\), and \(f_R\) as in the definition of bi-invertible.
+  \item \(f_L\) and \(f_R\) are the composition of bi-invertible morphisms.
+  \end{itemize}
+
+  Next, the following claim is proved, which is slightly weaker than the statement of the main theorem.
+
+  \begin{claim}
+    For any \(n \in \mathbb{N}\) and bi-invertible cells \(f,g\), \(f \circ_n g\) is pseudo-bi-invertible if it is well defined.
+  \end{claim}
+  \begin{proof}[Proof of claim]
+    Take a pair of compatible composition. Split into cases on \(n\):
     \begin{itemize}
+    \item \(n = 0\): It is required that given bi-invertible \(f : x \to y\) and \(g : y \to z\), that \(g \circ f : x \to z\) is pseudo-bi-invertible. Let:
+      \begin{itemize}
       \item \(\rinv {(g \circ f)} = \rinv f \circ \rinv g\)
       \item \(\linv {(g \circ f)} = \linv f \circ \linv g\)
       \item \({(g \circ f)}_R : g \circ f \circ \rinv f \circ \rinv g \to \id_z\) is the morphism
         \begin{equation*}
-          a_{g,f,\rinv f,\rinv g} \circ (\id_g \circ_1 (f_R \circ_1 \id_{\rinv g})) \circ (\id_g \circ_1 \lambda_{\rinv g}) \circ g_R
+          a_{g, f, \rinv f \circ \rinv g} \circ (\id_g \circ_1 a_{f,\rinv f, \rinv g}^{-1}) \circ (\id_g \circ_1 (f_R \circ_1 \id_{\rinv g})) \circ (\id_g \circ_1 \lambda_{\rinv g}) \circ g_R
         \end{equation*}
         This may be easier to understand from its string diagram, which is given below:
         \begin{center}
@@ -289,7 +306,7 @@ Next it is shown that invertibility implies bi-invertibility. This is fairly tri
         \end{center}
       \item \({(g \circ f)}_L : \linv g \circ \linv f \circ f \circ g \to \id_x\) is the morphism
         \begin{equation*}
-          a_{\linv g, \linv f, f ,g} \circ (\id_{\linv g} \circ_1 (f_L \circ_1 \id_g)) \circ (\id_{\linv g} \circ_1 \lambda_g) \circ g_L
+          a_{\linv g, \linv f, f \circ g} \circ (\id_{\linv g} \circ_1 a_{})\circ (\id_{\linv g} \circ_1 (f_L \circ_1 \id_g)) \circ (\id_{\linv g} \circ_1 \lambda_g) \circ g_L
         \end{equation*}
         which is given by the diagram:
         \begin{center}
@@ -308,7 +325,7 @@ Next it is shown that invertibility implies bi-invertibility. This is fairly tri
         \end{center}
       \end{itemize}
 
-      Using that \(f_L\), \(g_L\), \(f_R\), and \(g_R\) are bi-invertible as \(f\) and \(g\) are bi-invertible and further using the coinductive hypothesis that bi-invertibility is preserved by both \(\circ_0\) and \(\circ_1\) for \((k'+1)\)-cells, it can be deduce that both \({(g \circ f)}_R\) and \({(g \circ f)}_L\) are bi-invertible and so \(g \circ f\) is bi-invertible.
+      As \(f\) and \(g\) are bi-invertible we get that \(f_L\), \(g_L\), \(f_R\), and \(g_R\) are bi-invertible and the associators and unitors used are bi-invertible by lemmas~\ref{lem:inv-to-bi-inv} and~\ref{lem:inverse-invert} and hence \({(g \circ f)}_R\) and \({(g \circ f)}_R\) are the composition of bi-invertible cells. Therefore, \(g \circ f\) is pseudo-bi-invertible.
     \item \(n > 0\): It is required that given bi-invertible \(\alpha: f \to g\) and \(\beta: h \to j\) where \(f \circ_{n-1} h\) and \(g \circ_{n-1} j\) are both well defined that \(\alpha \circ_n \beta\) bi-invertible. Let:
       \begin{itemize}
       \item \(\rinv {(\alpha \circ_n \beta)} = \rinv \alpha \circ_n \rinv \beta\)
@@ -321,13 +338,19 @@ Next it is shown that invertibility implies bi-invertibility. This is fairly tri
         \begin{equation*}
           (\linv \alpha \circ_n \linv \beta) \circ (\alpha \circ_n \beta) \overset {i_{\linv \alpha, \linv \beta, \alpha, \beta}} \to (\linv \alpha \circ \alpha) \circ_n (\linv \beta \circ \beta) \overset {\alpha _L \circ_{n+1} \beta _L} \to \id_f \circ_n \id_h \to \id_{f \circ_n h}
         \end{equation*}
+      \end{itemize}
+      Now, both \({(\alpha \circ_n \beta)}_R\) and \({(\alpha \circ_n \beta)}_L\) are the compositions of bi-invertible and invertible cells so by \cref{lem:inv-to-bi-inv}, \(\alpha \circ_n \beta\) is pseudo-bi-invertible.
     \end{itemize}
-    Now, both \({(\alpha \circ_n \beta)}_R\) and \({(\alpha \circ_n \beta)}_L\) are the composition of higher order bi-invertible cells. Therefore we are able to apply the coinductive hypothesis to get that both are bi-invertible. Hence \(\alpha \circ_n \beta\) is bi-invertible.
-  \end{itemize}
-\end{proof}
-A comment should be made on why this is a valid coinductive proof.
+  \end{proof}\comment{is this the correct way to nest a proof in a proof?}
 
-\begin{lemma}[Inverses are bi-invertible]\label{lem:inverses}
+  Now the main theorem statement is proved by corecursion. Take \(n\) and \(f \circ_n g\), a compatible composition, where both \(f\) and \(g\) are bi-invertible. By the claim, \(f \circ_n g\) is pseudo-bi-invertible. A witness that \(f \circ_n g\) is bi-invertible can be constructed as follows:
+  \begin{itemize}
+  \item Let \(\rinv f\), \(\linv f\), \(f_R\), and \(f_L\) be as in the proof of pseudo-bi-invertibility.
+  \item It is known that \(f_R\) and \(f_L\) are the composition of bi-invertible cells. By corecursively applying the theorem we get that \(f_R\) and \(f_L\) are bi-invertible.
+  \end{itemize}
+\end{proof}\comment{This proof could be split into a definition, lemma, and theorem}
+
+\begin{lemma}[Inverses are bi-invertible]\comment{Do Lemma titles have capitalisation?}\label{lem:inverses}
   Let \(f\) be a bi-invertible cell. Then \(\linv f\) and \(\rinv f\) are bi-invertible.
 \end{lemma}
 \begin{proof}
@@ -335,7 +358,11 @@ A comment should be made on why this is a valid coinductive proof.
   \begin{itemize}
   \item \(\rinv {(\rinv f)} = f\)
   \item \(\linv {(\rinv f)} = f\)
-  \item \({(\rinv f)}_R: \rinv f \circ f \to \id\) is given by:
+  \item \({(\rinv f)}_R: \rinv f \circ f \to \id\) is the morphism:
+    \begin{equation*}
+      \lambda_{\rinv f \circ f}^{-1} \circ (\rinv {f_L} \circ_1 \id_{\rinv f} \circ_1 \id_f) \circ a_{\linv f, f, \rinv f \circ f} \circ (\id_{\linv f} \circ_1 a_{f, \rinv f, f}^{-1}) \circ (\id_{\linv f} \circ_1 f_R \circ_1 \id_f) \circ (\id_{\linv f} \circ_1 \lambda_f) \circ f_L
+    \end{equation*}
+    given by the string diagram:
     \begin{center}
       \begin{tikzpicture}
         \node (Finv) {\(\rinv f\)};
@@ -351,26 +378,28 @@ A comment should be made on why this is a valid coinductive proof.
     \end{center}
   \item \({(\rinv f)}_L: f \circ \rinv f \to \id\) is given by \(f_R\)
   \end{itemize}
-  We get that \({(\rinv f)}_R\) is bi-invertible as it is a composite of bi-invertible morphisms (where \(\rinv {f_L}\) is bi-invertible by coinductive hypothesis) and \((\rinv f)_L\) is trivially bi-invertible.
+  We get that \({(\rinv f)}_R\) is bi-invertible as it is a composite of bi-invertible morphisms (where \(\rinv {f_L}\) and \(a_{f, \rinv f , f}^{-1}\) are bi-invertible by \cref{lem:inv-to-bi-inv} and the coinductive hypothesis) and \({(\rinv f)}_L\) is trivially bi-invertible.
 \end{proof}
 
-\subsection{Half adjoint inverses}\label{sec:hai}
+\todo{add link to agda formalisation}
 
+\subsection{Half-Adjoint Inverses}\label{sec:hai}
 
+Another type of equivalence is the half-adjoint equivalence. Whereas being bi-invertible was a weakening of being invertible, being a half-adjoint equivalence is a strict strengthening of being an equivalence. This is done by adding a coherence condition which effectively enforces \(f_L\) and \(f_R\) to work well together. It turns out that there are two such coherence conditions we can specify, yet each of these implies the other and so it sufficient to provide one of these\todo{Put a reference for this, or a proof, or both}. This is what gives rise to the name \emph{half}-adjoint equivalence. In \Cref{sec:contractibility}, both coherence conditions will be useful so we will distinguish between them by calling one a left-adjoint inverse and the other a right-adjoint inverse.
 
 \begin{definition}
-  We define the collection of \emph{half-adjoint invertible} morphisms coinductively as follows: For \(n > 0\), an \(n\)-cell \(f: x \to y\) is \emph{half-adjoint invertible} if:
+  Given a globular set \(G\) with identities and composition, with an \(n > 0\) cell \(f : x \to y\), we coinductively say that \(f\) is \emph{right-adjoint invertible}\comment{are these the right way round?} if:
   \begin{itemize}
   \item There exists an \(n\)-cell \(f' : y \to x\).
   \item There exists an \(n+1\)-cell \(\alpha: f \circ f' \to \id_y\).
   \item There exists an \(n+1\)-cell \(\beta: \id_x \to f' \circ f\).
-  \item There exists an \(n+2\)-cell \(\gamma: (\lambda_{f'} \circ (\beta \circ_1 \id_{f'}) \circ (\id_{f'} \circ_1 \alpha) \circ \rho_{f'}) \to \id_{f'}\).
-  \item \(\alpha\) is \emph{half-adjoint invertible}.
-  \item \(\beta\) is \emph{half-adjoint invertible}.
-  \item \(\gamma\) is \emph{half-adjoint invertible}.
+  \item There exists an \(n+2\)-cell \(\gamma: (\lambda_{f'}^{-1} \circ (\beta \circ_1 \id_{f'}) \circ (\id_{f'} \circ_1 \alpha) \circ \rho_{f'}) \to \id_{f'}\).
+  \item \(\alpha\) is right-adjoint invertible.\comment{rename these?}
+  \item \(\beta\) is right-adjoint invertible.
+  \item \(\gamma\) is right-adjoint invertible.
   \end{itemize}
 
-  \(\gamma\) can be graphically represented by the following diagram:
+  Where \(\gamma\) can be graphically represented by the following diagram:
   \begin{center}
     \begin{tikzpicture}
       \node (Bottom) {\({f'}\)};
@@ -388,30 +417,70 @@ A comment should be made on why this is a valid coinductive proof.
       \draw (L1) to (L2);
     \end{tikzpicture}
   \end{center}
+
+  Dually say that \(f\) is \emph{left-adjoint invertible} if:
+  \begin{itemize}
+  \item There exists an \(n\)-cell \(f' : y \to x\).
+  \item There exists an \(n+1\)-cell \(\alpha: f' \circ f \to \id_x\).
+  \item There exists an \(n+1\)-cell \(\beta: \id_y \to f \circ f'\).
+  \item There exists an \(n+2\)-cell \(\gamma: (\rho_{f}^{-1} \circ (\id_{f} \circ_1 \beta) \circ (\alpha \circ_1 \id_f) \circ \lambda_f) \to \id_f\).
+  \item \(\alpha\) is left-adjoint invertible.
+  \item \(\beta\) is left-adjoint invertible.
+  \item \(\gamma\) is left-adjoint invertible.
+  \end{itemize}
+
+  So that \(\gamma\) is:
+  \begin{center}
+    \begin{tikzpicture}
+      \node (Bottom) {\({f}\)};
+      \node[on grid, above right=1cm and 2.25cm of Bottom, draw] (Cup){\(\beta\)};
+      \node[on grid, above left=2cm and 1.5cm of Cup,draw] (Cap){\(\alpha\)};
+      \node[on grid, above right=1cm and 2.25cm of Cap] (Top) {\({f}\)};
+      \draw (Bottom) to++(0,2) to[out=90,in=180] (Cap);
+      \draw (Cup) to[out=180,in=-90] ++(-0.75,1) to[out=90,in=0] (Cap);
+      \draw (Cup) to[out=0,in=-90] ++(0.75,1) to (Top);
+
+      \node[on grid, below right=2cm and 1cm of Top, font=\fontsize{20}{24}\selectfont] (Eq) {\(\Rightarrow\)};
+      \node[above=0cm of Eq,font=\fontsize{15}{19}\selectfont] (Gamma) {\(\gamma\)};
+      \node[on grid, right=2cm of Top] (L1) {\({f}\)};
+      \node[on grid, below=4cm of L1] (L2) {\({f}\)};
+      \draw (L1) to (L2);
+    \end{tikzpicture}
+  \end{center}
+
+  We say \(f\) is \emph{half-adjoint invertible} to mean that it is either left-adjoint or right-adjoint invertible.
 \end{definition}
 
 \begin{theorem}
-  A \emph{half-adjoint invertible} morphism is bi-invertible.
+  A half-adjoint invertible morphism is invertible.
 \end{theorem}
 \begin{proof}
-  Suppose \(f\) is \emph{half-adjoint invertible}. Then let:
+  Suppose \(f\) is right-adjoint invertible. Then let:
   \begin{itemize}
-  \item \(\rinv f = {f'}\)
-  \item \(\linv f = {f'}\)
-  \item \(f_R = \alpha\)
-  \item \(f_L = \rinv \beta\) (using that \(\beta\) is \emph{half-adjoint invertible} and hence bi-invertible)
+  \item \(\rinv f = {f'}\);
+  \item \(\linv f = {f'}\);
+  \item \(f_R = \alpha\);
+  \item \(f_L = \beta^{-1}\).
   \end{itemize}
-  Then by coinduction \(f_R = \alpha\) is bi-invertible and \(\beta\) is bi-invertible and so, by \cref{lem:inverses}, \(\rinv \beta\) is also bi-invertible which means \(f\) is too.
+  By coinduction \(f_R = \alpha\) is invertible and \(\beta\) is invertible and so, by \cref{lem:inverse-invert}, \(\inv \beta\) is also invertible which means \(f\) is too.
+  The case where \(f\) is left-adjoint invertible is similar.
 \end{proof}
 
-\begin{theorem}
-  A bi-invertible morphism is \emph{half-adjoint invertible}.
+\begin{cor}
+  A half-adjoint invertible morphism is bi-invertible.
+\end{cor}
+
+\begin{theorem}\label{thm:bi-inv-to-hai}
+  A bi-invertible morphism is right-adjoint invertible. Further this can be done such that \(f' = \rinv f\) and \(\alpha = f_R\).
 \end{theorem}
 \begin{proof}
-  Let \(f\) be bi-invertible. Then let:
+  Let \(f\) be bi-invertible. Then as require we set:
   \begin{itemize}
-  \item \({f'} = \rinv f\)
-  \item \(\alpha = f_R\)
+  \item \({f'} = \rinv f\),
+  \item \(\alpha = f_R\).
+  \end{itemize}
+  and then:
+  \begin{itemize}
   \item \(\beta\) is given by the following diagram:
     \begin{center}
       \begin{tikzpicture}
@@ -427,7 +496,7 @@ A comment should be made on why this is a valid coinductive proof.
       \end{tikzpicture}
     \end{center}
   \item \(\gamma\) is given by the following diagram:
-    \begin{center}
+    \begin{center}\comment{possible improvements to this diagram}
       \begin{tikzpicture}
         \node (G) {\({f'}\)};
         \node [on grid, below right=0.25cm and 1.75cm of G, draw] (FR) {\(f_R\)};
@@ -475,9 +544,29 @@ A comment should be made on why this is a valid coinductive proof.
         \draw (G3) to (G'3);
       \end{tikzpicture}
     \end{center}
-    \(\alpha\) is bi-invertible. \(\beta\) is a composite of bi-invertible morphisms and inverses of bi-invertible morphisms so is itself bi-invertible. \(\gamma\) consists of a composition of bi-invertible morphisms and isotopies so is bi-invertible. Therefore all of these are \emph{half-adjoint invertible} by coinduction and so \(f\) is \emph{half-adjoint invertible}.
+    As \(\alpha = f_R\), it is bi-invertible. Furthermore, \(\beta\) is a composite of bi-invertible morphisms and inverses of bi-invertible morphisms so is itself bi-invertible. We have that \(\gamma\) consists of a composition of bi-invertible morphisms and isotopies (which are invertible as we are working in a higher category which respects the graphical calculus) so is bi-invertible. Therefore all of these are right-adjoint invertible by coinduction and so \(f\) is right-adjoint invertible.
   \end{itemize}
 \end{proof}
 
-\printbibliography
+\begin{theorem}
+  A bi-invertible morphism has a left-adjoint structure with \(f' = \linv f\) and \(\alpha = f_L\).
+\end{theorem}
+\begin{proof}
+  Dual to \Cref{thm:bi-inv-to-hai}.
+\end{proof}
+
+\begin{cor}
+  Let \(G\) be a higher category. Let \(n > 0\) and \(f\) be an \(n\)-cell of \(G\). Then the following are equivalent.
+  \begin{itemize}
+  \item \(f\) is bi-invertible.
+  \item \(f\) is invertible.
+  \item \(f\) is half-adjoint invertible.
+  \end{itemize}
+\end{cor}
+
+\section{Contractibility}\label{sec:contractibility}
+
+\todo{Do this section}
+
+\printbibliography{}
 \end{document}
