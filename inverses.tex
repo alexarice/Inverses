@@ -430,18 +430,18 @@ Another type of equivalence is the half-adjoint equivalence. Whereas being bi-in
   So that \(\gamma\) is:
   \begin{center}
     \begin{tikzpicture}
-      \node (Bottom) {\({f}\)};
+      \node (Bottom) {\({f'}\)};
       \node[on grid, above right=1cm and 2.25cm of Bottom, draw] (Cup){\(\beta\)};
       \node[on grid, above left=2cm and 1.5cm of Cup,draw] (Cap){\(\alpha\)};
-      \node[on grid, above right=1cm and 2.25cm of Cap] (Top) {\({f}\)};
+      \node[on grid, above right=1cm and 2.25cm of Cap] (Top) {\({f'}\)};
       \draw (Bottom) to++(0,2) to[out=90,in=180] (Cap);
       \draw (Cup) to[out=180,in=-90] ++(-0.75,1) to[out=90,in=0] (Cap);
       \draw (Cup) to[out=0,in=-90] ++(0.75,1) to (Top);
 
       \node[on grid, below right=2cm and 1cm of Top, font=\fontsize{20}{24}\selectfont] (Eq) {\(\Rightarrow\)};
       \node[above=0cm of Eq,font=\fontsize{15}{19}\selectfont] (Gamma) {\(\gamma\)};
-      \node[on grid, right=2cm of Top] (L1) {\({f}\)};
-      \node[on grid, below=4cm of L1] (L2) {\({f}\)};
+      \node[on grid, right=2cm of Top] (L1) {\({f'}\)};
+      \node[on grid, below=4cm of L1] (L2) {\({f'}\)};
       \draw (L1) to (L2);
     \end{tikzpicture}
   \end{center}
@@ -581,36 +581,114 @@ In this section we aim to define a higher category of cells between invertibilit
 
 We start with bi-invertibility. The definition of the cells between these types is largely inspired by~\cite[Lemma 4.2.5]{hottbook}. This gives us a compositional way to think about equivalence between these two types. It can be formulated as follows: Suppose we have a cell \(f : x \to y\) and two bi-invertible structures on it \((\rinv f, \linv f, f_R, f_L, f_R{}BI, f_L{}BI)\) and \((\rinv f{}' , \linv f{}', f_R', f_L', f_R{}BI', f_L{}BI')\). A cell is made coinductively from the following parts:
 \begin{itemize}
-\item A bi-invertible cell \(\gamma_R : \rinv f \to \rinv f{}'\);
-\item A bi-invertible cell \(\delta_R : (\id_f \circ_1 \gamma_R) \circ f_R' \to f_R\);
-\item A cell from the induced bi-invertible structure on \((\id_f \circ_1 \gamma_R) \circ f_R'\) to \(f_R{}BI\);
-\item The equivalent for \(\gamma_L\), \(\delta_L\) and coinductive part.
+\item A bi-invertible cell \(\phi_R : \rinv f \to \rinv f{}'\);
+\item A bi-invertible cell \(\psi_R : (\id_f \circ_1 \phi_R) \circ f_R' \to f_R\);
+\item A cell from the induced bi-invertible structure on \((\id_f \circ_1 \phi_R) \circ f_R'\) to \(f_R{}BI\);
+\item The equivalent for \(\phi_L\), \(\psi_L\) and coinductive part.
 \end{itemize}
 
-It should be noted that this is quite a natural way to define a cell between these structures. We simply defined a cell for each part of the structure separately, with pretty much only one way of defining each such cell. The only oddity may be that we require these cells to be bi-invertible. This is simply so that \((\id_f \circ_1 \gamma_R) \circ f_R'\) has a canonical bi-invertible structure. Given this, the construction can be continued. Suppose we have \((\gamma_R, \delta_R, BI_R, \gamma_L, \delta_L, BI_L)\) and \((\gamma_R', \delta_R', BI_R', \gamma_L', \delta_L', BI_L')\). Then a cell is:
+It should be noted that this is quite a natural way to define a cell between these structures. We simply defined a cell for each part of the structure separately, with pretty much only one way of defining each such cell. The only oddity may be that we require these cells to be bi-invertible. This is simply so that \((\id_f \circ_1 \phi_R) \circ f_R'\) has a canonical bi-invertible structure. Given this, the construction can be continued. Suppose we have \((\phi_R, \psi_R, BI_R, \phi_L, \psi_L, BI_L)\) and \((\phi_R', \psi_R', BI_R', \phi_L', \psi_L', BI_L')\). Then a cell is:
 \begin{itemize}
-\item A bi-invertible cell \(\gamma_R \to \gamma_R'\)
+\item A bi-invertible cell \(\epsilon: \phi_R \to \phi_R'\)
 \item A bi-invertible cell from:
+  \begin{center}
+    \begin{tikzpicture}
+      \node (Base1) {\(f\)};
+      \node [on grid, right=1.5cm of Base1] (Base2) {\(\rinv f\)};
+      \node [on grid, above=1cm of Base2, draw] (G1) {\(\phi_R\)};
+      \node [on grid, above left= 1cm and 0.75cm of G1, draw] (Top1) {\(f_R'\)};
+      \draw (Base1) to ++(0cm,1cm)[out=90,in=180] to (Top1);
+      \draw (Base2) to (G1);
+      \draw (G1) to[out=90, in=0] (Top1);
+
+      \node [on grid, right=1cm of G1,font=\fontsize{20}{24}\selectfont](M1){\(\Rightarrow\)};
+      \node [on grid, above=0.5cm of M1]{\(\epsilon\)};
+
+      \node [on grid, below right=1cm and 1cm of M1](Base3) {\(f\)};
+      \node [on grid, right=1.5cm of Base3] (Base4) {\(\rinv f\)};
+      \node [on grid, above=1cm of Base4, draw] (G2) {\(\phi_R'\)};
+      \node [on grid, above left= 1cm and 0.75cm of G2, draw] (Top2) {\(f_R'\)};
+      \draw (Base3) to ++(0cm,1cm)[out=90,in=180] to (Top2);
+      \draw (Base4) to (G2);
+      \draw (G2) to[out=90, in=0] (Top2);
+
+      \node [on grid, right=1cm of G2,font=\fontsize{20}{24}\selectfont](M2){\(\Rightarrow\)};
+      \node [on grid, above=0.5cm of M2] {\(\psi_R'\)};
+
+      \node [on grid, below right=1cm and 1cm of M2](Base5) {\(f\)};
+      \node [on grid, right=1.5cm of Base5] (Base6) {\(\rinv f\)};
+      \node [on grid, above right=2cm and 0.75cm of Base5,draw] (Top3) {\(f_R\)};
+      \draw (Base5) to ++(0cm,1cm)[out=90,in=180] to (Top3);
+      \draw (Base6) to ++(0cm,1cm)[out=90,in=0] to (Top3);
+    \end{tikzpicture}
+  \end{center}
   \todo{diagram here}
-  to \(\delta_R\)
+  to \(\psi_R\)
 \item Similar constructions for the remainder of the parts.
 \end{itemize}
 
 We conjecture that continuing in this way will generate a higher category structure. Next is the main result of this section.
 
-\todo{main result}
+\begin{theorem}
+  Given a cell \(f : x \to y\), there is a cell (as described above) between any two bi-invertible structures.
+\end{theorem}
 
-\todo{invertibility and half-adjoints}
+\begin{proof}
+  Take structures \((\rinv f, \linv f, f_R, f_L, f_R{}BI, f_L{}BI)\) and \((\rinv f{}' , \linv f{}', f_R', f_L', f_R{}BI', f_L{}BI')\). It will be sufficient to show that \(\phi_R\) and \(\psi_R\) can be constructed. Then the cell between bi-invertible structures can be obtained by coinductive hypothesis and the rest of the data follows from symmetry.
 
-\todo{how to continue}
+  Using \Cref{thm:bi-inv-to-hai}, we can obtain a right-adjoint invertible structure \((\rinv f{}', f_R', \beta, f_R'H, \beta{}H)\). Then let \(\phi_R\) be the cell given by the diagram:
+  \begin{center}
+    \begin{tikzpicture}
+      \node (Bottom) {\(\rinv f\)};
+      \node [on grid, above left=1cm and 2.25cm of Bottom,draw](Cup){\(\beta\)};
+      \node [on grid, above left=2.5cm and 0.75cm of Bottom, draw](Cap){\(f_R\)};
+      \node [on grid, above left=1cm and 2.25cm of Cap](Top){\(\rinv f{}'\)};
+      \draw (Bottom) to ++(0cm,1.5cm) to[out=90,in=0] (Cap);
+      \draw (Cap) to[out=180,in=90] ++(-0.75cm,-0.75cm) to[out=-90,in=0] (Cup);
+      \draw (Cup) to[out=180,in=-90] ++(-0.75cm,0.75cm) to (Top);
+    \end{tikzpicture}
+  \end{center}
+  This is clearly bi-invertible as it a composition of various types of invertible cell. We now let \(\psi_R\) be:
+  \begin{center}
+    \begin{tikzpicture}
+      \node (Bottom) {\(\rinv f\)};
+      \node [on grid, above left=1cm and 2.25cm of Bottom,draw](Cup){\(\beta\)};
+      \node [on grid, above right=1.5cm and 1.5cm of Cup, draw](Cap){\(f_R\)};
+      \node [on grid, above left=1.5cm and 1.5cm of Cup,draw](Top){\(f_R'\)};
+      \node [on grid, left=4.5cm of Bottom] (End) {\(f\)};
+      \draw (Bottom) to ++(0cm,1.5cm) to[out=90,in=0] (Cap);
+      \draw (Cap) to[out=180,in=90] ++(-0.75cm,-0.75cm) to[out=-90,in=0] (Cup);
+      \draw (Cup) to[out=180,in=-90] ++(-0.75cm,0.75cm) to[out=90,in=0] (Top);
+      \draw (Top) to[out=180,in=90] ++(-0.75cm,-0.75cm) to (End);
+
+      \node [on grid, above right=1cm and 1cm of Bottom,font=\fontsize{20}{24}\selectfont] (M1) {\(\Rightarrow\)};
+
+      \node [on grid, below right=1cm and 1cm of M1](Base5) {\(f\)};
+      \node [on grid, right=1.5cm of Base5] (Base6) {\(\rinv f\)};
+      \node [on grid, above right=2cm and 0.75cm of Base5,draw] (Top3) {\(f_R\)};
+      \draw (Base5) to ++(0cm,1cm)[out=90,in=180] to (Top3);
+      \draw (Base6) to ++(0cm,1cm)[out=90,in=0] to (Top3);
+    \end{tikzpicture}
+  \end{center}
+
+  Which is the morphism from the proof that a right-adjoint invertible cell is also left-adjoint invertible.\todo{Add proof of this}\todo[left]{why is it invertible}
+\end{proof}
+
+This theorem effectively proves the first ``layer'' of contractibility. Whereas this layer used the adjoint coherences in its proof, the next layer, of which the proof is omitted as it requires 3 dimensional reasoning that is not rigorous with the tools we have here, can be constructed with swallowtail equivalences \todo{citation}. These can be thought of as the next coherence up. It is expected that the layer after this could be nicely proved with the coherence condition after this one. We conjecture that given a suitable notion of higher category, it should be possible to show this structure is fully contractible.
+
+One might ask why a similar proof will not work for invertible cells. The reason for this is that the cells considered above are not the canonical type of cell one would use to compare invertible cells. The difference is that in the case of invertible cells, \(\phi_L\) and \(\phi_R\) can be forced to be equal. In the above proof this is not the case. In fact, given that invertibility is not a contractible type in the type theory setting, we should expect that there is no such proof.
+
+However adding the structure of the half adjoint inverse adds the exactly the kind of coherence we need to get the proof to work. In the half-adjoint case we also have that \(\phi_L\) and \(\phi_R\) must be equal (and so for ease this cell will be called \(\phi\)). However a coherence for \(\gamma\) would also be necessary. This higher dimensional cell makes it hard to work with the tools we have, and so this proof is also omitted.
+
+\section{Formalisation}\label{sec:formalisation}
+
+\todo{section}
 
 \section{Related Work}\label{sec:related}
 
 \todo{section}
 
-\section{Formalisation}\label{sec:formalisation}
 
-\todo{section}
 
 \section{Conclusion}\label{sec:conclusion}
 
