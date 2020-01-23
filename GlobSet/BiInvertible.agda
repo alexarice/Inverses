@@ -43,8 +43,7 @@ id' : {a : Level}
     → (j : Size< i)
     → (x : cells G)
     → BiInvertibleCell i (com h) j x x
-cell (id' h j x) = id (com h) j x
-biInv (id' h j x) = invToBiInv j (com h) (Inv.idIsInv j h x)
+id' h j x = invToBiInvCell j (Inv.id' j h x)
 
 record BiInvertComp {a b c : Level}
                     (i : Size)
@@ -384,3 +383,84 @@ biCompHigher (compBiInv {i = i} j h x y z) k f f' g g' =
                  f'
                  g
                  g'
+
+
+leftBiInvIsInv : {a : Level}
+               → {i : Size}
+               → {G : GlobSet a i}
+               → (j : Size< i)
+               → (h : HigherCat i G)
+               → {x y : cells G}
+               → (f : cells (morphisms G j x y))
+               → (bi : BiInvertible i (com h) j f)
+               → BiInvertible i (com h) j (*f bi)
+f* (leftBiInvIsInv j h f bi) = f
+*f (leftBiInvIsInv j h f bi) = f
+fR (leftBiInvIsInv j h f bi) k = fL bi k
+fL (leftBiInvIsInv j h {x} {y} f bi) k =
+  comp1' (coin h j x x)
+         (invToBiInvCell k (Inv.invIsInvCell k
+                                             (compHigher (com h) j x x)
+                                             (ρ (hCat h) k (comp1 (com h) f (*f bi)))))
+         (comp1' (coin h j x x)
+                 (comp2' h
+                         (comp2' h
+                                 (id' (coin h j x y) k f)
+                                 (id' (coin h j y x) k (*f bi)))
+                         (record {
+                           cell = *f (biInv (fR bi k)) ;
+                           biInv = leftBiInvIsInv k (coin h j x x) (cell (fR bi k)) (biInv (fR bi k))
+                         }))
+                 (comp1' (coin h j x x)
+                         (origAssoc h f (*f bi) f (f* bi))
+                         (comp1' (coin h j x x)
+                                 (comp2' h
+                                         (id' (coin h j x y) k f)
+                                         (comp2' h
+                                                 (fL bi k)
+                                                 (id' (coin h j y x) k (f* bi))))
+                                 (comp1' (coin h j x x)
+                                         (comp2' h
+                                                 (id' (coin h j x y) k f)
+                                                 (invToBiInvCell k (ƛ (hCat h) k (f* bi))))
+                                         (fR bi k)))))
+
+rightBiInvIsInv : {a : Level}
+                → {i : Size}
+                → {G : GlobSet a i}
+                → (j : Size< i)
+                → (h : HigherCat i G)
+                → {x y : cells G}
+                → (f : cells (morphisms G j x y))
+                → (bi : BiInvertible i (com h) j f)
+                → BiInvertible i (com h) j (f* bi)
+f* (rightBiInvIsInv j h f bi) = f
+*f (rightBiInvIsInv j h f bi) = f
+fR (rightBiInvIsInv j h {x} {y} f bi) k =
+  comp1' (coin h j y y)
+         (invToBiInvCell k (Inv.invIsInvCell k
+                                             (compHigher (com h) j y y)
+                                             (ƛ (hCat h) k (comp1 (com h) (f* bi) f))))
+         (comp1' (coin h j y y)
+                 (comp2' h
+                         (record {
+                           cell = f* (biInv (fL bi k)) ;
+                           biInv = rightBiInvIsInv k (coin h j y y) (cell (fL bi k)) (biInv (fL bi k))
+                         })
+                         (comp2' h
+                                 (id' (coin h j y x) k (f* bi))
+                                 (id' (coin h j x y) k f)))
+                 (comp1' (coin h j y y)
+                         (origAssoc h (*f bi) f (f* bi) f)
+                         (comp1' (coin h j y y)
+                                 (comp2' h
+                                         (id' (coin h j y x) k (*f bi))
+                                         (comp2' h
+                                                 (fR bi k)
+                                                 (id' (coin h j x y) k f)))
+                                 (comp1' (coin h j y y)
+                                         (comp2' h
+                                                 (id' (coin h j y x) k (*f bi))
+                                                 (invToBiInvCell k (ƛ (hCat h) k f)))
+                                         (fL bi k)))))
+fL (rightBiInvIsInv j h f bi) k = fR bi k

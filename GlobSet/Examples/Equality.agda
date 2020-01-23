@@ -94,5 +94,6 @@ compPreserveCoin (compPreserveComp (hCatEquality i S) j x y z) k (a , b) (c , d)
   eq (compPreserve (γ j k t a .a b .b) l m (refl , refl) (.refl , .refl) (.refl , .refl)) n ((refl , refl) , refl , refl) = equalityInvertibleMorphisms l n refl
   compPreserveCoin (γ j k t a c b d) l (w , x) (y , z) = γ k l (func (equalityCompHelper₂ a c b d t)) w y x z
 ƛ (hCatEquality i S) {j} k refl = equalityInvertibleMorphisms j k refl
+ρ (hCatEquality i S) {j} k refl = equalityInvertibleMorphisms j k refl
 assoc (hCatEquality i S) {j} {k} refl refl refl = equalityInvertibleMorphisms j k refl
 hcoin (hCatEquality i S) j x y = hCatEquality j (x ≡ y)

@@ -51,5 +51,6 @@ compPreserveComp (hCatTerminal i) j x y z = γ i j
   eq (compPreserve (γ i j) k l x y z) m w = terminalInvertibleMorphisms k m
   compPreserveCoin (γ i j) k x y = γ j k
 ƛ (hCatTerminal i) {j} k f = terminalInvertibleMorphisms j k
+ρ (hCatTerminal i) {j} k f = terminalInvertibleMorphisms j k
 assoc (hCatTerminal i) {j} {k} a b c = terminalInvertibleMorphisms j k
 hcoin (hCatTerminal i) j x y = hCatTerminal j

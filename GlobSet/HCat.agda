@@ -89,10 +89,19 @@ record HCat {a : Level} {i : Size} (G : GlobSet a i) (com : Composable i G) : Se
       → {x y : cells G}
       → (f : cells (morphisms G j x y))
       → InvertibleCell j
-                         (compHigher com j x y)
-                         k
-                         (comp1 com (id com j x) f)
-                         f
+                       (compHigher com j x y)
+                       k
+                       (comp1 com (id com j x) f)
+                       f
+    ρ : {j : Size< i}
+      → (k : Size< j)
+      → {x y : cells G}
+      → (f : cells (morphisms G j x y))
+      → InvertibleCell j
+                       (compHigher com j x y)
+                       k
+                       (comp1 com f (id com j y))
+                       f
     assoc : {j : Size< i}
             {k : Size< j}
             {v x y z : cells G}
