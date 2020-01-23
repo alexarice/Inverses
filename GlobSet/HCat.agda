@@ -5,7 +5,7 @@ module GlobSet.HCat where
 open import GlobSet
 open import GlobSet.Product
 open import GlobSet.Composition
-open import GlobSet.BiInvertible.Core
+open import GlobSet.Invertible.Core
 
 record SameMorphism {a b : Level}
                     {i : Size}
@@ -17,7 +17,7 @@ record SameMorphism {a b : Level}
   field
     eq : (j : Size< i)
        → (x : cells G)
-       → BiInvertibleCell i c j (func F₁ x) (func F₂ x)
+       → InvertibleCell i c j (func F₁ x) (func F₂ x)
 
 open SameMorphism public
 
@@ -33,7 +33,7 @@ record PreserveIden {a b : Level}
     idPreserve : (j : Size< i)
                → (k : Size< j)
                → (x : cells G)
-               → BiInvertibleCell j
+               → InvertibleCell j
                                   (compHigher ch j (func F x) (func F x))
                                   k
                                   (func (funcMorphisms F j x x) (id cg j x))
@@ -88,23 +88,22 @@ record HCat {a : Level} {i : Size} (G : GlobSet a i) (com : Composable i G) : Se
       → (k : Size< j)
       → {x y : cells G}
       → (f : cells (morphisms G j x y))
-      → BiInvertibleCell j
+      → InvertibleCell j
                          (compHigher com j x y)
                          k
                          (comp1 com (id com j x) f)
                          f
     assoc : {j : Size< i}
             {k : Size< j}
-            {u v x y z : cells G}
-          → (a : cells (morphisms G j u v))
-          → (b : cells (morphisms G j v x))
-          → (c : cells (morphisms G j x y))
-          → (d : cells (morphisms G j y z))
-          → BiInvertibleCell j
-                             (compHigher com j u z)
-                             k
-                             (comp1 com (comp1 com a b) (comp1 com c d))
-                             (comp1 com a (comp1 com (comp1 com b c) d))
+            {v x y z : cells G}
+          → (a : cells (morphisms G j v x))
+          → (b : cells (morphisms G j x y))
+          → (c : cells (morphisms G j y z))
+          → InvertibleCell j
+                           (compHigher com j v z)
+                           k
+                           (comp1 com (comp1 com a b) c)
+                           (comp1 com a (comp1 com b c))
     hcoin : (j : Size< i)
           → (x y : cells G)
           → HCat (morphisms G j x y) (compHigher com j x y)
@@ -118,7 +117,7 @@ record HCat {a : Level} {i : Size} (G : GlobSet a i) (com : Composable i G) : Se
                → (β : cells (morphisms (morphisms G j y z) k d e))
                → (γ : cells (morphisms (morphisms G j x y) k b c))
                → (δ : cells (morphisms (morphisms G j y z) k e f))
-               → BiInvertibleCell k
+               → InvertibleCell k
                                   (compHigher (compHigher com j x z)
                                               k
                                               (comp1 com a d)
@@ -157,7 +156,7 @@ record HCat {a : Level} {i : Size} (G : GlobSet a i) (com : Composable i G) : Se
                → (χ : cells (morphisms (morphisms (morphisms G j x y) k a b) l β γ))
                → (ψ : cells (morphisms (morphisms (morphisms G j y z) k c d) l δ ε))
                → (ω : cells (morphisms (morphisms (morphisms G j y z) k c d) l ε ζ))
-               → BiInvertibleCell l (compHigher (compHigher (compHigher com j x z)
+               → InvertibleCell l (compHigher (compHigher (compHigher com j x z)
                                                             k
                                                             (comp1 com a c)
                                                             (comp1 com b d))
@@ -184,7 +183,7 @@ record HCat {a : Level} {i : Size} (G : GlobSet a i) (com : Composable i G) : Se
                {x y z : cells G}
              → (f : cells (morphisms G j x y))
              → (g : cells (morphisms G j y z))
-             → BiInvertibleCell k
+             → InvertibleCell k
                                 (compHigher (compHigher com j x z)
                                             k
                                             (comp1 com f g)
@@ -206,7 +205,7 @@ record HCat {a : Level} {i : Size} (G : GlobSet a i) (com : Composable i G) : Se
                {c d : cells (morphisms G j y z)}
              → (α : cells (morphisms (morphisms G j x y) k a b))
              → (β : cells (morphisms (morphisms G j y z) k c d))
-             → BiInvertibleCell l (compHigher (compHigher (compHigher com j x z)
+             → InvertibleCell l (compHigher (compHigher (compHigher com j x z)
                                                              k
                                                              (comp1 com a c)
                                                              (comp1 com b d))

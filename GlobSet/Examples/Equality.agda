@@ -4,7 +4,7 @@ module GlobSet.Examples.Equality where
 open import GlobSet
 open import GlobSet.Product
 open import GlobSet.Composition
-open import GlobSet.BiInvertible
+open import GlobSet.Invertible
 open import GlobSet.HCat
 open import Relation.Binary.PropositionalEquality.Core
 
@@ -54,12 +54,11 @@ equalityInvertibleMorphisms : {a : Level}
                             → {S : Set a}
                             → (j : Size< i)
                             → (x : S)
-                            → BiInvertibleCell i (compEquality i S) j x x
+                            → InvertibleCell i (compEquality i S) j x x
 cell (equalityInvertibleMorphisms i S j) = refl
-f* (biInv (equalityInvertibleMorphisms i S j)) = refl
-*f (biInv (equalityInvertibleMorphisms i S j)) = refl
-fR (biInv (equalityInvertibleMorphisms i S j)) k = equalityInvertibleMorphisms S k refl
-fL (biInv (equalityInvertibleMorphisms i S j)) k = equalityInvertibleMorphisms S k refl
+finv (invert (equalityInvertibleMorphisms i S j)) = refl
+fR (invert (equalityInvertibleMorphisms i S j)) k = equalityInvertibleMorphisms S k refl
+fL (invert (equalityInvertibleMorphisms i S j)) k = equalityInvertibleMorphisms S k refl
 
 hCatEquality : {a : Level} → (i : Size) → (S : Set a) → HCat (equality i S) (compEquality i S)
 idPreserve (compPreserveId (hCatEquality i S) j x y z) k l w = equalityInvertibleMorphisms k l refl
@@ -95,5 +94,5 @@ compPreserveCoin (compPreserveComp (hCatEquality i S) j x y z) k (a , b) (c , d)
   eq (compPreserve (γ j k t a .a b .b) l m (refl , refl) (.refl , .refl) (.refl , .refl)) n ((refl , refl) , refl , refl) = equalityInvertibleMorphisms l n refl
   compPreserveCoin (γ j k t a c b d) l (w , x) (y , z) = γ k l (func (equalityCompHelper₂ a c b d t)) w y x z
 ƛ (hCatEquality i S) {j} k refl = equalityInvertibleMorphisms j k refl
-assoc (hCatEquality i S) {j} {k} refl refl refl refl = equalityInvertibleMorphisms j k refl
+assoc (hCatEquality i S) {j} {k} refl refl refl = equalityInvertibleMorphisms j k refl
 hcoin (hCatEquality i S) j x y = hCatEquality j (x ≡ y)

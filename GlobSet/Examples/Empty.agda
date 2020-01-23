@@ -5,7 +5,7 @@ module GlobSet.Examples.Empty where
 open import GlobSet
 open import GlobSet.Product
 open import GlobSet.Composition
-open import GlobSet.BiInvertible
+open import GlobSet.Invertible
 open import GlobSet.HCat
 open import Data.Empty
 

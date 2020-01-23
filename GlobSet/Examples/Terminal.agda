@@ -5,7 +5,7 @@ open import Agda.Builtin.Unit
 open import GlobSet
 open import GlobSet.Product
 open import GlobSet.Composition
-open import GlobSet.BiInvertible
+open import GlobSet.Invertible
 open import GlobSet.HCat
 
 terminal : (i : Size) → GlobSet 0ℓ i
@@ -23,12 +23,11 @@ Composable.compHigher (compTerminal i) j x y = (compTerminal j)
 
 terminalInvertibleMorphisms : (i : Size)
                               (j : Size< i)
-                            → BiInvertibleCell i (compTerminal i) j tt tt
+                            → InvertibleCell i (compTerminal i) j tt tt
 cell (terminalInvertibleMorphisms i j) = tt
-f* (biInv (terminalInvertibleMorphisms i j)) = tt
-*f (biInv (terminalInvertibleMorphisms i j)) = tt
-fR (biInv (terminalInvertibleMorphisms i j)) = terminalInvertibleMorphisms j
-fL (biInv (terminalInvertibleMorphisms i j)) = terminalInvertibleMorphisms j
+finv (invert (terminalInvertibleMorphisms i j)) = tt
+fR (invert (terminalInvertibleMorphisms i j)) = terminalInvertibleMorphisms j
+fL (invert (terminalInvertibleMorphisms i j)) = terminalInvertibleMorphisms j
 
 hCatTerminal : (i : Size) → HCat (terminal i) (compTerminal i)
 compPreserveId (hCatTerminal i) j x y z = γ i j
@@ -52,5 +51,5 @@ compPreserveComp (hCatTerminal i) j x y z = γ i j
   eq (compPreserve (γ i j) k l x y z) m w = terminalInvertibleMorphisms k m
   compPreserveCoin (γ i j) k x y = γ j k
 ƛ (hCatTerminal i) {j} k f = terminalInvertibleMorphisms j k
-assoc (hCatTerminal i) {j} {k} a b c d = terminalInvertibleMorphisms j k
+assoc (hCatTerminal i) {j} {k} a b c = terminalInvertibleMorphisms j k
 hcoin (hCatTerminal i) j x y = hCatTerminal j
