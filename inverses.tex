@@ -161,25 +161,25 @@ In this paper we want to talk about different structures on \(\omega\)-categorie
 Once we have a globular set with identities and composition, we have enough to define a notion of equivalence. The most basic notion of invertibility will be given here, as it will be needed to state the remainder of properties that we expect an higher category to obey.
 
 \begin{definition}
-  Given a globular set \(G\) with identities and composition, with an \(n > 0\) cell \(f : x \to y\), we say that \(f\) is \emph{invertible} if:
+  Given a globular set \(G\) with identities and composition, with an \(n > 0\) cell \(f : x \to y\), a \emph{quasi-invertible} structure on \(f\) is:
   \begin{itemize}
-  \item There exists an \(n\)-cell \(\inv f : y \to x\);
-  \item There exists an \((n+1)\)-cell \(f_R: f \circ \inv f \to \id_y\);
-  \item There exists an \((n+1)\)-cell \(f_L: \inv f \circ f \to \id_x\).
-  \item \(f_R\) is invertible.
-  \item \(f_L\) is invertible.
+  \item An \(n\)-cell \(\inv f : y \to x\);
+  \item An \((n+1)\)-cell \(f_R: f \circ \inv f \to \id_y\);
+  \item An \((n+1)\)-cell \(f_L: \inv f \circ f \to \id_x\).
+  \item A quasi-invertible structure on \(f_R\).
+  \item A quasi-invertible structure on \(f_L\).
   \end{itemize}
 \end{definition}
 
 \begin{remark}
-  The previous definition is a coinductive one. Formally, we have defined a coinductive data type, which we could call \(\text{Invertible}(f)\), which references itself (in saying that \(f_R\) and \(f_L\) are themselves invertible), and then have specified that \(f\) is invertible if there is a member of \(\text{Invertible}(f)\). Note that as \(\text{Invertible}\) is dependent on the parameter \(f\), it is in fact a coinductive type family as described in \Cref{sec:coinduction}.
+  The previous definition is a coinductive one. Formally, we have defined a coinductive data type, which we could call \(\text{QuasiInvertible}(f)\), which references itself (in saying that \(f_R\) and \(f_L\) themselves have a quasi-invertible structure). Note that as \(\text{QuasiInvertible}\) is dependent on the parameter \(f\), it is in fact a coinductive type family as described in \Cref{sec:coinduction}.
 \end{remark}
 
 \begin{remark}\label{descendants}
-  Notice that in a globular set \(G\) with identities and composition, given two \(n\)-cells \(x\) and \(y\) with the same source and target, we can define a new globular set \(G\) as follows:
+  Notice that in a globular set \(G\) with identities and composition, given two \(n\)-cells \(x\) and \(y\) with the same source and target, we can define a new globular set \(G_{x,y}\) as follows:
   \begin{itemize}
   \item The \(0\)-cells are the \(n+1\)-cells in \(G\) with source \(x\) and target \(y\);
-  \item The \(m\)-cells are the \(n+m+1\)-cells in \(G\) whose source and target lie in the \(m-1\)-cells of the globular set being generated.
+  \item The \(m\)-cells are the \(n+m+1\)-cells in \(G\) whose source and target lie in the \(m-1\)-cells of \(G_{x,y}\).
   \end{itemize}
   Further it is clear that we can carry over identities and composition to this new globular set.
 \end{remark}
@@ -191,32 +191,32 @@ Once we have a globular set with identities and composition, we have enough to d
 
   In this higher categorical setting we can instead require that given a well typed string diagram, and an isotopy of this diagram, there is a \(3\)-cell from source of the isotopy to the target. We require that this cell is invertible. We say that a globular set \emph{respects the graphical calculus} if it has this property.
 
-  We define a \emph{higher category}\comment{Call this a higher precategory?} to be a globular set with identities and composition such that given any globular set generated as in \cref{descendants} respects the graphical calculus. Further we assume the existence of the following morphisms.
+  We define a \emph{higher pre-category} to be a globular set with identities and composition such that given any globular set generated as in \cref{descendants} respects the graphical calculus. Further we assume the existence of the following morphisms:
   \begin{itemize}
   \item For \(n>0\) and each \(n\)-cell \(f: x \to y\), there are \(n+1\)-cells, known as unitors, \(\lambda_f: \id_y \circ f \to f\) and \(\rho_f: f \circ \id_x \to f\).
   \item Given \(f,g,h\), \(n>1\)-cells with suitable composition defined, we have an associator \(a_{f,g,h} : (f \circ g) \circ h \to f \circ (g \circ h)\).
   \item For compatible morphisms \(f,g,h,j\), we have an interchanger \(i_{f,g,h,j}(f \circ_n g) \circ (h \circ_n j) \to (f \circ h) \circ_n (g \circ j)\).
   \item For suitable \(f,g\) and \(n > 1\), there is a cell \(\id_f \circ_{n+1} \id_g \to \id_{f \circ_n g}\)
   \end{itemize}
-  All these further morphisms must be invertible.
+  All these further morphisms must be equipped with a quasi-invertible structure.
 \end{definition}
 
-To end this section we give a small lemma, which demonstrates the use of these higher categories and will also be invaluable later.
+To end this section we give a small lemma, which demonstrates the use of these higher pre-categories and will also be invaluable later.
 
 \begin{lemma}\label{lem:identity}
-  Any identity morphism in a higher category \(G\) is invertible.
+  Any identity morphism in a higher pre-category \(G\) has a quasi-invertible structure.
 \end{lemma}
 
 \begin{proof}
-  Let \(x\) be any cell. Take \(\inv {\id_x} = \id_x\) and \({(\id_x)}_R = {(\id_x)}_L = \lambda_{id_x}\). By assumption, \(\lambda_{id_x}\) is invertible. Hence \(\id_x\) is invertible.
+  Let \(x\) be any cell. Take \(\inv {\id_x} = \id_x\) and \({(\id_x)}_R = {(\id_x)}_L = \lambda_{id_x}\). By assumption, \(\lambda_{id_x}\) has a quasi-invertible structure which can be used to form a structure on \(\id_x\).
 \end{proof}
 
 \begin{lemma}\label{lem:inverse-invert}
-  Suppose \(f\) is invertible. Then so is \(\inv f\).
+  Suppose \(f\) is quasi-invertible. Then so is \(\inv f\).
 \end{lemma}
 
 \begin{proof}
-  Let \((\inv f, f_R, f_L, f_R{}I, f_L{}I)\) be a witness that \(f\) is invertible. Then \((f , f_L, f_R, f_L{}I, f_R{}I)\) is a witness that \(\inv f\) is invertible.
+  Let \((\inv f, f_R, f_L, f_R{}I, f_L{}I)\) be a quasi-invertible structure on \(f\). Then \((f , f_L, f_R, f_L{}I, f_R{}I)\)  that \(\inv f\) is invertible.
 \end{proof}
 
 \section{Types of Invertibility}\label{sec:invertibility}
@@ -263,7 +263,7 @@ Next it is shown that invertibility implies bi-invertibility. This is fairly tri
 
 \noindent Now, one of the most important and complex theorems of the paper is proved.
 
-\begin{theorem}[Composition of Bi-invertible Morphisms]
+\begin{theorem}
   For any \(n \in \mathbb{N}\) and bi-invertible cells \(f,g\), \(f \circ_n g\) is bi-invertible if it is well defined.
 \end{theorem}
 \begin{proof}
@@ -350,9 +350,9 @@ Next it is shown that invertibility implies bi-invertibility. This is fairly tri
   \end{itemize}
 \end{proof}\comment{This proof could be split into a definition, lemma, and theorem}
 
-\begin{lemma}[Inverses are bi-invertible]\comment{Do Lemma titles have capitalisation?}\label{lem:inverses}
+\begin{lemma}\label{lem:inverses}
   Let \(f\) be a bi-invertible cell. Then \(\linv f\) and \(\rinv f\) are bi-invertible.
-\end{lemma}
+\end{lemma}\todo{We are defining \emph{one} bi-invertible structure on these. Use a definition and a lemma}
 \begin{proof}
   We show \(\rinv f\) is bi-invertible and \(\linv f\) will follow similarly. Define the following:
   \begin{itemize}
@@ -562,7 +562,7 @@ Another type of equivalence is the half-adjoint equivalence. Whereas being bi-in
   \end{itemize}
 \end{cor}
 
-\section{Contractibility}\label{sec:contractibility}
+\section{Towards Contractibility}\label{sec:contractibility}
 
 \Cref{sec:hai} achieves one of the goals set out in the introduction, namely \cref{cor:equiv}. The other property stated was that bi-invertibility and half-adjoint invertibility should be contractible types. In type theory, a type is contractible if there is an element in that type which all other terms of that type are propositionally equal to. Any contractible type is then equivalent to the unit type. The natural analogue to the higher categorical setting would be to say that a category is contractible if it is equivalent to the terminal category.
 
@@ -670,7 +670,7 @@ We conjecture that continuing in this way will generate a higher category struct
     \end{tikzpicture}
   \end{center}
 
-  Which is the morphism from the proof that a right-adjoint invertible cell is also left-adjoint invertible.\todo{Add proof of this}\todo[left]{why is it invertible}
+  Which is the morphism from the proof that a right-adjoint invertible cell is also left-adjoint invertible.\todo{Add proof of this}\todo{why is it invertible}
 \end{proof}
 
 This theorem effectively proves the first ``layer'' of contractibility. Whereas this layer used the adjoint coherences in its proof, the next layer, of which the proof is omitted as it requires 3 dimensional reasoning that is not rigorous with the tools we have here, can be constructed with swallowtail equivalences \todo{citation}. These can be thought of as the next coherence up. It is expected that the layer after this could be nicely proved with the coherence condition after this one. We conjecture that given a suitable notion of higher category, it should be possible to show this structure is fully contractible.
