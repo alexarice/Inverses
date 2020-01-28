@@ -1,6 +1,6 @@
 \documentclass{article}
 
-\title{Inverses in Higher Categories}
+\title{Inverses in Higher Categories through Coinduction}
 \author{Alex Rice}
 
 \usepackage{verbatim}
@@ -87,6 +87,11 @@ Given this coinductive machinery, the definition of equivalence above seems very
 There are certain properties about these invertibility conditions that are important in type theory. Firstly, all 3 definitions are equivalent, in that a function \(f\) has one of these 3 types of inverses, then it also has the other 2. Secondly, definitions 2 and 3 form contractible types. In essence, this means that there is only one way in which they hold up to propositional equality.
 
 Although it seems that these 3 are not applicable to generalised higher categories due to the use of equality in their definitions, they can nonetheless be modified into coinductive definitions suitable for such a category. This paper will present those definitions and to attempt to show that they are all equivalent. Further we will try to present an analogue to contractibility which is suitable for higher categories and investigate whether these data types are contractible.
+
+\section{Related Work}\label{sec:related}
+
+\todo{section}
+
 
 \section{Background}\label{sec:background}
 
@@ -693,11 +698,12 @@ However adding the structure of the half adjoint inverse adds the exactly the ki
 
 \section{Formalisation}\label{sec:formalisation}
 
-\todo{section}
+It may at first appear that a lot of the coinductive proofs in this paper work by ``magic'' in that they seem like non-well founded induction. To remedy this all the definitions and results from  sections~\ref{sec:categories} and~\ref{sec:bi-invertibility}. Have been formalised in the proof assistant Agda\footnote{\url{https://github.com/agda/agda}} with use of the standard library\footnote{\url{}}. The formalisation uses sized types~\cite{Abel_2010} to ensure productivity of the functions defined and makes heavy use of coinductive record types and copatterns~\cite{10.1145/2480359.2429075}.
 
-\section{Related Work}\label{sec:related}
+The notion of higher pre-category introduced in this paper is very set-theoretic and becomes messy in the world of type theory. Because of this, alternative coinductive definitions of globular sets and composition are taken from~\cite{hirschowitz_et_al:LIPIcs:2015:5166}. This allows a lot of the proofs to become neater as coinduction tends to work nicely with coinductively defined structures. We believe the use of a different definition is not consequential as the main purpose of the formalisation was to show that coinductive elements of the arguments hold.
 
-\todo{section}
+The code is made available at~\cite{rice_agda}. This has been tested with Agda version 2.6.0.1 and standard library version 1.2.
+
 
 
 
