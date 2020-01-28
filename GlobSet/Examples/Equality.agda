@@ -20,8 +20,8 @@ equalityCompHelper₂ : {a : Level}
                     → (F : A × B → C)
                     → GlobSetMorphism (equality k (f ≡ f') ×G equality k (g ≡ g'))
                                       (equality k (F (f , g) ≡ F (f' , g')))
-func (equalityCompHelper₂ f .f g .g F) (refl , refl) = refl
-funcMorphisms (equalityCompHelper₂ f f' g g' F) j (α , β) (α' , β') =
+equalityCompHelper₂ f .f g .g F .func (refl , refl) = refl
+equalityCompHelper₂ f f' g g' F .funcMorphisms j (α , β) (α' , β') =
   equalityCompHelper₂ α
                       α'
                       β
@@ -37,17 +37,16 @@ equalityCompHelper : {a : Level}
                                       ×G
                                       morphisms (equality i S) j y z)
                                      (morphisms (equality i S) j x z)
-func (equalityCompHelper i S j x y z) (f , g) = trans f g
-funcMorphisms (equalityCompHelper i S j x y z) k (f , g) (f' , g') =
+equalityCompHelper i S j x y z .func (f , g) = trans f g
+equalityCompHelper i S j x y z .funcMorphisms k (f , g) (f' , g') =
   equalityCompHelper₂ f f' g g' (func (equalityCompHelper i S j x y z))
 
 
 
 compEquality : {a : Level} → (i : Size) → (S : Set a) → Composable i (equality i S)
-Composable.id (compEquality i S) j x = refl
-Composable.comp (compEquality i S) j x y z = equalityCompHelper i S j x y z
-
-Composable.compHigher (compEquality i S) j x y = compEquality j (x ≡ y)
+compEquality i S .id j x = refl
+compEquality i S .comp j x y z = equalityCompHelper i S j x y z
+compEquality i S .compHigher j x y = compEquality j (x ≡ y)
 
 equalityInvertibleMorphisms : {a : Level}
                             → (i : Size)
@@ -55,14 +54,15 @@ equalityInvertibleMorphisms : {a : Level}
                             → (j : Size< i)
                             → (x : S)
                             → InvertibleCell i (compEquality i S) j x x
-cell (equalityInvertibleMorphisms i S j) = refl
-finv (invert (equalityInvertibleMorphisms i S j)) = refl
-fR (invert (equalityInvertibleMorphisms i S j)) k = equalityInvertibleMorphisms S k refl
-fL (invert (equalityInvertibleMorphisms i S j)) k = equalityInvertibleMorphisms S k refl
+equalityInvertibleMorphisms i S j .cell = refl
+equalityInvertibleMorphisms i S j .invert .finv = refl
+equalityInvertibleMorphisms i S j .invert .fR k = equalityInvertibleMorphisms S k refl
+equalityInvertibleMorphisms i S j .invert .fL k = equalityInvertibleMorphisms S k refl
 
 hCatEquality : {a : Level} → (i : Size) → (S : Set a) → HCat (equality i S) (compEquality i S)
-idPreserve (compPreserveId (hCatEquality i S) j x y z) k l w = equalityInvertibleMorphisms k l refl
-idPreserveCoin (compPreserveId (hCatEquality i S) j x y z) k (a , b) (c , d) = γ j k (λ v → trans (proj₁ v) (proj₂ v)) a c b d
+hCatEquality i S .compPreserveId j x y z .idPreserve k l w = equalityInvertibleMorphisms k l refl
+hCatEquality i S .compPreserveId j x y z .idPreserveCoin k (a , b) (c , d) =
+  γ j k (λ v → trans (proj₁ v) (proj₂ v)) a c b d
  where
   γ : {l : Level}
     → (j : Size)
@@ -75,10 +75,10 @@ idPreserveCoin (compPreserveId (hCatEquality i S) j x y z) k (a , b) (c , d) = �
                              (compEquality k (b ≡ d)))
                    (compEquality k (t (a , b) ≡ t (c , d)))
                    (equalityCompHelper₂ a c b d t)
-  idPreserve (γ j k t a c b d) l m w = equalityInvertibleMorphisms l m refl
-  idPreserveCoin (γ j k {S} t a c b d) l (e , f) (g , h) = γ k l (func (equalityCompHelper₂ a c b d t)) e g f h
-eq (compPreserve (compPreserveComp (hCatEquality i S) j x y z) k l (a , b) (.a , .b) (.a , .b)) m ((refl , refl) , (refl , refl)) = equalityInvertibleMorphisms k m refl
-compPreserveCoin (compPreserveComp (hCatEquality i S) j x y z) k (a , b) (c , d) = γ j k (λ {(v₁ , v₂) → trans v₁ v₂}) a c b d
+  γ j k t a c b d .idPreserve l m w = equalityInvertibleMorphisms l m refl
+  γ j k {S} t a c b d .idPreserveCoin l (e , f) (g , h) = γ k l (func (equalityCompHelper₂ a c b d t)) e g f h
+hCatEquality i S .compPreserveComp j x y z .compPreserve k l (a , b) (.a , .b) (.a , .b) .eq m ((refl , refl) , (refl , refl)) = equalityInvertibleMorphisms k m refl
+hCatEquality i S .compPreserveComp j x y z .compPreserveCoin k (a , b) (c , d) = γ j k (λ {(v₁ , v₂) → trans v₁ v₂}) a c b d
  where
   γ : {l : Level}
     → (j : Size)
@@ -91,9 +91,9 @@ compPreserveCoin (compPreserveComp (hCatEquality i S) j x y z) k (a , b) (c , d)
                              (compEquality k (b ≡ d)))
                    (compEquality k (t (a , b) ≡ t (c , d)))
                    (equalityCompHelper₂ a c b d t)
-  eq (compPreserve (γ j k t a .a b .b) l m (refl , refl) (.refl , .refl) (.refl , .refl)) n ((refl , refl) , refl , refl) = equalityInvertibleMorphisms l n refl
-  compPreserveCoin (γ j k t a c b d) l (w , x) (y , z) = γ k l (func (equalityCompHelper₂ a c b d t)) w y x z
-ƛ (hCatEquality i S) {j} k refl = equalityInvertibleMorphisms j k refl
-ρ (hCatEquality i S) {j} k refl = equalityInvertibleMorphisms j k refl
-assoc (hCatEquality i S) {j} {k} refl refl refl = equalityInvertibleMorphisms j k refl
-hcoin (hCatEquality i S) j x y = hCatEquality j (x ≡ y)
+  γ j k t a .a b .b .compPreserve l m (refl , refl) (.refl , .refl) (.refl , .refl) .eq n ((refl , refl) , refl , refl) = equalityInvertibleMorphisms l n refl
+  γ j k t a c b d .compPreserveCoin l (w , x) (y , z) = γ k l (func (equalityCompHelper₂ a c b d t)) w y x z
+hCatEquality i S .ƛ {j} k refl = equalityInvertibleMorphisms j k refl
+hCatEquality i S .ρ {j} k refl = equalityInvertibleMorphisms j k refl
+hCatEquality i S .assoc {j} {k} refl refl refl = equalityInvertibleMorphisms j k refl
+hCatEquality i S .hcoin j x y = hCatEquality j (x ≡ y)

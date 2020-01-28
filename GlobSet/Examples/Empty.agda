@@ -10,18 +10,18 @@ open import GlobSet.HCat
 open import Data.Empty
 
 emptyGlobSet : (i : Size) → GlobSet 0ℓ i
-cells (emptyGlobSet i) = ⊥
-morphisms (emptyGlobSet i) _ x = ⊥-elim x
+emptyGlobSet i .cells = ⊥
+emptyGlobSet i .morphisms _ x = ⊥-elim x
 
 compEmpty : (i : Size) → Composable i (emptyGlobSet i)
-id (compEmpty i) _ x = ⊥-elim x
-comp (compEmpty i) _ x = ⊥-elim x
-compHigher (compEmpty i) _ x = ⊥-elim x
+compEmpty i .id _ x = ⊥-elim x
+compEmpty i .comp _ x = ⊥-elim x
+compEmpty i .compHigher _ x = ⊥-elim x
 
 hCatEmpty : (i : Size) → HCat (emptyGlobSet i) (compEmpty i)
-compPreserveId (hCatEmpty i) _ x = ⊥-elim x
-compPreserveComp (hCatEmpty i) _ x = ⊥-elim x
-ƛ (hCatEmpty i) _ {x} = ⊥-elim x
-ρ (hCatEmpty i) _ {x} = ⊥-elim x
-assoc (hCatEmpty i) {x = x} = ⊥-elim x
-hcoin (hCatEmpty i) _ x = ⊥-elim x
+hCatEmpty i .compPreserveId _ x = ⊥-elim x
+hCatEmpty i .compPreserveComp _ x = ⊥-elim x
+hCatEmpty i .ƛ _ {x} = ⊥-elim x
+hCatEmpty i .ρ _ {x} = ⊥-elim x
+hCatEmpty i .assoc {x = x} = ⊥-elim x
+hCatEmpty i .hcoin _ x = ⊥-elim x

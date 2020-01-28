@@ -17,12 +17,12 @@ invToBiInv : {a : Level}
            → {f : cells (morphisms G j x y)}
            → Inv.Invertible i c j f
            → BiInvertible i c j f
-f* (invToBiInv j c inv) = Inv.finv inv
-*f (invToBiInv j c inv) = Inv.finv inv
-cell (fR (invToBiInv j c inv) k) = Inv.cell (Inv.fR inv k)
-biInv (fR (invToBiInv j c {x} inv) k) = invToBiInv k (compHigher c j x x) (Inv.invert (Inv.fR inv k))
-cell (fL (invToBiInv j c inv) k) = Inv.cell (Inv.fL inv k)
-biInv (fL (invToBiInv j c {x} {y} inv) k) = invToBiInv k (compHigher c j y y) (Inv.invert (Inv.fL inv k))
+invToBiInv j c inv .f* = Inv.finv inv
+invToBiInv j c inv .*f = Inv.finv inv
+invToBiInv j c inv .fR k .cell = Inv.cell (Inv.fR inv k)
+invToBiInv j c {x} inv .fR k .biInv = invToBiInv k (compHigher c j x x) (Inv.invert (Inv.fR inv k))
+invToBiInv j c inv .fL k .cell = Inv.cell (Inv.fL inv k)
+invToBiInv j c {x} {y} inv .fL k .biInv = invToBiInv k (compHigher c j y y) (Inv.invert (Inv.fL inv k))
 
 invToBiInvCell : {a : Level}
                → {i : Size}
@@ -32,8 +32,8 @@ invToBiInvCell : {a : Level}
                → {x y : cells G}
                → Inv.InvertibleCell i c j x y
                → BiInvertibleCell i c j x y
-cell (invToBiInvCell j inv) = Inv.cell inv
-biInv (invToBiInvCell j {c = c} inv) = invToBiInv j c (Inv.invert inv)
+invToBiInvCell j inv .cell = Inv.cell inv
+invToBiInvCell j {c = c} inv .biInv = invToBiInv j c (Inv.invert inv)
 
 
 id' : {a : Level}
@@ -191,8 +191,8 @@ comp1' : {a : Level}
        → BiInvertibleCell i (com h) j x y
        → BiInvertibleCell i (com h) j y z
        → BiInvertibleCell i (com h) j x z
-cell (comp1' h f g) = comp1 (com h) (cell f) (cell g)
-biInv (comp1' h f g) = comp1BiInv h (biInv f) (biInv g)
+comp1' h f g .cell = comp1 (com h) (cell f) (cell g)
+comp1' h f g .biInv = comp1BiInv h (biInv f) (biInv g)
 
 comp2' : {a : Level}
        → {i : Size}
@@ -206,8 +206,8 @@ comp2' : {a : Level}
        → BiInvertibleCell j (compHigher (com h) j x y) k f f'
        → BiInvertibleCell j (compHigher (com h) j y z) k g g'
        → BiInvertibleCell j (compHigher (com h) j x z) k (comp1 (com h) f g) (comp1 (com h) f' g')
-cell (comp2' h α β) = comp2 (com h) (cell α) (cell β)
-biInv (comp2' h α β) = comp2BiInv h (biInv α) (biInv β)
+comp2' h α β .cell = comp2 (com h) (cell α) (cell β)
+comp2' h α β .biInv = comp2BiInv h (biInv α) (biInv β)
 
 comp3' : {a : Level}
        → {i : Size}
@@ -230,8 +230,8 @@ comp3' : {a : Level}
                             l
                             (comp2 (com h) α β)
                             (comp2 (com h) α' β')
-cell (comp3' h δ ε) = comp3 (com h) (cell δ) (cell ε)
-biInv (comp3' h δ ε) = comp3BiInv h (biInv δ) (biInv ε)
+comp3' h δ ε .cell = comp3 (com h) (cell δ) (cell ε)
+comp3' h δ ε .biInv = comp3BiInv h (biInv δ) (biInv ε)
 
 origAssoc : {a : Level}
           → {i : Size}
@@ -259,9 +259,11 @@ origAssoc h {j} {k} {u} {v} {x} {y} {z} a b c d =
                                                      (assoc (hCat h) b c d))))
 
 
-f* (biComp (generateBiComp i j k cA cB hC composition prevComp prevId f f' g g') bα bβ) = func (funcMorphisms composition k (f' , g') (f , g)) ((f* bα) , (f* bβ))
-*f (biComp (generateBiComp i j k cA cB hC composition prevComp prevId f f' g g') bα bβ) = func (funcMorphisms composition k (f' , g') (f , g)) ((*f bα) , (*f bβ))
-fR (biComp (generateBiComp i j k {A} {B} {C} {x} {x'} {y} {y'} {z} {z'} cA cB hC composition prevComp prevId f f' g g') {α} {β} bα bβ) l =
+generateBiComp i j k cA cB hC composition prevComp prevId f f' g g' .biComp bα bβ .f* =
+  func (funcMorphisms composition k (f' , g') (f , g)) ((f* bα) , (f* bβ))
+generateBiComp i j k cA cB hC composition prevComp prevId f f' g g' .biComp bα bβ .*f =
+  func (funcMorphisms composition k (f' , g') (f , g)) ((*f bα) , (*f bβ))
+generateBiComp i j k {A} {B} {C} {x} {x'} {y} {y'} {z} {z'} cA cB hC composition prevComp prevId f f' g g' .biComp {α} {β} bα bβ .fR l =
   comp1' (coin (coin hC j z z') k (func composition (f , g)) (func composition (f , g)))
          (comp1' (coin (coin hC j z z') k (func composition (f , g)) (func composition (f , g)))
                  (invToBiInvCell l (eq (compPreserve prevComp k l (f , g) (f' , g') (f , g)) l ((α , β) , f* bα , f* bβ)))
@@ -294,7 +296,7 @@ fR (biComp (generateBiComp i j k {A} {B} {C} {x} {x'} {y} {y'} {z} {z'} cA cB hC
                                   (biInv (fR bα l))
                                   (biInv (fR bβ l)) }))
          (invToBiInvCell l (idPreserve prevId k l (f , g)))
-fL (biComp (generateBiComp i j k {A} {B} {C} {x} {x'} {y} {y'} {z} {z'} cA cB hC composition prevComp prevId f f' g g') {α} {β} bα bβ) l =
+generateBiComp i j k {A} {B} {C} {x} {x'} {y} {y'} {z} {z'} cA cB hC composition prevComp prevId f f' g g' .biComp {α} {β} bα bβ .fL l =
   comp1' (coin (coin hC j z z') k (func composition (f' , g')) (func composition (f' , g')))
          (comp1' (coin (coin hC j z z') k (func composition (f' , g')) (func composition (f' , g')))
                  (invToBiInvCell l (eq (compPreserve prevComp k l (f' , g') (f , g) (f' , g')) l ((*f bα , *f bβ) , α , β)))
@@ -327,7 +329,7 @@ fL (biComp (generateBiComp i j k {A} {B} {C} {x} {x'} {y} {y'} {z} {z'} cA cB hC
                                   (biInv (fL bα l))
                                   (biInv (fL bβ l)) }))
          (invToBiInvCell l (idPreserve prevId k l (f' , g')))
-biCompHigher (generateBiComp i j k {A} {B} {C} {x} {x'} {y} {y'} {z} {z'} cA cB hC composition prevComp prevId f f' g g') l =
+generateBiComp i j k {A} {B} {C} {x} {x'} {y} {y'} {z} {z'} cA cB hC composition prevComp prevId f f' g g' .biCompHigher l =
   generateBiComp j
                  k
                  l
@@ -339,9 +341,9 @@ biCompHigher (generateBiComp i j k {A} {B} {C} {x} {x'} {y} {y'} {z} {z'} cA cB 
                  (idPreserveCoin prevId k (f , g) (f' , g'))
 
 
-f* (biComp (compBiInv j h x y z) bf bg) = comp1 (com h) (f* bg) (f* bf)
-*f (biComp (compBiInv j h x y z) bf bg) = comp1 (com h) (*f bg) (*f bf)
-fR (biComp (compBiInv j h x y z) {f} {g} bf bg) k =
+compBiInv j h x y z .biComp bf bg .f* = comp1 (com h) (f* bg) (f* bf)
+compBiInv j h x y z .biComp bf bg .*f = comp1 (com h) (*f bg) (*f bf)
+compBiInv j h x y z .biComp {f} {g} bf bg .fR k =
   comp1' (coin h j x x)
          (origAssoc h f g (f* bg) (f* bf))
          (comp1' (coin h j x x)
@@ -355,7 +357,7 @@ fR (biComp (compBiInv j h x y z) {f} {g} bf bg) k =
                                  (id' (coin h j x y) k f)
                                  (invToBiInvCell k (ƛ (hCat h) k (f* bf))))
                          (fR bf k)))
-fL (biComp (compBiInv j h x y z) {f} {g} bf bg) k =
+compBiInv j h x y z .biComp {f} {g} bf bg .fL k =
   comp1' (coin h j z z)
          (origAssoc h (*f bg) (*f bf) f g)
          (comp1' (coin h j z z)
@@ -369,7 +371,7 @@ fL (biComp (compBiInv j h x y z) {f} {g} bf bg) k =
                                  (id' (coin h j z y) k (*f bg))
                                  (invToBiInvCell k (ƛ (hCat h) k g)))
                          (fL bg k)))
-biCompHigher (compBiInv {i = i} j h x y z) k f f' g g' =
+compBiInv {i = i} j h x y z .biCompHigher k f f' g g' =
   generateBiComp i
                  j
                  k
@@ -394,10 +396,10 @@ leftBiInvIsInv : {a : Level}
                → (f : cells (morphisms G j x y))
                → (bi : BiInvertible i (com h) j f)
                → BiInvertible i (com h) j (*f bi)
-f* (leftBiInvIsInv j h f bi) = f
-*f (leftBiInvIsInv j h f bi) = f
-fR (leftBiInvIsInv j h f bi) k = fL bi k
-fL (leftBiInvIsInv j h {x} {y} f bi) k =
+leftBiInvIsInv j h f bi .f* = f
+leftBiInvIsInv j h f bi .*f = f
+leftBiInvIsInv j h f bi .fR k = fL bi k
+leftBiInvIsInv j h {x} {y} f bi .fL k =
   comp1' (coin h j x x)
          (invToBiInvCell k (Inv.invIsInvCell k
                                              (compHigher (com h) j x x)
@@ -434,9 +436,9 @@ rightBiInvIsInv : {a : Level}
                 → (f : cells (morphisms G j x y))
                 → (bi : BiInvertible i (com h) j f)
                 → BiInvertible i (com h) j (f* bi)
-f* (rightBiInvIsInv j h f bi) = f
-*f (rightBiInvIsInv j h f bi) = f
-fR (rightBiInvIsInv j h {x} {y} f bi) k =
+rightBiInvIsInv j h f bi .f* = f
+rightBiInvIsInv j h f bi .*f = f
+rightBiInvIsInv j h {x} {y} f bi .fR k =
   comp1' (coin h j y y)
          (invToBiInvCell k (Inv.invIsInvCell k
                                              (compHigher (com h) j y y)
@@ -463,4 +465,4 @@ fR (rightBiInvIsInv j h {x} {y} f bi) k =
                                                  (id' (coin h j y x) k (*f bi))
                                                  (invToBiInvCell k (ƛ (hCat h) k f)))
                                          (fL bi k)))))
-fL (rightBiInvIsInv j h f bi) k = fR bi k
+rightBiInvIsInv j h f bi .fL k = fR bi k

@@ -261,5 +261,5 @@ coin : {a : Level}
      → (j : Size< i)
      → (x y : cells G)
      → HigherCat j (morphisms G j x y)
-com (coin h j x y) = compHigher (com h) j x y
-hCat (coin h j x y) = hcoin (hCat h) j x y
+coin h j x y .com = compHigher (com h) j x y
+coin h j x y .hCat = hcoin (hCat h) j x y
