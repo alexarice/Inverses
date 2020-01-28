@@ -52,6 +52,7 @@ block=ragged
 \newcommand{\linv}[1]{{}^\star\!#1}
 \newcommand{\rinv}[1]{#1^\star}
 \newcommand{\inv}[1]{#1^{-1}}
+\newcommand{\comp}{\star}
 
 
 \begin{document}
@@ -61,7 +62,7 @@ The todo list has things I think I should do in orange and questions in green
 \listoftodos{}
 
 \begin{abstract}
-  \todo{Writing one of these would be good}
+  \todo{I need to write an abstract}
 \end{abstract}
 \section{Introduction}\label{sec:intro}
 
@@ -151,37 +152,37 @@ In this paper we want to talk about different structures on \(\omega\)-categorie
   \item Inductively define composition as follows:
     \begin{itemize}
     \item Given \(n\)-cells \(f: x \to y\) and \(g: y \to z\) there is
-      an \(n\)-cell \(g \circ_0 f: x \to z\).
-    \item Given \(\alpha: f \to g\) and \(\beta: h \to j\), where the composites \(f \circ_n h\) and \(g \circ_n j\) are well defined, there is a morphism \(\alpha \circ_{n+1} \beta: (f \circ_n h) \to (g \circ_n j)\)
+      an \(n\)-cell \(g \comp_0 f: x \to z\).
+    \item Given \(\alpha: f \to g\) and \(\beta: h \to j\), where the composites \(f \comp_n h\) and \(g \comp_n j\) are well defined, there is a morphism \(\alpha \comp_{n+1} \beta: (f \comp_n h) \to (g \comp_n j)\)
     \end{itemize}
   \end{itemize}
-  \(\circ\) will be used to mean \(\circ_0\).\comment{Should I write \(\otimes\) for \(\circ_1\)}
+  Composition is defined such that the subscript represents the codimension of the composition. \comment{explain what this is?}
 \end{definition}
-
+\comment{should regular composition be \(\comp_1\)}
 Once we have a globular set with identities and composition, we have enough to define a notion of equivalence. The most basic notion of invertibility will be given here, as it will be needed to state the remainder of properties that we expect an higher category to obey.
 
 \begin{definition}
-  Given a globular set \(G\) with identities and composition, with an \(n > 0\) cell \(f : x \to y\), a \emph{quasi-invertible} structure on \(f\) is:
+  Given a globular set \(G\) with identities and composition, with an \(n > 0\) cell \(f : x \to y\), a \emph{quasi-invertible} structure on \(f\) is a (dependant) tuple \((\inv f, f_R, f_L, f_R{}BI, f_L{}BI)\) where:
   \begin{itemize}
-  \item An \(n\)-cell \(\inv f : y \to x\);
-  \item An \((n+1)\)-cell \(f_R: f \circ \inv f \to \id_y\);
-  \item An \((n+1)\)-cell \(f_L: \inv f \circ f \to \id_x\).
-  \item A quasi-invertible structure on \(f_R\).
-  \item A quasi-invertible structure on \(f_L\).
+  \item \(\inv f\) is an \(n\)-cell \(y \to x\);
+  \item \(f_R\) is an \((n+1)\)-cell \(f \comp_0 \inv f \to \id_y\);
+  \item \(f_L\) is an \((n+1)\)-cell \(\inv f \comp_0 f \to \id_x\).
+  \item \(f_R{}BI\) is a quasi-invertible structure on \(f_R\).
+  \item \(f_L{}BI\) is a quasi-invertible structure on \(f_L\).
   \end{itemize}
 \end{definition}
 
 \begin{remark}
-  The previous definition is a coinductive one. Formally, we have defined a coinductive data type, which we could call \(\text{QuasiInvertible}(f)\), which references itself (in saying that \(f_R\) and \(f_L\) themselves have a quasi-invertible structure). Note that as \(\text{QuasiInvertible}\) is dependent on the parameter \(f\), it is in fact a coinductive type family as described in \Cref{sec:coinduction}.
+  The previous definition is a coinductive one. Formally, we have defined a coinductive data type, which we could call \(\mathsf{QuasiInvertible}(f)\), which references itself (in saying that \(f_R\) and \(f_L\) themselves have a quasi-invertible structure). Note that as \(\mathsf{QuasiInvertible}\) is dependent on the parameter \(f\), it is in fact a coinductive type family as described in \Cref{sec:coinduction}.
 \end{remark}
 
 \begin{remark}\label{descendants}
   Notice that in a globular set \(G\) with identities and composition, given two \(n\)-cells \(x\) and \(y\) with the same source and target, we can define a new globular set \(G_{x,y}\) as follows:
   \begin{itemize}
-  \item The \(0\)-cells are the \(n+1\)-cells in \(G\) with source \(x\) and target \(y\);
-  \item The \(m\)-cells are the \(n+m+1\)-cells in \(G\) whose source and target lie in the \(m-1\)-cells of \(G_{x,y}\).
+  \item The \(0\)-cells are the \((n+1)\)-cells in \(G\) with source \(x\) and target \(y\);
+  \item The \(m\)-cells are the \((n+m+1)\)-cells in \(G\) whose source and target lie in the \((m-1)\)-cells of \(G_{x,y}\).
   \end{itemize}
-  Further it is clear that we can carry over identities and composition to this new globular set.
+  It is clear that we can carry over identities and composition to this new globular set.
 \end{remark}
 
 
@@ -193,17 +194,21 @@ Once we have a globular set with identities and composition, we have enough to d
 
   We define a \emph{higher pre-category} to be a globular set with identities and composition such that given any globular set generated as in \cref{descendants} respects the graphical calculus. Further we assume the existence of the following morphisms:
   \begin{itemize}
-  \item For \(n>0\) and each \(n\)-cell \(f: x \to y\), there are \(n+1\)-cells, known as unitors, \(\lambda_f: \id_y \circ f \to f\) and \(\rho_f: f \circ \id_x \to f\).
-  \item Given \(f,g,h\), \(n>1\)-cells with suitable composition defined, we have an associator \(a_{f,g,h} : (f \circ g) \circ h \to f \circ (g \circ h)\).
-  \item For compatible morphisms \(f,g,h,j\), we have an interchanger \(i_{f,g,h,j}(f \circ_n g) \circ (h \circ_n j) \to (f \circ h) \circ_n (g \circ j)\).
-  \item For suitable \(f,g\) and \(n > 1\), there is a cell \(\id_f \circ_{n+1} \id_g \to \id_{f \circ_n g}\)
+  \item For \(n>0\) and each \(n\)-cell \(f: x \to y\), there are \(n+1\)-cells, known as unitors, \(\lambda_f: \id_y \comp_0 f \to f\) and \(\rho_f: f \comp_0 \id_x \to f\).
+  \item Given \(f,g,h\), \(n>1\)-cells with suitable composition defined, we have an associator \(a_{f,g,h} : (f \comp_0 g) \comp_0 h \to f \comp_0 (g \comp_0 h)\).
+  \item For compatible morphisms \(f,g,h,j\), we have an interchanger \(i_{f,g,h,j}(f \comp_n g) \comp_0 (h \comp_n j) \to (f \comp_0 h) \comp_n (g \comp_0 j)\).
+  \item For suitable \(f,g\) and \(n > 1\), there is a cell \(\id_f \comp_{n+1} \id_g \to \id_{f \comp_n g}\)
   \end{itemize}
   All these further morphisms must be equipped with a quasi-invertible structure.
 \end{definition}
 
-To end this section we give a small lemma, which demonstrates the use of these higher pre-categories and will also be invaluable later.
+\begin{remark}
+  It is worth stressing that it is not intended that a higher pre-category is in any way a definition of an \(\omega\)-category. Instead, this is just a list of properties that are expected to hold in any realistic definition of a higher category. The definition is made to be as general as possible so that it can be as applicable as possible.
+\end{remark}
 
-\begin{lemma}\label{lem:identity}
+To end this section we give two small lemmas, which demonstrates the use of these higher pre-categories and will also be invaluable later.
+
+\begin{lemma}\label{identity}
   Any identity morphism in a higher pre-category \(G\) has a quasi-invertible structure.
 \end{lemma}
 
@@ -211,156 +216,166 @@ To end this section we give a small lemma, which demonstrates the use of these h
   Let \(x\) be any cell. Take \(\inv {\id_x} = \id_x\) and \({(\id_x)}_R = {(\id_x)}_L = \lambda_{id_x}\). By assumption, \(\lambda_{id_x}\) has a quasi-invertible structure which can be used to form a structure on \(\id_x\).
 \end{proof}
 
-\begin{lemma}\label{lem:inverse-invert}
-  Suppose \(f\) is quasi-invertible. Then so is \(\inv f\).
+\begin{lemma}\label{inverse-invert}
+  Suppose \(f\) is quasi-invertible structure. This induces a quasi-invertible structure on \(\inv f\).
 \end{lemma}
 
 \begin{proof}
-  Let \((\inv f, f_R, f_L, f_R{}I, f_L{}I)\) be a quasi-invertible structure on \(f\). Then \((f , f_L, f_R, f_L{}I, f_R{}I)\)  that \(\inv f\) is invertible.
+  Let \((\inv f, f_R, f_L, f_R{}I, f_L{}I)\) be a quasi-invertible structure on \(f\). Then \((f , f_L, f_R, f_L{}I, f_R{}I)\) is a quasi-invertible structure on \(\inv f\).
 \end{proof}
 
 \section{Types of Invertibility}\label{sec:invertibility}
 
-In this section we introduce 2 more types of invertibility. Some theorems are proved that help us to work with them and finally all 3 types of invertibility are shown to imply each other. Throughout this section it will be assumed that we are working in a higher category \(G\).
+In this section we introduce 2 more types of invertibility. Some theorems are proved that help us to work with them and finally all 3 types of invertibility are shown to imply each other. Throughout this section it will be assumed that we are working in a higher pre-category \(G\).
 
 \subsection{Bi-Invertibility}\label{sec:bi-invertibility}
 
-Normally, throughout mathematics, when saying a map is invertible we specify a single inverse, and show that this cancels the function when composed on the left and the right. Instead we can consider a function either having a left inverse or a right inverse, meaning the inverse only cancels the function on when composed on the left (or right respectively). It usually does not make sense to consider functions which have both a separate left and right inverse as in most scenarios it can be proved that these are equal and any computations will be simplified by treating them as the same.
+Normally throughout mathematics, when saying a map is invertible we specify a single inverse, and show that this cancels the function when composed on the left and the right. Instead we can consider a function either having a left inverse or a right inverse, meaning the inverse only cancels the function on when composed on the left (or right respectively). It usually does not make sense to consider functions which have both a separate left and right inverse as in most scenarios it can be proved that these are equal and any computations will be simplified by treating them as the same.
 
-However, the concept of bi-invertibility (having both a left and right inverse), plays a role in type theory. It can be shown (perhaps not surprisingly) that a morphism being bi-invertible implies that it is invertible in the usual sense. Perhaps more surprisingly, the data for being bi-invertible is in some ways simpler than the data for being invertible, in that it can be shown that any two ways of showing a function is bi-invertible turn out to be equivalent.
+However, the concept of bi-invertibility, having both a left and right inverse, plays a role in type theory. It can be shown (perhaps not surprisingly) that a morphism being bi-invertible implies that it is invertible in the usual sense. More surprisingly, the data for being bi-invertible is in some ways simpler than the data for being invertible, in that it can be shown that any two ways of showing a function is bi-invertible turn out to be equal.
 
-First, we must define what we mean for a morphism in a higher category to be bi-invertible, as a generalisation of the idea in type theory.
+Before these can be studied, we must define what we mean for a morphism in a higher category to be bi-invertible, as a generalisation of the idea in type theory.
 
 \begin{definition}
-  Given a globular set \(G\) with identities and composition, with an \(n > 0\) cell \(f : x \to y\), we coinductively say that \(f\) is \emph{bi-invertible} if:
+  Given a globular set \(G\) with identities and composition, with an \(n > 0\) cell \(f : x \to y\), a \emph{bi-invertible} structure on \(f\) is a tuple \((\rinv f, \linv f, f_R, f_L, f_R{}BI, f_L{}BI)\) where:
   \begin{itemize}
-  \item There exists an \(n\)-cell \(\rinv f : y \to x\);
-  \item There exists an \(n\)-cell \(\linv f : y \to x\);
-  \item There exists an \((n+1)\)-cell \(f_R: f \circ \rinv f \to \id_y\);
-  \item There exists an \((n+1)\)-cell \(f_L: \linv f \circ f \to \id_x\).
-  \item \(f_R\) is bi-invertible.
-  \item \(f_L\) is bi-invertible.
+  \item \(\rinv f\) is an \(n\)-cell \(y \to x\);
+  \item \(\linv f\) is an \(n\)-cell \(y \to x\);
+  \item \(f_R\) is an \((n+1)\)-cell \(f \comp_0 \rinv f \to \id_y\);
+  \item \(f_L\) is an \((n+1)\)-cell \(\linv f \comp_0 f \to \id_x\).
+  \item \(f_R{}BI\) is a bi-invertible structure on \(f_R\).
+  \item \(f_L{}BI\) is a bi-invertible structure on \(f_L\).
   \end{itemize}
 \end{definition}
 
 Next it is shown that invertibility implies bi-invertibility. This is fairly trivial though it will be written out to demonstrate proof by coinduction.
 
-\begin{lemma}\label{lem:inv-to-bi-inv}
+\begin{lemma}\label{inv-to-bi-inv}
   Let \(f : x \to y\) be invertible. Then \(f\) is bi-invertible.
 \end{lemma}
 
 \begin{proof}
-  This is proven by constructing a corecursive function \(\mathsf{invToBiInv} : \Pi_{f : x \to y} \mathsf{Invertible}(f) \to \mathsf{BiInvertible}(f)\). Given \(I = (f',f_R^i,f_L^i,f_R{}I, f_L{}I) : \mathsf{Invertible}(f)\) we can construct \(\mathsf{invToBiInv}(f)(I)\) by:
+  This is proven by constructing a corecursive function \(\mathsf{invToBiInv} : \Pi_{f : x \to y} (\mathsf{Invertible}(f) \to \mathsf{BiInvertible}(f))\). Given \(I = (\inv f,f_R^i,f_L^i,f_R{}I, f_L{}I) : \mathsf{Invertible}(f)\) we can construct \(\mathsf{invToBiInv}(f)(I)\) by:
   \begin{itemize}
-  \item \(\rinv f = f'\);
-  \item \(\linv f = f'\);
+  \item \(\rinv f = \inv f\);
+  \item \(\linv f = \inv f\);
   \item \(f_R = f_R^i\);
   \item \(f_L = f_L^i\);
-  \item \(f_R\) is bi-invertible corecursively by \(\mathsf{invToBiInv}(f_R)(f_R{}I)\);
-  \item \(f_L\) is bi-invertible corecursively by \(\mathsf{invToBiInv}(f_L)(f_L{}I)\).
+  \item Corecursively, we let \(f_R{}BI = \mathsf{invToBiInv}(f_R)(f_R{}I)\);
+  \item Similarly, let \(f_L{}BI = \mathsf{invToBiInv}(f_L)(f_L{}I)\).
   \end{itemize}
 \end{proof}
 
-\noindent Now, one of the most important and complex theorems of the paper is proved.
+\noindent Next, one of the most important and complex theorems of the paper is proved. To prove this we introduce a new notion and prove a lemma.
 
-\begin{theorem}
-  For any \(n \in \mathbb{N}\) and bi-invertible cells \(f,g\), \(f \circ_n g\) is bi-invertible if it is well defined.
+\begin{definition}
+  Let \(f : x \to y\) be an \(n\) cell. Then a \emph{pseudo-bi-invertible} structure on \(f\) is a tuple \((\rinv f, \linv f, f_R, f_L, f_R{}PBI, f_L{}PBI)\) where:
+  \begin{itemize}
+  \item \(\rinv f\), \(\linv f\), \(f_L\), and \(f_R\) are as in the definition of bi-invertible.
+  \item \(f_R{}PBI\) is a collection of bi-invertible structures on morphisms which compose (in any dimension) to give \(f_R\);
+  \item \(f_L{}PBI\) is the same for \(f_L\).
+  \end{itemize}
+\end{definition}
+
+\begin{lemma}\label{composition-lemma}
+  For any \(n \in \mathbb{N}\) and cells \(f,g\) where \(f \comp_n g\) is well defined, given a bi-invertible structure on \(f\) and \(g\), we can generate a pseudo-bi-invertible structure on \(f \comp_n g\).
+\end{lemma}
+\begin{proof}
+  Split into cases on \(n\):
+  \begin{itemize}
+  \item \(n = 0\): Let \((\rinv f, \linv f, f_R, f_L, f_R{}BI, f_L{}BI)\) and \((\rinv g, \linv g, g_R, g_L, g_R{}BI, g_L{}BI)\) be bi-invertible structures for \(f\) and \(g\) respectively. We define a pseudo-bi-invertible structure on \(g \comp_0 f\) where:
+    \begin{itemize}
+    \item \(\rinv {(g \comp_0 f)} = \rinv f \comp_0 \rinv g\)
+    \item \(\linv {(g \comp_0 f)} = \linv f \comp_0 \linv g\)
+    \item \({(g \comp_0 f)}_R : g \comp_0 f \comp_0 \rinv f \comp_0 \rinv g \to \id_z\) is the morphism
+      \begin{equation*}
+        a_{g, f, \rinv f \comp_0 \rinv g} \comp_0 (\id_g \comp_1 a_{f,\rinv f, \rinv g}^{-1}) \comp_0 (\id_g \comp_1 (f_R \comp_1 \id_{\rinv g})) \comp_0 (\id_g \comp_1 \lambda_{\rinv g}) \comp_0 g_R
+      \end{equation*}
+      This may be easier to understand from its string diagram, which is given below:
+      \begin{center}
+        \begin{tikzpicture}
+          \node[draw] (GR) {\(g_R\)};
+          \node[on grid, below=1 of GR, draw] (FR) {\(f_R\)};
+          \node[on grid, below left=1.5cm and 2.25cm of FR] (Base1) {\(g\)};
+          \node[on grid, right=0.75cm of Base1] (Base2) {\(f\)};
+          \node[on grid, right=3cm of Base2] (Base3) {\(\rinv f\)};
+          \node[on grid, right=0.75cm of Base3] (Base4) {\(\rinv g\)};
+          \draw (Base1) to ++(0,1cm) to [out=90,in=180]  (GR);
+          \draw (Base4) to ++(0,1cm) to [out=90,in=0] (GR);
+          \draw (Base2) to ++(0,0.75cm) to [out=90,in=180] (FR);
+          \draw (Base3) to ++(0,0.75cm) to [out=90,in=0] (FR);
+        \end{tikzpicture}
+      \end{center}
+    \item \({(g \comp_0 f)}_L : \linv g \comp_0 \linv f \comp_0 f \comp_0 g \to \id_x\) is the morphism
+      \begin{equation*}
+        a_{\linv g, \linv f, f \comp_0 g} \comp_0 (\id_{\linv g} \comp_1 a_{})\comp_0 (\id_{\linv g} \comp_1 (f_L \comp_1 \id_g)) \comp_0 (\id_{\linv g} \comp_1 \lambda_g) \comp_0 g_L
+      \end{equation*}
+      which is given by the diagram:
+      \begin{center}
+        \begin{tikzpicture}
+          \node[draw] (GL) {\(g_L\)};
+          \node[on grid, below=1 of GL, draw] (FL) {\(f_L\)};
+          \node[on grid, below left=1.5cm and 2.25cm of FL] (Base1) {\(\linv g\)};
+          \node[on grid, right=0.75cm of Base1] (Base2) {\(\linv f\)};
+          \node[on grid, right=3cm of Base2] (Base3) {\(f\)};
+          \node[on grid, right=0.75cm of Base3] (Base4) {\(g\)};
+          \draw (Base1) to ++(0,1cm) to [out=90,in=180] (GL);
+          \draw (Base4) to ++(0,1cm) to [out=90,in=0] (GL);
+          \draw (Base2) to ++(0,0.75cm) to [out=90,in=180] (FL);
+          \draw (Base3) to ++(0,0.75cm) to [out=90,in=0] (FL);
+        \end{tikzpicture}
+      \end{center}
+    \end{itemize}
+
+    From the bi-invertible structures on \(f\) and \(g\) we can obtain bi-invertible structures on \(f_L\), \(g_L\), \(f_R\), and \(g_R\). The associators and unitors used have bi-invertible structures by lemmas~\ref{inv-to-bi-inv} and~\ref{inverse-invert}. All identity morphisms can be equipped with a bi-invertible structure using lemmas~\ref{inv-to-bi-inv} and~\ref{identity}. Hence we have obtained collections of bi-invertible structures for morphisms which compose to \({(g \comp_0 f)}_R\) and \({(g \comp_0 f)}_R\).
+  \item \(n > 0\): Suppose we have \(\alpha: f \to g\) and \(\beta: h \to j\) where \(f \comp_{n-1} h\) and \(g \comp_{n-1} j\) are both well defined. Further suppose
+    \begin{itemize}
+    \item \((\rinv \alpha, \linv \alpha, \alpha_R, \alpha_L, \alpha_R{}BI, \alpha_L{}BI)\) is a bi-invertible structure on \(\alpha\);
+    \item \((\rinv \beta, \linv \beta, \beta_R, \beta_L, \beta_R{}BI, \beta_R{}BI)\) is a bi-invertible structure for \(\beta\).
+    \end{itemize}
+    Then we can define the following pseudo-bi-invertible structure on \(\alpha \comp_n \beta\):
+    \begin{itemize}
+    \item \(\rinv {(\alpha \comp_n \beta)} = \rinv \alpha \comp_n \rinv \beta\)
+    \item \(\linv {(\alpha \comp_n \beta)} = \linv \alpha \comp_n \linv \beta\)
+    \item Let \({(\alpha \comp_n \beta)}_R\) be the following composition:
+      \begin{equation*}
+        (\alpha \comp_n \beta) \comp_0 (\rinv \alpha \comp_n \rinv \beta) \overset {i_{\alpha,\beta,\rinv \alpha, \rinv \beta}} \to (\alpha \comp_0 \rinv \alpha) \comp_n (\beta \comp_0 \rinv \beta) \overset {\alpha_R \comp_{n+1} \beta_R} \to \id_g \comp_n \id_j \to \id_{g \comp_{n-1} j}
+      \end{equation*}
+    \item Similarly, let \({(\alpha \comp_n \beta)}_L\) be the following composition:
+      \begin{equation*}
+        (\linv \alpha \comp_n \linv \beta) \comp_0 (\alpha \comp_n \beta) \overset {i_{\linv \alpha, \linv \beta, \alpha, \beta}} \to (\linv \alpha \comp_0 \alpha) \comp_n (\linv \beta \comp_0 \beta) \overset {\alpha _L \comp_{n+1} \beta _L} \to \id_f \comp_n \id_h \to \id_{f \comp_n h}
+      \end{equation*}
+    \end{itemize}
+    Now, both \({(\alpha \comp_n \beta)}_R\) and \({(\alpha \comp_n \beta)}_L\) are the composition of cells with quasi-invertible structures given by the higher pre-category structure (and so have bi-invertible structures given by \cref{inv-to-bi-inv}) and \(\alpha_L\), \(\alpha_R\), \(\beta_L\), and \(\beta_R\) which have structures \(\alpha_L{}BI\), \(\alpha_R{}BI\), \(\beta_L{}BI\), and \(\beta_R{}BI\).
+  \end{itemize}
+\end{proof}
+
+\begin{theorem}\label{bi-inv-composition}
+  For any \(n \in \mathbb{N}\) and cells \(f,g\) where \(f \comp_n g\) is well defined, given a bi-invertible structure on \(f\) and \(g\), we can generate a bi-invertible structure on \(f \comp_n g\).
 \end{theorem}
 \begin{proof}
-  In order to prove the main theorem, the notion of pseudo-bi-invertible morphism is introduced. We define \(f\) to be \emph{pseudo-bi-invertible} if:
-  \begin{itemize}
-  \item There exist \(\rinv f\), \(\linv f\), \(f_L\), and \(f_R\) as in the definition of bi-invertible.
-  \item \(f_L\) and \(f_R\) are the composition of bi-invertible morphisms.
-  \end{itemize}
+  Let \(h = f \comp_n g\). The bi-invertible structure on \(h\) will be generated using corecursion. Using \cref{composition-lemma}, \(f \comp_n g\) has a pseudo-bi-invertible structure:
+  \begin{equation*}
+    (\rinv h, \linv h, h_R, h_L, h_R{}PBI, h_L{}PBI)
+  \end{equation*}
+  Then a bi-invertible structure on \(h\) is given by:
+  \begin{equation*}
+    (\rinv h, \linv h, h_R, h_L, h_R{}BI, h_L{}BI)
+  \end{equation*}
+  where \(h_R{}BI\) and \(h_L{}BI\) are created by corecursively applying the theorem to the components of \(h_R{}PBI\) and \(h_L{}PBI\).
+\end{proof}
 
-  Next, the following claim is proved, which is slightly weaker than the statement of the main theorem.
-
-  \begin{claim}
-    For any \(n \in \mathbb{N}\) and bi-invertible cells \(f,g\), \(f \circ_n g\) is pseudo-bi-invertible if it is well defined.
-  \end{claim}
-  \begin{proof}[Proof of claim]
-    Take a pair of compatible composition. Split into cases on \(n\):
-    \begin{itemize}
-    \item \(n = 0\): It is required that given bi-invertible \(f : x \to y\) and \(g : y \to z\), that \(g \circ f : x \to z\) is pseudo-bi-invertible. Let:
-      \begin{itemize}
-      \item \(\rinv {(g \circ f)} = \rinv f \circ \rinv g\)
-      \item \(\linv {(g \circ f)} = \linv f \circ \linv g\)
-      \item \({(g \circ f)}_R : g \circ f \circ \rinv f \circ \rinv g \to \id_z\) is the morphism
-        \begin{equation*}
-          a_{g, f, \rinv f \circ \rinv g} \circ (\id_g \circ_1 a_{f,\rinv f, \rinv g}^{-1}) \circ (\id_g \circ_1 (f_R \circ_1 \id_{\rinv g})) \circ (\id_g \circ_1 \lambda_{\rinv g}) \circ g_R
-        \end{equation*}
-        This may be easier to understand from its string diagram, which is given below:
-        \begin{center}
-          \begin{tikzpicture}
-            \node[draw] (GR) {\(g_R\)};
-            \node[on grid, below=1 of GR, draw] (FR) {\(f_R\)};
-            \node[on grid, below left=1.5cm and 2.25cm of FR] (Base1) {\(g\)};
-            \node[on grid, right=0.75cm of Base1] (Base2) {\(f\)};
-            \node[on grid, right=3cm of Base2] (Base3) {\(\rinv f\)};
-            \node[on grid, right=0.75cm of Base3] (Base4) {\(\rinv g\)};
-            \draw (Base1) to ++(0,1cm) to [out=90,in=180]  (GR);
-            \draw (Base4) to ++(0,1cm) to [out=90,in=0] (GR);
-            \draw (Base2) to ++(0,0.75cm) to [out=90,in=180] (FR);
-            \draw (Base3) to ++(0,0.75cm) to [out=90,in=0] (FR);
-          \end{tikzpicture}
-        \end{center}
-      \item \({(g \circ f)}_L : \linv g \circ \linv f \circ f \circ g \to \id_x\) is the morphism
-        \begin{equation*}
-          a_{\linv g, \linv f, f \circ g} \circ (\id_{\linv g} \circ_1 a_{})\circ (\id_{\linv g} \circ_1 (f_L \circ_1 \id_g)) \circ (\id_{\linv g} \circ_1 \lambda_g) \circ g_L
-        \end{equation*}
-        which is given by the diagram:
-        \begin{center}
-          \begin{tikzpicture}
-            \node[draw] (GL) {\(g_L\)};
-            \node[on grid, below=1 of GL, draw] (FL) {\(f_L\)};
-            \node[on grid, below left=1.5cm and 2.25cm of FL] (Base1) {\(\linv g\)};
-            \node[on grid, right=0.75cm of Base1] (Base2) {\(\linv f\)};
-            \node[on grid, right=3cm of Base2] (Base3) {\(f\)};
-            \node[on grid, right=0.75cm of Base3] (Base4) {\(g\)};
-            \draw (Base1) to ++(0,1cm) to [out=90,in=180] (GL);
-            \draw (Base4) to ++(0,1cm) to [out=90,in=0] (GL);
-            \draw (Base2) to ++(0,0.75cm) to [out=90,in=180] (FL);
-            \draw (Base3) to ++(0,0.75cm) to [out=90,in=0] (FL);
-          \end{tikzpicture}
-        \end{center}
-      \end{itemize}
-
-      As \(f\) and \(g\) are bi-invertible we get that \(f_L\), \(g_L\), \(f_R\), and \(g_R\) are bi-invertible and the associators and unitors used are bi-invertible by lemmas~\ref{lem:inv-to-bi-inv} and~\ref{lem:inverse-invert} and hence \({(g \circ f)}_R\) and \({(g \circ f)}_R\) are the composition of bi-invertible cells. Therefore, \(g \circ f\) is pseudo-bi-invertible.
-    \item \(n > 0\): It is required that given bi-invertible \(\alpha: f \to g\) and \(\beta: h \to j\) where \(f \circ_{n-1} h\) and \(g \circ_{n-1} j\) are both well defined that \(\alpha \circ_n \beta\) bi-invertible. Let:
-      \begin{itemize}
-      \item \(\rinv {(\alpha \circ_n \beta)} = \rinv \alpha \circ_n \rinv \beta\)
-      \item \(\linv {(\alpha \circ_n \beta)} = \linv \alpha \circ_n \linv \beta\)
-      \item Define \({(\alpha \circ_n \beta)}_R\) as the following composition:
-        \begin{equation*}
-          (\alpha \circ_n \beta) \circ (\rinv \alpha \circ_n \rinv \beta) \overset {i_{\alpha,\beta,\rinv \alpha, \rinv \beta}} \to (\alpha \circ \rinv \alpha) \circ_n (\beta \circ \rinv \beta) \overset {\alpha _R \circ_{n+1} \beta _R} \to \id_g \circ_n \id_j \to \id_{g \circ_{n-1} j}
-        \end{equation*}
-      \item Similarly, define \({(\alpha \circ_n \beta)}_L\) as the following composition:
-        \begin{equation*}
-          (\linv \alpha \circ_n \linv \beta) \circ (\alpha \circ_n \beta) \overset {i_{\linv \alpha, \linv \beta, \alpha, \beta}} \to (\linv \alpha \circ \alpha) \circ_n (\linv \beta \circ \beta) \overset {\alpha _L \circ_{n+1} \beta _L} \to \id_f \circ_n \id_h \to \id_{f \circ_n h}
-        \end{equation*}
-      \end{itemize}
-      Now, both \({(\alpha \circ_n \beta)}_R\) and \({(\alpha \circ_n \beta)}_L\) are the compositions of bi-invertible and invertible cells so by \cref{lem:inv-to-bi-inv}, \(\alpha \circ_n \beta\) is pseudo-bi-invertible.
-    \end{itemize}
-  \end{proof}\comment{is this the correct way to nest a proof in a proof?}
-
-  Now the main theorem statement is proved by corecursion. Take \(n\) and \(f \circ_n g\), a compatible composition, where both \(f\) and \(g\) are bi-invertible. By the claim, \(f \circ_n g\) is pseudo-bi-invertible. A witness that \(f \circ_n g\) is bi-invertible can be constructed as follows:
-  \begin{itemize}
-  \item Let \(\rinv f\), \(\linv f\), \(f_R\), and \(f_L\) be as in the proof of pseudo-bi-invertibility.
-  \item It is known that \(f_R\) and \(f_L\) are the composition of bi-invertible cells. By corecursively applying the theorem we get that \(f_R\) and \(f_L\) are bi-invertible.
-  \end{itemize}
-\end{proof}\comment{This proof could be split into a definition, lemma, and theorem}
-
-\begin{lemma}\label{lem:inverses}
-  Let \(f\) be a bi-invertible cell. Then \(\linv f\) and \(\rinv f\) are bi-invertible.
-\end{lemma}\todo{We are defining \emph{one} bi-invertible structure on these. Use a definition and a lemma}
+\begin{lemma}\label{inverses}
+  Let \(f\) be a cell. Given a bi-invertible structure on \(f\), one can be generated on both \(\linv f\) and \(\rinv f\).
+\end{lemma}
 \begin{proof}
-  We show \(\rinv f\) is bi-invertible and \(\linv f\) will follow similarly. Define the following:
+  A structure is given for \(\rinv f\) is bi-invertible and \(\linv f\) will follow by symmetry. As before let \((\rinv f, \linv f, f_R, f_L, f_R{}BI, f_L{}BI)\) be a bi-invertible structure on \(f\). Then a bi-invertible structure on \(\rinv f\) can be generated by:
   \begin{itemize}
   \item \(\rinv {(\rinv f)} = f\)
   \item \(\linv {(\rinv f)} = f\)
-  \item \({(\rinv f)}_R: \rinv f \circ f \to \id\) is the morphism:
+  \item \({(\rinv f)}_R: \rinv f \comp_0 f \to \id\) is the morphism:
     \begin{equation*}
-      \lambda_{\rinv f \circ f}^{-1} \circ (\rinv {f_L} \circ_1 \id_{\rinv f} \circ_1 \id_f) \circ a_{\linv f, f, \rinv f \circ f} \circ (\id_{\linv f} \circ_1 a_{f, \rinv f, f}^{-1}) \circ (\id_{\linv f} \circ_1 f_R \circ_1 \id_f) \circ (\id_{\linv f} \circ_1 \lambda_f) \circ f_L
+      \lambda_{\rinv f \comp_0 f}^{-1} \comp_0 (\rinv {f_L} \comp_1 \id_{\rinv f} \comp_1 \id_f) \comp_0 a_{\linv f, f, \rinv f \comp_0 f} \comp_0 (\id_{\linv f} \comp_1 a_{f, \rinv f, f}^{-1}) \comp_0 (\id_{\linv f} \comp_1 f_R \comp_1 \id_f) \comp_0 (\id_{\linv f} \comp_1 \lambda_f) \comp_0 f_L
     \end{equation*}
     given by the string diagram:
     \begin{center}
@@ -376,113 +391,106 @@ Next it is shown that invertibility implies bi-invertibility. This is fairly tri
         \draw (F) to ++(0,1.25cm) to[out=90,in=0] (FL);
       \end{tikzpicture}
     \end{center}
-  \item \({(\rinv f)}_L: f \circ \rinv f \to \id\) is given by \(f_R\)
+  \item \({(\rinv f)}_L: f \comp_0 \rinv f \to \id\) is given by \(f_R\)
   \end{itemize}
-  We get that \({(\rinv f)}_R\) is bi-invertible as it is a composite of bi-invertible morphisms (where \(\rinv {f_L}\) and \(a_{f, \rinv f , f}^{-1}\) are bi-invertible by \cref{lem:inv-to-bi-inv} and the coinductive hypothesis) and \({(\rinv f)}_L\) is trivially bi-invertible.
+  Let \({(\rinv f)}_L\) be given \(f_R{}BI\) as its bi-invertible structure. A bi-invertible structure on \({(\rinv f)}_R\) can be formed using \Cref{bi-inv-composition}, using that \(\rinv {f_L}\) has a bi-invertible structure given by corecursion.
 \end{proof}
 
 \subsection{Half-Adjoint Inverses}\label{sec:hai}
 
-Another type of equivalence is the half-adjoint equivalence. Whereas being bi-invertible was a weakening of being invertible, being a half-adjoint equivalence is a strict strengthening of being an equivalence. This is done by adding a coherence condition which effectively enforces \(f_L\) and \(f_R\) to work well together. It turns out that there are two such coherence conditions we can specify, yet each of these implies the other and so it sufficient to provide one of these\todo{Put a reference for this, or a proof, or both}. This is what gives rise to the name \emph{half}-adjoint equivalence. In \Cref{sec:contractibility}, both coherence conditions will be useful so we will distinguish between them by calling one a left-adjoint inverse and the other a right-adjoint inverse.
+Another type of equivalence is a half-adjoint equivalence. Whereas being bi-invertible was a weakening of being quasi-invertible, being half-adjoint invertible is a strict strengthening of being an quasi-invertible. This is done by adding a coherence condition which effectively enforces \(f_L\) and \(f_R\) to work well together. It turns out that there are two such coherence conditions we can specify, yet each of these implies the other and so it sufficient to provide one of these\todo{Put a reference for this, or a proof, or both}. This is what gives rise to the name \emph{half}-adjoint invertible. In \Cref{sec:contractibility}, both coherence conditions will be useful so we will distinguish between them by calling one a left-adjoint inverse and the other a right-adjoint inverse.
 
 \begin{definition}
-  Given a globular set \(G\) with identities and composition, with an \(n > 0\) cell \(f : x \to y\), we coinductively say that \(f\) is \emph{right-adjoint invertible}\comment{are these the right way round?} if:
+  Given a globular set \(G\) with identities and composition, with an \(n > 0\) cell \(f : x \to y\), a \emph{right-adjoint invertible} structure on \(f\) \comment{are these the right way round?} is a tuple \((f', \alpha_f, \beta_f, \gamma_f, \alpha_f{}RAI, \beta_f{}RAI, \gamma_f{}RAI)\) where:
   \begin{itemize}
-  \item There exists an \(n\)-cell \(f' : y \to x\).
-  \item There exists an \(n+1\)-cell \(\alpha: f \circ f' \to \id_y\).
-  \item There exists an \(n+1\)-cell \(\beta: \id_x \to f' \circ f\).
-  \item There exists an \(n+2\)-cell \(\gamma: (\lambda_{f'}^{-1} \circ (\beta \circ_1 \id_{f'}) \circ (\id_{f'} \circ_1 \alpha) \circ \rho_{f'}) \to \id_{f'}\).
-  \item \(\alpha\) is right-adjoint invertible.\comment{rename these?}
-  \item \(\beta\) is right-adjoint invertible.
-  \item \(\gamma\) is right-adjoint invertible.
+  \item \(f'\) is an \(n\)-cell \(y \to x\);
+  \item \(\alpha_f\) is an \(n+1\)-cell \(f \comp_0 f' \to \id_y\);
+  \item \(\beta_f\) is an \(n+1\)-cell \(\id_x \to f' \comp_0 f\);
+  \item \(\gamma_f\) is an \(n+2\)-cell \((\lambda_{f'}^{-1} \comp_0 (\beta \comp_1 \id_{f'}) \comp_0 a_{f',f,f'} \comp_0 (\id_{f'} \comp_1 \alpha) \comp_0 \rho_{f'}) \to \id_{f'}\);
+  \item \(\alpha_f{}RAI\) is a right-adjoint invertible structure on \(\alpha_f\);
+  \item \(\beta_f{}RAI\) is a right-adjoint invertible structure on \(\beta_f\);
+  \item \(\gamma_f{}RAI\) is a right-adjoint invertible structure on \(\gamma_f\).
   \end{itemize}
 
-  Where \(\gamma\) can be graphically represented by the following diagram:
+  Where \(\gamma_f\) can be graphically represented by the following diagram:
   \begin{center}
     \begin{tikzpicture}
       \node (Bottom) {\({f'}\)};
-      \node[on grid, above left=1cm and 2.25cm of Bottom, draw] (Cup){\(\beta\)};
-      \node[on grid, above right=2cm and 1.5cm of Cup,draw] (Cap){\(\alpha\)};
+      \node[on grid, above left=1cm and 2.25cm of Bottom, draw] (Cup){\(\beta_f\)};
+      \node[on grid, above right=2cm and 1.5cm of Cup,draw] (Cap){\(\alpha_f\)};
       \node[on grid, above left=1cm and 2.25cm of Cap] (Top) {\({f'}\)};
       \draw (Bottom) to++(0,2) to[out=90,in=0] (Cap);
       \draw (Cup) to[out=0,in=-90] ++(0.75,1) to[out=90,in=180] (Cap);
       \draw (Cup) to[out=180,in=-90] ++(-0.75,1) to (Top);
 
       \node[on grid, above right=2cm and 1cm of Bottom, font=\fontsize{20}{24}\selectfont] (Eq) {\(\Rightarrow\)};
-      \node[above=0cm of Eq,font=\fontsize{15}{19}\selectfont] (Gamma) {\(\gamma\)};
+      \node[above=0cm of Eq,font=\fontsize{15}{19}\selectfont] (Gamma) {\(\gamma_f\)};
       \node[on grid, right=2cm of Bottom] (L1) {\({f'}\)};
       \node[on grid, above=4cm of L1] (L2) {\({f'}\)};
       \draw (L1) to (L2);
     \end{tikzpicture}
   \end{center}
 
-  Dually say that \(f\) is \emph{left-adjoint invertible} if:
+  Dually an \emph{left-adjoint invertible} structure on \(f\) is a tuple \((f', \alpha_f, \beta_f, \gamma_f, \alpha_f{}LAI, \beta_f{}LAI, \gamma_f{}RAI)\) where:
   \begin{itemize}
   \item There exists an \(n\)-cell \(f' : y \to x\).
-  \item There exists an \(n+1\)-cell \(\alpha: f' \circ f \to \id_x\).
-  \item There exists an \(n+1\)-cell \(\beta: \id_y \to f \circ f'\).
-  \item There exists an \(n+2\)-cell \(\gamma: (\rho_{f}^{-1} \circ (\id_{f} \circ_1 \beta) \circ (\alpha \circ_1 \id_f) \circ \lambda_f) \to \id_f\).
-  \item \(\alpha\) is left-adjoint invertible.
-  \item \(\beta\) is left-adjoint invertible.
-  \item \(\gamma\) is left-adjoint invertible.
+  \item There exists an \(n+1\)-cell \(\alpha_f: f' \comp_0 f \to \id_x\).
+  \item There exists an \(n+1\)-cell \(\beta_f: \id_y \to f \comp_0 f'\).
+  \item There exists an \(n+2\)-cell \(\gamma_f: (\rho_{f}^{-1} \comp_0 (\id_{f} \comp_1 \beta_f) \comp_0 \inv {a_{f',f,f'}} \comp_0 (\alpha_f \comp_1 \id_f) \comp_0 \lambda_f) \to \id_f\).
+  \item \(\alpha_f{}LAI\) is a left-adjoint invertible structure on \(\alpha_f\).
+  \item \(\beta_f{}LAI\) is a left-adjoint invertible structure on \(\beta_f\).
+  \item \(\gamma_f{}LAI\) is a left-adjoint invertible structure on \(\gamma_f\).
   \end{itemize}
 
-  So that \(\gamma\) is:
+  So that \(\gamma_f\) is:
   \begin{center}
     \begin{tikzpicture}
       \node (Bottom) {\({f'}\)};
-      \node[on grid, above right=1cm and 2.25cm of Bottom, draw] (Cup){\(\beta\)};
-      \node[on grid, above left=2cm and 1.5cm of Cup,draw] (Cap){\(\alpha\)};
+      \node[on grid, above right=1cm and 2.25cm of Bottom, draw] (Cup){\(\beta_f\)};
+      \node[on grid, above left=2cm and 1.5cm of Cup,draw] (Cap){\(\alpha_f\)};
       \node[on grid, above right=1cm and 2.25cm of Cap] (Top) {\({f'}\)};
       \draw (Bottom) to++(0,2) to[out=90,in=180] (Cap);
       \draw (Cup) to[out=180,in=-90] ++(-0.75,1) to[out=90,in=0] (Cap);
       \draw (Cup) to[out=0,in=-90] ++(0.75,1) to (Top);
 
       \node[on grid, below right=2cm and 1cm of Top, font=\fontsize{20}{24}\selectfont] (Eq) {\(\Rightarrow\)};
-      \node[above=0cm of Eq,font=\fontsize{15}{19}\selectfont] (Gamma) {\(\gamma\)};
+      \node[above=0cm of Eq,font=\fontsize{15}{19}\selectfont] (Gamma) {\(\gamma_f\)};
       \node[on grid, right=2cm of Top] (L1) {\({f'}\)};
       \node[on grid, below=4cm of L1] (L2) {\({f'}\)};
       \draw (L1) to (L2);
     \end{tikzpicture}
   \end{center}
 
-  We say \(f\) is \emph{half-adjoint invertible} to mean that it is either left-adjoint or right-adjoint invertible.
+  We say that \(f\) has a \emph{half-adjoint invertible} structure to mean that it has either a left-adjoint or right-adjoint invertible structure.
 \end{definition}
 
 \begin{theorem}
-  A half-adjoint invertible morphism is invertible.
+  Any half-adjoint invertible structure can be restricted to a quasi-invertible structure on the same morphism.
 \end{theorem}
 \begin{proof}
-  Suppose \(f\) is right-adjoint invertible. Then let:
+  Suppose \(f\) has right-adjoint invertible structure \((f', \alpha_f, \beta_f, \gamma_f, \alpha_f{}RAI, \beta_f{}RAI, \gamma_f{}RAI)\). Then let:
   \begin{itemize}
-  \item \(\rinv f = {f'}\);
-  \item \(\linv f = {f'}\);
-  \item \(f_R = \alpha\);
-  \item \(f_L = \beta^{-1}\).
+  \item \(\inv f = {f'}\);
+  \item \(f_R = \alpha_f\);
+  \item \(f_L = \beta_f^{-1}\).
   \end{itemize}
-  By coinduction \(f_R = \alpha\) is invertible and \(\beta\) is invertible and so, by \cref{lem:inverse-invert}, \(\inv \beta\) is also invertible which means \(f\) is too.
-  The case where \(f\) is left-adjoint invertible is similar.
+  By coinduction, \(\alpha_f{}RAI\) can be restricted to a quasi-invertible structure on \(f_R\) and \(\beta_f{}RAI\) can be restricted to quasi-invertible structure on \(\beta_f\) which induces a structure on \(\inv {\beta_f}\) by \cref{inverse-invert}. The case where \(f\) is left-adjoint invertible is similar.
 \end{proof}
 
 \begin{cor}
-  A half-adjoint invertible morphism is bi-invertible.
+  Any half-adjoint invertible structure can be restricted to a bi-invertible structure on the same morphism.
 \end{cor}
 
-\begin{theorem}\label{thm:bi-inv-to-hai}
-  A bi-invertible morphism is right-adjoint invertible. Further this can be done such that \(f' = \rinv f\) and \(\alpha = f_R\).
+\begin{theorem}\label{bi-inv-to-hai}
+  A bi-invertible structure \((\rinv f, \linv f, f_R, f_L, \dots)\) of a cell \(f\) induces a right adjoint invertible structure \((\rinv f, f_R, \dots)\) on \(f\).
 \end{theorem}
 \begin{proof}
-  Let \(f\) be bi-invertible. Then as require we set:
+  Let \((\rinv f, \linv f, f_R, f_L, f_R{}BI, f_L{}BI)\) be a bi-invertible structure on \(f\). Then we give the right-adjoint invertible structure \((\rinv f, f_R, \beta_f, \gamma_f, f_R{}RAI, \beta_f{}RAI, \gamma_f{}RAI)\) where:
   \begin{itemize}
-  \item \({f'} = \rinv f\),
-  \item \(\alpha = f_R\).
-  \end{itemize}
-  and then:
-  \begin{itemize}
-  \item \(\beta\) is given by the following diagram:
+  \item \(\beta_f\) is given by the following diagram:
     \begin{center}
       \begin{tikzpicture}
-        \node (Finv) {\({f'}\)};
+        \node (Finv) {\({\rinv f}\)};
         \node [on grid, right=1cm of Finv] (F) {\(f\)};
         \node [on grid, below left=2cm and 0.75cm of Finv, draw] (FRInv) {\(\rinv {f_R}\)};
         \node [on grid, above left=1.5cm and 1.5cm of FRInv, draw] (FL) {\(f_L\)};
@@ -493,12 +501,12 @@ Another type of equivalence is the half-adjoint equivalence. Whereas being bi-in
         \draw (F) to ++(0,-1.25cm) to[out=-90,in=0] (FLInv);
       \end{tikzpicture}
     \end{center}
-  \item \(\gamma\) is given by the following diagram:
+  \item \(\gamma_f\) is given by the following diagram:
     \begin{center}\comment{possible improvements to this diagram}
       \begin{tikzpicture}
-        \node (G) {\({f'}\)};
+        \node (G) {\({\rinv f}\)};
         \node [on grid, below right=0.25cm and 1.75cm of G, draw] (FR) {\(f_R\)};
-        \node [on grid, below right=5cm and 0.75cm of FR] (G') {\({f'}\)};
+        \node [on grid, below right=5cm and 0.75cm of FR] (G') {\({\rinv f}\)};
         \node [on grid, below left=3cm and 0.75cm of G, draw] (FRInv) {\(\rinv {(f_R)}\)};
         \node [on grid, above left=1.5cm and 1.5cm of FRInv, draw] (FL) {\(f_L\)};
         \node [on grid, below right=2.75cm and 1.25cm of FL, draw] (FLInv) {\(\linv {(f_L)}\)};
@@ -511,12 +519,12 @@ Another type of equivalence is the half-adjoint equivalence. Whereas being bi-in
         \node [on grid, below right=2.75cm and 3.75cm of G,font=\fontsize{20}{24}\selectfont] (A1) {\(\Rightarrow\)};
         \node [on grid, above=0.5cm of A1] (A1Text) {isotopy};
 
-        \node [on grid, right=8cm of G] (G1) {\({f'}\)};
+        \node [on grid, right=8cm of G] (G1) {\({\rinv f}\)};
         \node [on grid, below left=2cm and 0.75cm of G1, draw] (FRInv1) {\(\rinv {(f_R)}\)};
         \node [on grid, below=1cm of FRInv1, draw] (FR1) {\(f_R\)};
         \node [on grid, above left=1.5cm and 1.5cm of FRInv1, draw] (FL1) {\(f_L\)};
         \node [on grid, below left=1.5cm and 1.5cm of FR1, draw] (FLInv1) {\(\linv {(f_L)}\)};
-        \node [on grid, below right=2cm and 0.75cm of FR1] (G'1) {\({f'}\)};
+        \node [on grid, below right=2cm and 0.75cm of FR1] (G'1) {\({\rinv f}\)};
         \draw (G1) to ++(0,-1.25cm) to[out=-90,in=0] (FRInv1);
         \draw (FRInv1) to[out=180,in=-90] ++(-0.75cm,0.75cm) to[out=90,in=0] (FL1);
         \draw (FL1) to[out=180,in=90] ++(-0.75cm,-0.75cm) to ++(0,-2.5cm) to[out=-90,in=180] (FLInv1);
@@ -526,8 +534,8 @@ Another type of equivalence is the half-adjoint equivalence. Whereas being bi-in
         \node [on grid, rotate=-90, below left=1.5cm and 1.5cm of G'1,font=\fontsize{20}{24}\selectfont] (A2) {\(\Rightarrow\)};
         \node [on grid, left=1cm of A2] (A2Text) {\((f_R)_R\)};
 
-        \node [on grid, below=8cm of G1] (G2) {\({f'}\)};
-        \node [on grid, below=3.5cm of G2] (G'2) {\({f'}\)};
+        \node [on grid, below=8cm of G1] (G2) {\({\rinv f}\)};
+        \node [on grid, below=3.5cm of G2] (G'2) {\({\rinv f}\)};
         \node [on grid, below left=1cm and 2.25cm of G2, draw] (FL2) {\(f_L\)};
         \node [on grid, below=1.5cm of FL2, draw] (FLInv2) {\(\linv {(f_L)}\)};
         \draw (G2) to (G'2);
@@ -537,28 +545,32 @@ Another type of equivalence is the half-adjoint equivalence. Whereas being bi-in
         \node [on grid, below left=0.75cm and 2.5cm of FL2,font=\fontsize{20}{24}\selectfont] (A3) {\(\Leftarrow\)};
         \node [on grid, above=0.5cm of A3] (A3Text) {\((f_L)_L\)};
 
-        \node [on grid, below=8cm of G] (G3) {\({f'}\)};
-        \node [on grid, below=3.5cm of G3] (G'3) {\({f'}\)};
+        \node [on grid, below=8cm of G] (G3) {\({\rinv f}\)};
+        \node [on grid, below=3.5cm of G3] (G'3) {\({\rinv f}\)};
         \draw (G3) to (G'3);
       \end{tikzpicture}
+
     \end{center}
-    As \(\alpha = f_R\), it is bi-invertible. Furthermore, \(\beta\) is a composite of bi-invertible morphisms and inverses of bi-invertible morphisms so is itself bi-invertible. We have that \(\gamma\) consists of a composition of bi-invertible morphisms and isotopies (which are invertible as we are working in a higher category which respects the graphical calculus) so is bi-invertible. Therefore all of these are right-adjoint invertible by coinduction and so \(f\) is right-adjoint invertible.
-  \end{itemize}
+  \item \(f_R{}RAI\) can be generated by coinduction on \(f_R{}BI\).
+  \item A bi-invertible structure can be formed for \(\beta_f\) as it is a composition of identities, morphisms with given bi-invertible structures and inverses of those morphisms. Then \(\beta_f{}RAI\) can be formed coinductively.
+  \item A bi-invertible structure can be put on \(\gamma\) as it is the composite of morphisms that have a given bi-invertible structure and an isotopy, which has a quasi-invertible structure given by \(G\) being a higher pre-category. Therefore, as before, \(\gamma_f{}RAI\) can be formed by coinduction.  \end{itemize}
 \end{proof}
 
 \begin{theorem}
-  A bi-invertible morphism has a left-adjoint structure with \(f' = \linv f\) and \(\alpha = f_L\).
+  A bi-invertible structure \((\rinv f, \linv f, f_R, f_L, \dots)\) of a cell \(f\) induces a left adjoint invertible structure \((\linv f, f_L, \dots)\) on \(f\).
 \end{theorem}
 \begin{proof}
-  Dual to \Cref{thm:bi-inv-to-hai}.
+  Dual to \Cref{bi-inv-to-hai}.
 \end{proof}
 
 \begin{cor}\label{cor:equiv}
-  Let \(G\) be a higher category. Let \(n > 0\) and \(f\) be an \(n\)-cell of \(G\). Then the following are equivalent.
+  Let \(G\) be a higher category. Let \(n > 0\) and \(f\) be an \(n\)-cell of \(G\). Then the following are equivalent:
   \begin{itemize}
-  \item \(f\) is bi-invertible.
-  \item \(f\) is invertible.
-  \item \(f\) is half-adjoint invertible.
+  \item \(f\) has a bi-invertible structure.
+  \item \(f\) has a quasi-invertible structure.
+  \item \(f\) has a half-adjoint invertible structure.
+  \item \(f\) has a right-adjoint invertible structure.
+  \item \(f\) has a left-adjoint invertible structure.
   \end{itemize}
 \end{cor}
 
@@ -582,12 +594,12 @@ In this section we aim to define a higher category of cells between invertibilit
 We start with bi-invertibility. The definition of the cells between these types is largely inspired by~\cite[Lemma 4.2.5]{hottbook}. This gives us a compositional way to think about equivalence between these two types. It can be formulated as follows: Suppose we have a cell \(f : x \to y\) and two bi-invertible structures on it \((\rinv f, \linv f, f_R, f_L, f_R{}BI, f_L{}BI)\) and \((\rinv f{}' , \linv f{}', f_R', f_L', f_R{}BI', f_L{}BI')\). A cell is made coinductively from the following parts:
 \begin{itemize}
 \item A bi-invertible cell \(\phi_R : \rinv f \to \rinv f{}'\);
-\item A bi-invertible cell \(\psi_R : (\id_f \circ_1 \phi_R) \circ f_R' \to f_R\);
-\item A cell from the induced bi-invertible structure on \((\id_f \circ_1 \phi_R) \circ f_R'\) to \(f_R{}BI\);
+\item A bi-invertible cell \(\psi_R : (\id_f \comp_1 \phi_R) \comp_0 f_R' \to f_R\);
+\item A cell from the induced bi-invertible structure on \((\id_f \comp_1 \phi_R) \comp_0 f_R'\) to \(f_R{}BI\);
 \item The equivalent for \(\phi_L\), \(\psi_L\) and coinductive part.
 \end{itemize}
 
-It should be noted that this is quite a natural way to define a cell between these structures. We simply defined a cell for each part of the structure separately, with pretty much only one way of defining each such cell. The only oddity may be that we require these cells to be bi-invertible. This is simply so that \((\id_f \circ_1 \phi_R) \circ f_R'\) has a canonical bi-invertible structure. Given this, the construction can be continued. Suppose we have \((\phi_R, \psi_R, BI_R, \phi_L, \psi_L, BI_L)\) and \((\phi_R', \psi_R', BI_R', \phi_L', \psi_L', BI_L')\). Then a cell is:
+It should be noted that this is quite a natural way to define a cell between these structures. We simply defined a cell for each part of the structure separately, with pretty much only one way of defining each such cell. The only oddity may be that we require these cells to be bi-invertible. This is simply so that \((\id_f \comp_1 \phi_R) \comp_0 f_R'\) has a canonical bi-invertible structure. Given this, the construction can be continued. Suppose we have \((\phi_R, \psi_R, BI_R, \phi_L, \psi_L, BI_L)\) and \((\phi_R', \psi_R', BI_R', \phi_L', \psi_L', BI_L')\). Then a cell is:
 \begin{itemize}
 \item A bi-invertible cell \(\epsilon: \phi_R \to \phi_R'\)
 \item A bi-invertible cell from:
@@ -635,7 +647,7 @@ We conjecture that continuing in this way will generate a higher category struct
 \begin{proof}
   Take structures \((\rinv f, \linv f, f_R, f_L, f_R{}BI, f_L{}BI)\) and \((\rinv f{}' , \linv f{}', f_R', f_L', f_R{}BI', f_L{}BI')\). It will be sufficient to show that \(\phi_R\) and \(\psi_R\) can be constructed. Then the cell between bi-invertible structures can be obtained by coinductive hypothesis and the rest of the data follows from symmetry.
 
-  Using \Cref{thm:bi-inv-to-hai}, we can obtain a right-adjoint invertible structure \((\rinv f{}', f_R', \beta, f_R'H, \beta{}H)\). Then let \(\phi_R\) be the cell given by the diagram:
+  Using \Cref{bi-inv-to-hai}, we can obtain a right-adjoint invertible structure \((\rinv f{}', f_R', \beta, f_R'H, \beta{}H)\). Then let \(\phi_R\) be the cell given by the diagram:
   \begin{center}
     \begin{tikzpicture}
       \node (Bottom) {\(\rinv f\)};
