@@ -1,0 +1,3 @@
+[submodule "citations"]
+	path = citations
+	url = git@github.com:alexarice/citations.git
