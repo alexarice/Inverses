@@ -90,7 +90,9 @@ Although it seems that these 3 are not applicable to generalised higher categori
 
 \section{Related Work}\label{sec:related}
 
-\todo{section}
+A lot of work has been done relating to invertible structures in higher categories. The idea of defining a notion of pre-category is largely inspired by \citeauthor{Cheng2007}~\cite{Cheng2007}. The result that an equivalence implies an adjoint equivalence in bicategories is well known and this has been extended to tricategories in~\cite{gurski2012biequivalences}. \citeauthor*{lafont2007folk}~\cite{lafont2007folk} constructs the idea of a quasi-invertible structure in precisely the same way as in this paper, and proves some of the same results, though these are done in the setting of a strict \(\omega\)-category, where some of the coinductive arguments become easier.
+
+Higher categories have been viewed coinductively before, in particular in~\cite{cheng2012weak} and~\cite{hirschowitz_et_al:LIPIcs:2015:5166}, the latter of which provided a lot of inspiration for the format of given formalisation~\cite{rice_agda} in \Cref{sec:formalisation}. Many of the coinductive results are proved in a style similar to~\cite{kozen_silva_2017}, and are justified by guardedness which is defined and explored in~\cite{10.1007/3-540-58085-9_72} and~\cite{gimenez1995codifying}.
 
 
 \section{Background}\label{sec:background}
@@ -189,8 +191,6 @@ Once we have a globular set with identities and composition, we have enough to d
   \end{itemize}
   It is clear that we can carry over identities and composition to this new globular set.
 \end{remark}
-
-
 
 \begin{definition}\label{def:higher-cat}
   Consider the standard string diagram diagrammatic calculus for bicategories. We can draw diagrams containing nodes, lines, and areas where areas represent \(0\)-cells, a line between areas representing cells \(x\) and \(y\) represents a \(1\)-cell between \(x\) and \(y\), and node between lines represent \(2\)-cells between the cells those lines represent. These diagrams still represent well formed morphisms in an globular set with identities and composition. In a bicategory we have the theorem that given a planar isotopy of string diagrams, the source and target morphisms are equal.
@@ -581,27 +581,29 @@ Another type of equivalence is a half-adjoint equivalence. Whereas being bi-inve
 
 \section{Towards Contractibility}\label{sec:contractibility}
 
-\Cref{sec:hai} achieves one of the goals set out in the introduction, namely \cref{cor:equiv}. The other property stated was that bi-invertibility and half-adjoint invertibility should be contractible types. In type theory, a type is contractible if there is an element in that type which all other terms of that type are propositionally equal to. Any contractible type is then equivalent to the unit type. The natural analogue to the higher categorical setting would be to say that a category is contractible if it is equivalent to the terminal category.
+\Cref{sec:hai} (in particular \cref{cor:equiv}) achieves one of the goals set out in the introduction. The other property stated was that bi-invertibility and half-adjoint invertibility should be contractible types. In type theory, a type is contractible if there is an element in that type which all other terms of that type are propositionally equal to. Any contractible type is then equivalent to the unit type. The natural analogue to the higher categorical setting would be to say that a category is contractible if it is equivalent to the terminal category.
 
 \begin{definition}
   The terminal globular set \(T\) is the globular set with exactly one \(n\) cell for each \(n\). There is then only one choice for the source and target of each cell and all required equations hold by this uniqueness.
   We can further add identities and composition to this globular set. There is only one way these could be defined due to uniqueness.
 \end{definition}
 
-What this does not answer is what a suitable notion of equivalence should be. As this could be dependent of the specific definition of a higher category, we do not try to answer this here. Instead, we give a notion of contractibility based on the work that has already been done.
+What this does not answer is what a suitable notion of equivalence should be. As this could be dependent of the specific definition of a higher category, we do not try to answer this here. Instead, we give a notion of contractibility based on the work that has already been done. Due to the simplicity of the terminal category it is highly likely that this is a sufficient condition for contractibility.
 
 \begin{definition}
-  Let \(G\) be a globular set with identities and composition. \(G\) is \emph{contractible} if given any two \(0\)-cells \(x\) and \(y\), there is an invertible cell \(f : x \to y\) and for any \(n\)-cells \(f : x \to y\) and \(g : x \to y\) there should be an invertible cell \(f \to g\).
+  Let \(G\) be a globular set with identities and composition. \(G\) is \emph{contractible} if given any parallel cells \(f\) and \(g\) there is a cell \(f \to g\)
 \end{definition}
 
-In this section we aim to define a higher category of cells between invertibility data. While the task of showing contractibility falls beyond the scope of this paper, we do manage to prove partial contractibility results for the half-adjoint and bi-invertible cases, and suggest how these could be continued.
+In this section we aim to define a higher category of cells between invertibility data. While the task of showing contractibility falls beyond the scope of this paper, we do manage to prove partial contractibility results for the bi-invertible case, and suggest how this could be continued.
 
-We start with bi-invertibility. The definition of the cells between these types is largely inspired by~\cite[Lemma 4.2.5]{hottbook}. This gives us a compositional way to think about equivalence between these two types. It can be formulated as follows: Suppose we have a cell \(f : x \to y\) and two bi-invertible structures on it \((\rinv f, \linv f, f_R, f_L, f_R{}BI, f_L{}BI)\) and \((\rinv f{}' , \linv f{}', f_R', f_L', f_R{}BI', f_L{}BI')\). A cell is made coinductively from the following parts:
+The definition of the cells between these types is largely inspired by~\cite[Lemma 4.2.5]{hottbook}. This gives us a compositional way to think about equivalence between these two types. It can be formulated as follows: Suppose we have a cell \(f : x \to y\) and two bi-invertible structures on it \((\rinv f, \linv f, f_R, f_L, f_R{}BI, f_L{}BI)\) and \((\rinv f{}' , \linv f{}', f_R', f_L', f_R{}BI', f_L{}BI')\). A cell\todo{give this a name?} is a tuple consisting of the following data:
 \begin{itemize}
-\item A bi-invertible cell \(\phi_R : \rinv f \to \rinv f{}'\);
-\item A bi-invertible cell \(\psi_R : (\id_f \comp_1 \phi_R) \comp_0 f_R' \to f_R\);
-\item A cell from the induced bi-invertible structure on \((\id_f \comp_1 \phi_R) \comp_0 f_R'\) to \(f_R{}BI\);
-\item The equivalent for \(\phi_L\), \(\psi_L\) and coinductive part.
+\item \(\phi_R : \rinv f \to \rinv f{}'\);
+\item \(\phi_R{}BI\) is a bi-invertible structure on \(\phi_R\);
+\item \(\psi_R : (\id_f \comp_1 \phi_R) \comp_0 f_R' \to f_R\);
+\item \(\psi_R{}BI\) is a bi-invertible structure on \(\psi_R\);
+\item \(BIC_R\) is a cell from the induced bi-invertible structure on \((\id_f \comp_1 \phi_R) \comp_0 f_R'\) to \(f_R{}BI\);
+\item \(\phi_L\), \(\phi_L{}BI\), \(\psi_L\), \(\psi_L{}BI\), and \(BIC_R\) are similar but symmetric to above.
 \end{itemize}
 
 It should be noted that this is quite a natural way to define a cell between these structures. We simply defined a cell for each part of the structure separately, with pretty much only one way of defining each such cell. The only oddity may be that we require these cells to be bi-invertible. This is simply so that \((\id_f \comp_1 \phi_R) \comp_0 f_R'\) has a canonical bi-invertible structure. Given this, the construction can be continued. Suppose we have \((\phi_R, \psi_R, BI_R, \phi_L, \psi_L, BI_L)\) and \((\phi_R', \psi_R', BI_R', \phi_L', \psi_L', BI_L')\). Then a cell is:
@@ -640,13 +642,13 @@ It should be noted that this is quite a natural way to define a cell between the
     \end{tikzpicture}
   \end{center}
   to \(\psi_R\)
-\item Similar constructions for the remainder of the parts.
+\item Similar constructions for the remainder of the parts. \todo{remove this?}
 \end{itemize}
 
 We conjecture that continuing in this way will generate a higher category structure. Next is the main result of this section.
 
 \begin{theorem}
-  Given a cell \(f : x \to y\), there is a cell (as described above) between any two bi-invertible structures.
+  Given a cell \(f : x \to y\), there is a cell (as described above) between any two bi-invertible structures on \(f\).
 \end{theorem}
 
 \begin{proof}
@@ -664,7 +666,7 @@ We conjecture that continuing in this way will generate a higher category struct
       \draw (Cup) to[out=180,in=-90] ++(-0.75cm,0.75cm) to (Top);
     \end{tikzpicture}
   \end{center}
-  This is clearly bi-invertible as it a composition of various types of invertible cell. We now let \(\psi_R\) be:
+  There is a clear bi-invertible structure on this morphism as it a composition of various types of bi-invertible cells. We now let \(\psi_R\) be:
   \begin{center}
     \begin{tikzpicture}
       \node (Bottom) {\(\rinv f\)};
@@ -690,22 +692,25 @@ We conjecture that continuing in this way will generate a higher category struct
   Which is the morphism from the proof that a right-adjoint invertible cell is also left-adjoint invertible.\todo{Add proof of this}\todo{why is it invertible}
 \end{proof}
 
-This theorem effectively proves the first ``layer'' of contractibility. Whereas this layer used the adjoint coherences in its proof, the next layer, of which the proof is omitted as it requires 3 dimensional reasoning that is not rigorous with the tools we have here, can be constructed with swallowtail equivalences \todo{citation}. These can be thought of as the next coherence up. It is expected that the layer after this could be nicely proved with the coherence condition after this one. We conjecture that given a suitable notion of higher category, it should be possible to show this structure is fully contractible.
+This theorem effectively proves the first ``layer'' of contractibility, in other words that there is a cell between each pair of \(0\)-cells. Whereas this layer used the adjoint coherences in its proof, the next layer, of which the proof is omitted as it requires 3 dimensional reasoning that is not rigorous with the tools we have here, can be constructed with swallowtail equivalences \todo{citation}. These can be thought of as the next coherence up. It is expected that the layer after this could be nicely proved with the coherence condition after this one. We conjecture that given a suitable notion of higher category, it should be possible to show this structure is fully contractible.
 
 One might ask why a similar proof will not work for invertible cells. The reason for this is that the cells considered above are not the canonical type of cell one would use to compare invertible cells. The difference is that in the case of invertible cells, \(\phi_L\) and \(\phi_R\) can be forced to be equal. In the above proof this is not the case. In fact, given that invertibility is not a contractible type in the type theory setting, we should expect that there is no such proof.
 
-However adding the structure of the half adjoint inverse adds the exactly the kind of coherence we need to get the proof to work. In the half-adjoint case we also have that \(\phi_L\) and \(\phi_R\) must be equal (and so for ease this cell will be called \(\phi\)). However a coherence for \(\gamma\) would also be necessary. This higher dimensional cell makes it hard to work with the tools we have, and so this proof is also omitted.
+It is expected that adding the structure of the half adjoint inverse adds the exactly the kind of coherence we need to get the proof to work. In the half-adjoint case we also have that \(\phi_L\) and \(\phi_R\) must be equal (and so for ease this cell will be called \(\phi\)). However a coherence for \(\gamma\) would also be necessary. This higher dimensional cell makes it hard to work with the tools we have, and so a proof is not attempted.
+
+Another contractibility question that can be asked is the following: Let \(\mathcal{C}\) be the infinity category freely generated by two \(0\)-cells, a single \(1\)-cell between them and an invertibility structure on this morphism. Is \(\mathcal{C}\) contractible.
+
+We know that this is certainly not true for quasi-invertible structures. Suppose we start with \(0\)-cells \(x\) and \(y\) and a morphism \(f : x \to y\) and quasi-invertibility structure \((\inv f, f_R, f_L, f_R{}BI, f_L{}BI)\). Then the contractibility condition effectively tells us that the cell required for a half-adjoint invertibility structure should exist. In general this cell does not exist. If we consider \(\mathbf{Cat}\) as a \(\omega\)-category (by considering the 2-category letting each higher globular set be either empty or terminal), then we get that a quasi-invertible structure is an equivalence and a half-adjoint invertible structure is an adjoint equivalence. It is well known that not all equivalences are adjoint equivalences.
+
+However this problem does not arise in the bi-invertible case, and the existence of the cell is enforced in the half-adjoint invertible case. This gives good reason to believe that the infinity category freely generated from these structures may be contractible though we have no progress towards a proof of this. It is possible that similar coinductive procedures can be employed to prove this.
 
 \section{Formalisation}\label{sec:formalisation}
 
-It may at first appear that a lot of the coinductive proofs in this paper work by ``magic'' in that they seem like non-well founded induction. To remedy this all the definitions and results from  sections~\ref{sec:categories} and~\ref{sec:bi-invertibility}. Have been formalised in the proof assistant Agda\footnote{\url{https://github.com/agda/agda}} with use of the standard library\footnote{\url{}}. The formalisation uses sized types~\cite{Abel_2010} to ensure productivity of the functions defined and makes heavy use of coinductive record types and copatterns~\cite{10.1145/2480359.2429075}.
+It may at first appear that a lot of the coinductive proofs in this paper work by ``magic'' in that they seem like non-well founded induction. To remedy this all the definitions and results from  sections~\ref{sec:categories} and~\ref{sec:bi-invertibility}. Have been formalised in the proof assistant Agda\footnote{\url{https://github.com/agda/agda}} with use of the standard library\footnote{\url{https://github.com/agda/agda-stdlib}}. The formalisation uses sized types~\cite{Abel_2010} to ensure productivity of the functions defined and makes heavy use of coinductive record types and copatterns~\cite{10.1145/2480359.2429075}.
 
 The notion of higher pre-category introduced in this paper is very set-theoretic and becomes messy in the world of type theory. Because of this, alternative coinductive definitions of globular sets and composition are taken from~\cite{hirschowitz_et_al:LIPIcs:2015:5166}. This allows a lot of the proofs to become neater as coinduction tends to work nicely with coinductively defined structures. We believe the use of a different definition is not consequential as the main purpose of the formalisation was to show that coinductive elements of the arguments hold.
 
 The code is made available at~\cite{rice_agda}. This has been tested with Agda version 2.6.0.1 and standard library version 1.2.
-
-
-
 
 \section{Conclusion}\label{sec:conclusion}
 
