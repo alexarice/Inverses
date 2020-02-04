@@ -714,7 +714,15 @@ The code is made available at~\cite{rice_agda}. This has been tested with Agda v
 
 \section{Conclusion}\label{sec:conclusion}
 
-\todo{conclusion}
+This paper explores the equivalence of various types of invertible cells, using coinductive proof techniques. The aim is that these techniques make managing the data of a cell being invertible easier and the proofs simpler.
+
+Given a setting of higher category theory which we believe is sufficiently general, we have managed to prove many properties of bi-invertible structures, which we believe have not been studied in great depth before. We have shown that, using coinductive techniques, one can work with these structures using only 2-dimensional reasoning. Further we have shown that these structures work nicely with inverses and composition as expected.
+
+These results have been used to show that the 3 definitions of invertibility given in the paper all imply each other, in that given one of these structures we can construct the others. This mirrors similar proofs in lower dimensional category theory that were already known well.
+
+Going further, we would like to be able to prove some of the contractibility results that have been conjectured. It is possible that this either requires a lot more structure than we have postulated that any weak higher category should have. Nevertheless, we believe that contractibility results for bi-invertible structures could have large implications on ways in which higher categories can be defined and worked with. It would also have implications on the study of \(\infty\)-groupoids, where every morphism is invertible.
+
+Lastly, this paper also contributes a large amount of Agda formalisation for all the structures mentioned. With a little work, much of the code could be reused for proving similar facts about \(\omega\)-categories. The power of this formalisation technique would be largely increased if the condition of ``respecting the graphical calculus'' could be removed, which is slightly vague. We believe that just as the correctness of string diagrams for bi-categories follows from the existence of associators, unitors and some coherence conditions, there should be a similar set of conditions on \(\omega\)-category which at least allows up to 2-dimensional graphical reasoning. The ability to automate a translation from the graphical calculus to a proof system such as Agda would allow very complex proofs, including all the proofs in this paper, to be formalised with ease.
 
 \printbibliography{}
 \end{document}
