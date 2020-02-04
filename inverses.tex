@@ -62,7 +62,11 @@ The todo list has things I think I should do in orange and questions in green
 \listoftodos{}
 
 \begin{abstract}
-  \todo{I need to write an abstract}
+  Invertibility is an important concept in category theory as it can be used to determine different notions on what it means for two objects to be ``the same''. In higher category theory, it becomes less obvious what the correct notion of invertibility is, as extra coherence conditions become necessary.
+
+  We define some properties we expect any reasonable definition of a weak \(\omega\)-category to possess. With these properties we define 3 notions inspired by type theory of what it could mean for a morphism to be invertible. These definitions take the form of coinductive data structures and using coinductive proofs we are able to show that these 3 notions all imply each other. It is expected that our results should transfer to any definition of a higher category.
+
+  Many of the results of the paper have been formalised in Agda using coinductive records and the machinery of sized types.
 \end{abstract}
 \section{Introduction}\label{sec:intro}
 
