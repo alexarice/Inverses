@@ -1,6 +1,6 @@
 \documentclass{article}
 
-\title{Inverses in Higher Categories through Coinduction}
+\title{Coinductive Invertibility in Higher Categories}
 \author{Alex Rice}
 
 \usepackage{verbatim}
@@ -62,41 +62,41 @@ The todo list has things I think I should do in orange and questions in green
 \listoftodos{}
 
 \begin{abstract}
-  Invertibility is an important concept in category theory as it can be used to determine different notions on what it means for two objects to be ``the same''. In higher category theory, it becomes less obvious what the correct notion of invertibility is, as extra coherence conditions become necessary.
+  Invertibility is an important concept in category theory. In higher category theory, it becomes less obvious what the correct notion of invertibility is, as extra coherence conditions can become necessary for invertible structures to have desirable properties.
 
-  We define some properties we expect any reasonable definition of a weak \(\omega\)-category to possess. With these properties we define 3 notions inspired by type theory of what it could mean for a morphism to be invertible. These definitions take the form of coinductive data structures and using coinductive proofs we are able to show that these 3 notions all imply each other. It is expected that our results should transfer to any definition of a higher category.
+  We define some properties we expect any reasonable definition of a weak \(\omega\)-category to possess. With these properties we define 3 notions of invertibility inspired by type theory. These are quasi-invertibility, where a two sided inverse is required, bi-invertibility, where a separate left and right inverse is given, and half-adjoint inverse, which is a quasi-inverse with an extra coherence condition. These definitions take the form of coinductive data structures and using coinductive proofs we are able to show that these 3 notions are all equivalent in that given any one of these invertibility structures, the others can be obtained. It is expected that our results should transfer to any definition of a higher category.
 
   Many of the results of the paper have been formalised in Agda using coinductive records and the machinery of sized types.
 \end{abstract}
 \section{Introduction}\label{sec:intro}
 
-In the study of higher category theory, the notion of invertibility is central. It is common within higher category theory to not specify that two objects are equal, or that two sides of an equation are equal, but rather specify that there is a higher level equivalence between these two objects. It is usual to say that two objects are equivalent exactly when there is an invertible function between them.
+In the study of higher category theory, the notion of invertibility is central. It is common within higher category theory to not specify that two objects are equal, or that two sides of an equation are equal, but rather specify that there is a higher level equivalence between these two objects. It is usual to say that two objects are equivalent exactly when there is an invertible morphism between them.
 
 This idea can be seen even in the simplest examples of higher categories. Consider the definition of a monoidal category. It is our intention that given objects \(A\), \(B\) and \(C\) that \(A \otimes (B \otimes C)\) and \((A \otimes B) \otimes C\) represent the same object. However it is often the case that requiring equality between these objects (as in a strict monoidal category) is too restrictive and so the usual definition states that there is a natural isomorphism between them.
 
 This is our first example of invertibility. An isomorphism between \(A\) and \(B\) is a morphism \(f : A \to B\) such that there exists a morphisms \(g : B \to A\) with \(f \circ g = \id_B\) and \(g \circ f = \id_A\). This notion of isomorphism works well throughout standard category theory and even in monoidal categories.
 
-However if generalised higher categories are considered, it can be seen that the problem has just been pushed one level up. We have specified that \(g \circ f\) and \(\id_A\) should be equal, yet have already stated that equality is not the best notion of two objects in a higher category. Ideally we want a collection of data that specifies that \(f\) has an inverse \(g\), and that there is a higher morphisms \(\alpha : g \circ f \to \id_A\) and an inverse \(\beta : \id_A \to g \circ f\), and that there exists a morphism \(\alpha \circ \beta \to \id_{\id_A \to g \circ f}\) and continuing in this fashion. Unfortunately this generates a very unwieldy set of data that is difficult to describe.
+However if generalised higher categories are considered, it can be seen that the problem has just been pushed one level up. We have specified that \(g \circ f\) and \(\id_A\) should be equal, yet have already stated that equality is not the best notion of two objects in a higher category. Ideally we want a collection of data that specifies that \(f\) has an inverse \(g\), and that there is a higher morphism \(\alpha : g \circ f \to \id_A\) and an inverse \(\beta : \id_A \to g \circ f\), and that there exists a morphism \(\alpha \circ \beta \to \id_{\id_A \to g \circ f}\) and continuing in this fashion. However, this generates a very unwieldy set of data that is difficult to describe.
 
 A natural way we can talk about data structures like this is through coinduction. The definition of equivalence above can be written nicely by saying that \(f : A \to B\) is an equivalence if there exists a \(g : B \to A\) and equivalences \(f \circ g \to \id_B\) and \(g \circ f \to \id_A\). This is a neat method of defining an equivalence, but also has the advantage of opening up more proof techniques to us. In particular, it allows us to structure proofs coinductively.
 
 Given this coinductive machinery, the definition of equivalence above seems very natural. If we start with our definition of isomorphism, then realise that the equalities introduced should themselves be weakened to equivalences, we end up with the proposed definition. However this is not only way we could have defined invertibility. In type theory and in particular in HoTT~\cite{hottbook}, there are 3 notions of invertibility defined:
 
 \begin{itemize}
-\item A quasi-inverse, which is similar to the notion of isomorphism presented already;
-\item A bi-inverse, where instead of specifying an inverse to the function \(f\), we instead present separate left and right inverses;
-\item A half-adjoint inverse, defined to be the same as the quasi-inverse but with an extra coherence condition.
+\item a quasi-inverse, which is similar to the notion of isomorphism presented already;
+\item a bi-inverse, where instead of specifying an inverse to the function \(f\), we instead present separate left and right inverses;
+\item a half-adjoint inverse, defined to be the same as the quasi-inverse but with an extra coherence condition.
 \end{itemize}
 
-There are certain properties about these invertibility conditions that are important in type theory. Firstly, all 3 definitions are equivalent, in that a function \(f\) has one of these 3 types of inverses, then it also has the other 2. Secondly, definitions 2 and 3 form contractible types. In essence, this means that there is only one way in which they hold up to propositional equality.
+There are certain properties about these invertibility conditions that are important in type theory. Firstly, all 3 definitions are equivalent~\cite[Corollary 4.3.3]{hottbook}, in that a function \(f\) has one of these 3 types of inverses, then it also has the other 2. Secondly, definitions 2 and 3 form contractible types~\cite[Theorem 4.2.13 ,Theorem 4.3.2]{hottbook}. In essence, this means that there is only one way in which they hold up to propositional equality.
 
-Although it seems that these 3 are not applicable to generalised higher categories due to the use of equality in their definitions, they can nonetheless be modified into coinductive definitions suitable for such a category. This paper will present those definitions and to attempt to show that they are all equivalent. Further we will try to present an analogue to contractibility which is suitable for higher categories and investigate whether these data types are contractible.
+Although it seems that these 3 are not applicable to generalised higher categories due to the use of equality in their definitions, they can nonetheless be modified into coinductive definitions suitable for such a category. This paper will present those definitions and show that they are all equivalent. Further we will try to present an analogue to contractibility which is suitable for higher categories and prove a partial contractibility result on bi-invertible structures as well as suggest how this result could be extended.
 
 \section{Related Work}\label{sec:related}
 
-A lot of work has been done relating to invertible structures in higher categories. The idea of defining a notion of pre-category is largely inspired by \citeauthor{Cheng2007}~\cite{Cheng2007}. \citeauthor{kansangian2009weak}~\cite{kansangian2009weak} discuss the equivalence of some forms of weak inverse in strict \(n\)-categories. The result that an equivalence implies an adjoint equivalence in bicategories is well known and this has been extended to tricategories in~\cite{gurski2012biequivalences}. \citeauthor*{lafont2010folk}~\cite{lafont2010folk} constructs the idea of a quasi-invertible structure in precisely the same way as in this paper, and proves some of the same results, though these are done in the setting of a strict \(\omega\)-category, where some of the coinductive arguments become easier.
+A lot of work has been done relating to invertible structures in higher categories. The idea of defining a notion of pre-category is largely inspired by \citeauthor{Cheng2007}~\cite{Cheng2007}. \citeauthor{kansangian2009weak}~\cite{kansangian2009weak} discuss the equivalence of some forms of weak inverse in strict \(n\)-categories. The result that an equivalence implies an adjoint equivalence in bicategories is well known and this has been extended to tricategories by \citeauthor{gurski2012biequivalences}~\cite{gurski2012biequivalences}. \citeauthor*{lafont2010folk}~\cite{lafont2010folk} construct the idea of a quasi-invertible structure in precisely the same way as in this paper, and proves some of the same results, though these are done in the setting of a strict \(\omega\)-category, where some of the coinductive arguments become easier.
 
-Higher categories have been viewed coinductively before, in particular in~\cite{cheng2012weak} and~\cite{hirschowitz_et_al:LIPIcs:2015:5166}, the latter of which provided a lot of inspiration for the format of given formalisation~\cite{rice_agda} in \Cref{sec:formalisation}. Many of the coinductive results are proved in a style similar to~\cite{kozen_silva_2017}, and are justified by guardedness which is defined and explored in~\cite{10.1007/3-540-58085-9_72} and~\cite{gimenez1995codifying}.
+Higher categories have been viewed coinductively before~\cite{cheng2012weak}~\cite{hirschowitz_et_al:LIPIcs:2015:5166}, with the work of \citeauthor{hirschowitz_et_al:LIPIcs:2015:5166} providing the foundation of the formalisation~\cite{rice_agda} in \Cref{sec:formalisation}. Many of the coinductive results are proved in a style similar to that given in \citetitle{kozen_silva_2017}~\cite{kozen_silva_2017}, and are justified by guardedness which is a well known concept~\cite{10.1007/3-540-58085-9_72}~\cite{gimenez1995codifying}.
 
 
 \section{Background}\label{sec:background}
@@ -115,7 +115,7 @@ When a type is introduced in type theory, there are four parts of its definition
 \item Induction is a generalisation of recursion and allows us to define functions \(f : \Pi_{xs : \mathsf{List}(A)} P(xs)\) where \(P\) is a type family of type \(\mathsf{List}(A) \to \mathcal{U}\).
 \end{itemize}
 
-A further thing to note is that we will require the use of a slight generalisation of this known as inductive type families. These are described in Section~5.7 of \citetitle{hottbook}~\cite{hottbook}. These allow our inductive types to be parameterised. A good example of this is the vector type, which is a list of specified length. Here our type formation rule says that given a type \(A\) we can get a type \(\mathsf{Vec}(A) : \mathbb{N} \to \mathcal{U}\). Further the term formation rules become \(\mathsf{nil} : \mathsf{Vec}(A)(0)\) and \(\mathsf{cons} : \Pi_{n : \mathbb{N}} A \to \mathsf{Vec}(A)(n) \to \mathsf{Vec}(A)(\mathsf{succ}(n))\). Notice that unlike with lists, which also took a parameter, vectors can not be defined by considering each element of the parameter separately. The recursion and induction rules also need to modified slightly.
+A further thing to note is that we will require the use of a slight generalisation of this known as inductive type families~\cite[Section 5.7]{hottbook}. These allow our inductive types to be parameterised. A good example of this is the vector type, which is a list of specified length. Here our type formation rule says that given a type \(A\) we can get a type \(\mathsf{Vec}(A) : \mathbb{N} \to \mathcal{U}\). Further the term formation rules become \(\mathsf{nil} : \mathsf{Vec}(A)(0)\) and \(\mathsf{cons} : \Pi_{n : \mathbb{N}} A \to \mathsf{Vec}(A)(n) \to \mathsf{Vec}(A)(\mathsf{succ}(n))\). Notice that unlike with lists, which also took a parameter, vectors can not be defined by considering each element of the parameter separately. The recursion and induction rules also need to modified slightly.
 
 Now it will be seen how this differs for coinductive types. For this we will use one of the most common coinductive types, the stream.
 
@@ -135,7 +135,7 @@ As an example of coinduction, suppose we wanted to prove every element of a stre
 In this paper we want to talk about different structures on \(\omega\)-categories, however there are many different definitions of \(\omega\)-categories, a lot of which are very in depth and complicated. Therefore, similar in style to a paper by \textcite{Cheng2007}, we give a set of conditions that we expect to hold in any reasonable definition of a weak infinity category. We then prove results only using these conditions, and reason that given a precise definition of an infinity category, if one could show that these conditions hold, then our results should follow for free.
 
 \begin{definition}
-  The globe category \(\mathbb{G}\) is the category where the objects are the natural numbers and morphisms are generated by
+  The \emph{globe category} \(\mathbb{G}\) is the category where the objects are the natural numbers and morphisms are generated by
   \begin{align*}
     &\sigma_n : n \to n+1\\
     &\tau_n : n \to n+1
@@ -148,7 +148,7 @@ In this paper we want to talk about different structures on \(\omega\)-categorie
 \end{definition}
 
 \begin{definition}
-  A globular set \(G\) is a presheaf of \(\mathbb{G}\). We refer to \(G(n)\) as the set of \(n\)-cells and for two \(n\)-cells \(x\) and \(y\) we write \(f: x \to y\) to mean that \(f\) is an \((n+1)\)-cell and
+  A \emph{globular set} \(G\) is a presheaf of \(\mathbb{G}\). We refer to \(G(n)\) as the set of \(n\)-cells and for two \(n\)-cells \(x\) and \(y\) we write \(f: x \to y\) to mean that \(f\) is an \((n+1)\)-cell and
   \begin{align*}
     G(\sigma_n)(f) &= x\\
     G(\tau_n)(f) &= y
@@ -157,7 +157,7 @@ In this paper we want to talk about different structures on \(\omega\)-categorie
 \end{definition}
 
 \begin{definition}
-  A globular set with identities and composition is a globular set \(G\) with the following:
+  A \emph{globular set with identities and composition} is a globular set \(G\) with the following:
   \begin{itemize}
   \item For each \(n\)-cell \(x\), there is an \((n+1)\)-cell, \(\id_x\).
   \item Inductively define composition as follows:
@@ -190,8 +190,8 @@ Once we have a globular set with identities and composition, we have enough to d
 \begin{remark}\label{descendants}
   Notice that in a globular set \(G\) with identities and composition, given two \(n\)-cells \(x\) and \(y\) with the same source and target, we can define a new globular set \(G_{x,y}\) as follows:
   \begin{itemize}
-  \item The \(0\)-cells are the \((n+1)\)-cells in \(G\) with source \(x\) and target \(y\);
-  \item The \(m\)-cells are the \((n+m+1)\)-cells in \(G\) whose source and target lie in the \((m-1)\)-cells of \(G_{x,y}\).
+  \item the \(0\)-cells are the \((n+1)\)-cells in \(G\) with source \(x\) and target \(y\);
+  \item the \(m\)-cells are the \((n+m+1)\)-cells in \(G\) whose source and target lie in the \((m-1)\)-cells of \(G_{x,y}\).
   \end{itemize}
   It is clear that we can carry over identities and composition to this new globular set.
 \end{remark}
@@ -206,7 +206,7 @@ Once we have a globular set with identities and composition, we have enough to d
   \item For \(n>0\) and each \(n\)-cell \(f: x \to y\), there are \(n+1\)-cells, known as unitors, \(\lambda_f: \id_y \comp_0 f \to f\) and \(\rho_f: f \comp_0 \id_x \to f\).
   \item Given \(f,g,h\), \(n>1\)-cells with suitable composition defined, we have an associator \(a_{f,g,h} : (f \comp_0 g) \comp_0 h \to f \comp_0 (g \comp_0 h)\).
   \item For compatible morphisms \(f,g,h,j\), we have an interchanger \(i_{f,g,h,j}(f \comp_n g) \comp_0 (h \comp_n j) \to (f \comp_0 h) \comp_n (g \comp_0 j)\).
-  \item For suitable \(f,g\) and \(n > 1\), there is a cell \(\id_f \comp_{n+1} \id_g \to \id_{f \comp_n g}\)
+  \item For suitable \(f,g\) and \(n > 1\), there is a cell \(\id_f \comp_{n+1} \id_g \to \id_{f \comp_n g}\).
   \end{itemize}
   All these further morphisms must be equipped with a quasi-invertible structure.
 \end{definition}
@@ -270,8 +270,8 @@ Next it is shown that invertibility implies bi-invertibility. This is fairly tri
   \item \(\linv f = \inv f\);
   \item \(f_R = f_R^i\);
   \item \(f_L = f_L^i\);
-  \item Corecursively, we let \(f_R{}BI = \mathsf{invToBiInv}(f_R)(f_R{}I)\);
-  \item Similarly, let \(f_L{}BI = \mathsf{invToBiInv}(f_L)(f_L{}I)\).
+  \item corecursively, we let \(f_R{}BI = \mathsf{invToBiInv}(f_R)(f_R{}I)\);
+  \item similarly, let \(f_L{}BI = \mathsf{invToBiInv}(f_L)(f_L{}I)\).
   \end{itemize}
 \end{proof}
 
@@ -442,10 +442,10 @@ Another type of equivalence is a half-adjoint equivalence. Whereas being bi-inve
 
   Dually an \emph{left-adjoint invertible} structure on \(f\) is a tuple \((f', \alpha_f, \beta_f, \gamma_f, \alpha_f{}LAI, \beta_f{}LAI, \gamma_f{}RAI)\) where:
   \begin{itemize}
-  \item There exists an \(n\)-cell \(f' : y \to x\).
-  \item There exists an \(n+1\)-cell \(\alpha_f: f' \comp_0 f \to \id_x\).
-  \item There exists an \(n+1\)-cell \(\beta_f: \id_y \to f \comp_0 f'\).
-  \item There exists an \(n+2\)-cell \(\gamma_f: (\rho_{f}^{-1} \comp_0 (\id_{f} \comp_1 \beta_f) \comp_0 \inv {a_{f',f,f'}} \comp_0 (\alpha_f \comp_1 \id_f) \comp_0 \lambda_f) \to \id_f\).
+  \item \(f'\) is an \(n\)-cell \(y \to x\).
+  \item \(\alpha_f\) is an \((n+1)\)-cell \(f' \comp_0 f \to \id_x\).
+  \item \(\beta_f\) is an \((n+1)\)-cell \(\id_y \to f \comp_0 f'\).
+  \item \(\gamma_f\) is an \((n+2)\)-cell \((\rho_{f}^{-1} \comp_0 (\id_{f} \comp_1 \beta_f) \comp_0 \inv {a_{f',f,f'}} \comp_0 (\alpha_f \comp_1 \id_f) \comp_0 \lambda_f) \to \id_f\).
   \item \(\alpha_f{}LAI\) is a left-adjoint invertible structure on \(\alpha_f\).
   \item \(\beta_f{}LAI\) is a left-adjoint invertible structure on \(\beta_f\).
   \item \(\gamma_f{}LAI\) is a left-adjoint invertible structure on \(\gamma_f\).
@@ -612,8 +612,8 @@ The definition of the cells between these types is largely inspired by~\cite[Lem
 
 It should be noted that this is quite a natural way to define a cell between these structures. We simply defined a cell for each part of the structure separately, with pretty much only one way of defining each such cell. The only oddity may be that we require these cells to be bi-invertible. This is simply so that \((\id_f \comp_1 \phi_R) \comp_0 f_R'\) has a canonical bi-invertible structure. Given this, the construction can be continued. Suppose we have \((\phi_R, \psi_R, BI_R, \phi_L, \psi_L, BI_L)\) and \((\phi_R', \psi_R', BI_R', \phi_L', \psi_L', BI_L')\). Then a cell is:
 \begin{itemize}
-\item A bi-invertible cell \(\epsilon: \phi_R \to \phi_R'\)
-\item A bi-invertible cell from:
+\item a bi-invertible cell \(\epsilon: \phi_R \to \phi_R'\);
+\item a bi-invertible cell from:
   \begin{center}
     \begin{tikzpicture}
       \node (Base1) {\(f\)};
@@ -645,8 +645,8 @@ It should be noted that this is quite a natural way to define a cell between the
       \draw (Base6) to ++(0cm,1cm)[out=90,in=0] to (Top3);
     \end{tikzpicture}
   \end{center}
-  to \(\psi_R\)
-\item Similar constructions for the remainder of the parts. \todo{remove this?}
+  to \(\psi_R\);
+\item similar constructions for the remainder of the parts. \todo{remove this?}
 \end{itemize}
 
 We conjecture that continuing in this way will generate a higher category structure. Next is the main result of this section.
@@ -712,9 +712,9 @@ However this problem does not arise in the bi-invertible case, and the existence
 
 It may at first appear that a lot of the coinductive proofs in this paper work by ``magic'' in that they seem like non-well founded induction. To remedy this all the definitions and results from  sections~\ref{sec:categories} and~\ref{sec:bi-invertibility}. Have been formalised in the proof assistant Agda\footnote{\url{https://github.com/agda/agda}} with use of the standard library\footnote{\url{https://github.com/agda/agda-stdlib}}. The formalisation uses sized types~\cite{Abel_2010} to ensure productivity of the functions defined and makes heavy use of coinductive record types and copatterns~\cite{10.1145/2480359.2429075}.
 
-The notion of higher pre-category introduced in this paper is very set-theoretic and becomes messy in the world of type theory. Because of this, alternative coinductive definitions of globular sets and composition are taken from~\cite{hirschowitz_et_al:LIPIcs:2015:5166}. This allows a lot of the proofs to become neater as coinduction tends to work nicely with coinductively defined structures. We believe the use of a different definition is not consequential as the main purpose of the formalisation was to show that coinductive elements of the arguments hold.
+The notion of higher pre-category introduced in this paper is very set-theoretic and becomes messy in the world of type theory. Because of this, alternative coinductive definitions of globular sets and composition are taken from~\citetitle{hirschowitz_et_al:LIPIcs:2015:5166}~\cite{hirschowitz_et_al:LIPIcs:2015:5166}. This allows a lot of the proofs to become neater as coinduction tends to work nicely with coinductively defined structures. We believe the use of a different definition is not consequential as the main purpose of the formalisation was to show that coinductive elements of the arguments hold.
 
-The code is made available at~\cite{rice_agda}. This has been tested with Agda version 2.6.0.1 and standard library version 1.2.
+The code is publicly available~\cite{rice_agda} and has been tested with Agda version 2.6.0.1 and standard library version 1.2.
 
 \section{Conclusion}\label{sec:conclusion}
 
