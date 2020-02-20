@@ -18,6 +18,7 @@
 \usepackage[colorinlistoftodos,obeyDraft]{todonotes}
 \renewcommand{\comment}[1]{\todo[color=green!40]{#1}}
 
+
 \usetikzlibrary{positioning}
 
 \usepackage[
@@ -28,7 +29,8 @@ maxbibnames=99,
 isbn=false,
 doi=false,
 eprint=false,
-block=ragged
+block=ragged,
+uniquename=init
 ]{biblatex}
 
 \addbibresource{./citations/citations.bib}
@@ -75,7 +77,7 @@ This idea can be seen even in the simplest examples of higher categories. Consid
 
 This is our first example of invertibility. An isomorphism between \(A\) and \(B\) is a morphism \(f : A \to B\) such that there exists a morphisms \(g : B \to A\) with \(f \circ g = \id_B\) and \(g \circ f = \id_A\). This notion of isomorphism works well throughout standard category theory and even in monoidal categories.
 
-However if generalised higher categories are considered, it can be seen that the problem has just been pushed one level up. We have specified that \(g \circ f\) and \(\id_A\) should be equal, yet have already stated that equality is not the best notion of two objects in a higher category. Ideally we want a collection of data that specifies that \(f\) has an inverse \(g\), and that there is a higher morphism \(\alpha : g \circ f \to \id_A\) and an inverse \(\beta : \id_A \to g \circ f\), and that there exists a morphism \(\alpha \circ \beta \to \id_{\id_A \to g \circ f}\) and continuing in this fashion. However, this generates a very unwieldy set of data that is difficult to describe.
+However if higher categories are considered, it can be seen that the problem has just been pushed into the higher structure of the category. We have specified that \(g \circ f\) and \(\id_A\) should be equal, yet have already stated that equality is not the best notion of two objects in a higher category. Ideally we want a collection of data that specifies that \(f\) has an inverse \(g\), and that there is a higher morphism \(\alpha : g \circ f \to \id_A\) and an inverse \(\beta : \id_A \to g \circ f\), and that there exists a morphism \(\alpha \circ \beta \to \id_{\id_A}\) and continuing in this fashion. However, this generates a very unwieldy set of data that is difficult to describe.
 
 A natural way we can talk about data structures like this is through coinduction. The definition of equivalence above can be written nicely by saying that \(f : A \to B\) is an equivalence if there exists a \(g : B \to A\) and equivalences \(f \circ g \to \id_B\) and \(g \circ f \to \id_A\). This is a neat method of defining an equivalence, but also has the advantage of opening up more proof techniques to us. In particular, it allows us to structure proofs coinductively.
 
@@ -89,13 +91,13 @@ Given this coinductive machinery, the definition of equivalence above seems very
 
 There are certain properties about these invertibility conditions that are important in type theory. Firstly, all 3 definitions are equivalent~\cite[Corollary 4.3.3]{hottbook}, in that a function \(f\) has one of these 3 types of inverses, then it also has the other 2. Secondly, definitions 2 and 3 form contractible types~\cite[Theorem 4.2.13 ,Theorem 4.3.2]{hottbook}. In essence, this means that there is only one way in which they hold up to propositional equality.
 
-Although it seems that these 3 are not applicable to generalised higher categories due to the use of equality in their definitions, they can nonetheless be modified into coinductive definitions suitable for such a category. This paper will present those definitions and show that they are all equivalent. Further we will try to present an analogue to contractibility which is suitable for higher categories and prove a partial contractibility result on bi-invertible structures as well as suggest how this result could be extended.
+Although it seems that these 3 are not applicable to higher categories due to the use of equality in their definitions, they can nonetheless be modified into coinductive definitions suitable for such a category. This paper will present those definitions and show that they are all equivalent. Further we will try to present an analogue to contractibility which is suitable for higher categories and prove a partial contractibility result on bi-invertible structures as well as suggest how this result could be extended.
 
 \section{Related Work}\label{sec:related}
 
 A lot of work has been done relating to invertible structures in higher categories. The idea of defining a notion of pre-category is largely inspired by \citeauthor{Cheng2007}~\cite{Cheng2007}. \citeauthor{kansangian2009weak}~\cite{kansangian2009weak} discuss the equivalence of some forms of weak inverse in strict \(n\)-categories. The result that an equivalence implies an adjoint equivalence in bicategories is well known and this has been extended to tricategories by \citeauthor{gurski2012biequivalences}~\cite{gurski2012biequivalences}. \citeauthor*{lafont2010folk}~\cite{lafont2010folk} construct the idea of a quasi-invertible structure in precisely the same way as in this paper, and proves some of the same results, though these are done in the setting of a strict \(\omega\)-category, where some of the coinductive arguments become easier.
 
-Higher categories have been viewed coinductively before~\cite{cheng2012weak}~\cite{hirschowitz_et_al:LIPIcs:2015:5166}, with the work of \citeauthor{hirschowitz_et_al:LIPIcs:2015:5166} providing the foundation of the formalisation~\cite{rice_agda} in \Cref{sec:formalisation}.
+Higher categories have been viewed coinductively before~\cite{cheng2012weak,hirschowitz_et_al:LIPIcs:2015:5166}, with the work of \citeauthor{hirschowitz_et_al:LIPIcs:2015:5166} providing the foundation of the formalisation~\cite{rice_agda} in \Cref{sec:formalisation}.
 
 
 \section{Background}\label{sec:background}
@@ -111,7 +113,7 @@ When a type is introduced in type theory, there are four parts of its definition
 \item Type formation tells us how to build the type. For lists, given a type \(A\), the type \(\mathsf{List}(A)\) can be formed.
 \item Term formation tells us how terms of the type can be constructed. \(\mathsf{List}(A)\) has multiple constructors. We have \(\mathsf{nil} : \mathsf{List}(A)\), which is a constructor with no arguments and \(\mathsf{cons} : A \to \mathsf{List}(A) \to \mathsf{List}(A)\), which takes two.
 \item Recursion lets us form functions out of an inductive type. For lists this says that to form a function \(f : \mathsf{List}(A) \to B\), it suffices to define \(f(\mathsf{nil}) : B\) and define \(f(\mathsf{cons}(a)(xs))\) given the value of \(f(xs)\).
-\item Induction is a generalisation of recursion and allows us to define functions \(f : \Pi_{xs : \mathsf{List}(A)} P(xs)\) where \(P\) is a type family of type \(\mathsf{List}(A) \to \mathcal{U}\).
+\item Induction is a generalisation of recursion and allows us to define functions \(f : \Pi_{xs : \mathsf{List}(A)} P(xs)\) where \(P\) is a type family of type \(\mathsf{List}(A) \to \mathcal{U}\), with \(\mathcal{U}\) being a universe of types. In other words \(P\) assigns a type to each list.
 \end{itemize}
 
 A further thing to note is that we will require the use of a slight generalisation of this known as inductive type families~\cite[Section 5.7]{hottbook}. These allow our inductive types to be parameterised. A good example of this is the vector type, which is a list of specified length. Here our type formation rule says that given a type \(A\) we can get a type \(\mathsf{Vec}(A) : \mathbb{N} \to \mathcal{U}\). Further the term formation rules become \(\mathsf{nil} : \mathsf{Vec}(A)(0)\) and \(\mathsf{cons} : \Pi_{n : \mathbb{N}} A \to \mathsf{Vec}(A)(n) \to \mathsf{Vec}(A)(\mathsf{succ}(n))\). Notice that unlike with lists, which also took a parameter, vectors can not be defined by considering each element of the parameter separately. The recursion and induction rules also need to modified slightly.
@@ -147,7 +149,7 @@ In this paper we want to talk about different structures on \(\omega\)-categorie
 \end{definition}
 
 \begin{definition}
-  A \emph{globular set} \(G\) is a presheaf of \(\mathbb{G}\). We refer to \(G(n)\) as the set of \(n\)-cells and for two \(n\)-cells \(x\) and \(y\) we write \(f: x \to y\) to mean that \(f\) is an \((n+1)\)-cell and
+  A \emph{globular set} \(G\) is a presheaf on \(\mathbb{G}\). We refer to \(G(n)\) as the set of \(n\)-cells and for two \(n\)-cells \(x\) and \(y\) we write \(f: x \to y\) to mean that \(f\) is an \((n+1)\)-cell and
   \begin{align*}
     G(\sigma_n)(f) &= x\\
     G(\tau_n)(f) &= y
@@ -158,7 +160,7 @@ In this paper we want to talk about different structures on \(\omega\)-categorie
 \begin{definition}
   A \emph{globular set with identities and composition} is a globular set \(G\) with the following:
   \begin{itemize}
-  \item For each \(n\)-cell \(x\), there is an \((n+1)\)-cell, \(\id_x\).
+  \item For each \(n\)-cell \(x\), there is an \((n+1)\)-cell, \(\id_x : x \to x\).
   \item Inductively define composition as follows:
     \begin{itemize}
     \item Given \(n\)-cells \(f: x \to y\) and \(g: y \to z\) there is
@@ -184,6 +186,8 @@ Once we have a globular set with identities and composition, we have enough to d
 
 \begin{remark}
   The previous definition is a coinductive one. Formally, we have defined a coinductive data type, which we could call \(\mathsf{QuasiInvertible}(f)\), which references itself (in saying that \(f_R\) and \(f_L\) themselves have a quasi-invertible structure). Note that as \(\mathsf{QuasiInvertible}\) is dependent on the parameter \(f\), it is in fact a coinductive type family as described in \Cref{sec:coinduction}.
+
+  Further, it should be noted that, as a coinductive structure, \(\mathsf{QuasiInvertible}(f)\) contains an infinite stack of data, and in particular contains the data witnessing the invertibility of \(f\) at all dimensions.
 \end{remark}
 
 \begin{remark}\label{descendants}
@@ -195,10 +199,10 @@ Once we have a globular set with identities and composition, we have enough to d
   It is clear that we can carry over identities and composition to this new globular set.
 \end{remark}
 
-\begin{definition}\label{def:higher-cat}
-  Consider the standard string diagram diagrammatic calculus for bicategories. We can draw diagrams containing nodes, lines, and areas where areas represent \(0\)-cells, a line between areas representing cells \(x\) and \(y\) represents a \(1\)-cell between \(x\) and \(y\), and node between lines represent \(2\)-cells between the cells those lines represent. These diagrams still represent well formed morphisms in an globular set with identities and composition. In a bicategory we have the theorem that given a planar isotopy of string diagrams, the source and target morphisms are equal.
+Consider the standard string diagram diagrammatic calculus for bicategories. We can draw diagrams containing nodes, lines, and areas where areas represent \(0\)-cells, a line between areas representing cells \(x\) and \(y\) represents a \(1\)-cell between \(x\) and \(y\), and node between lines represent \(2\)-cells between the cells those lines represent. These diagrams still represent well formed morphisms in an globular set with identities and composition. In a bicategory there exists the theorem that given a planar isotopy of string diagrams, the source and target morphisms are equal.
 
-  In this higher categorical setting we can instead require that given a well typed string diagram, and an isotopy of this diagram, there is a \(3\)-cell from source of the isotopy to the target. We require that this cell is invertible. We say that a globular set \emph{respects the graphical calculus} if it has this property.
+\begin{definition}\label{def:higher-cat}
+  Say that a globular set \emph{respects the graphical calculus} if for any well typed string diagram and any planar isotopy of this diagram, there exists a \(3\)-cell from the source of the isotopy to the target. Further, it is required that there is a quasi-invertible structure on this morphism..
 
   We define a \emph{higher pre-category} to be a globular set with identities and composition such that given any globular set generated as in \cref{descendants} respects the graphical calculus. Further we assume the existence of the following morphisms:
   \begin{itemize}
@@ -335,7 +339,7 @@ Next it is shown that invertibility implies bi-invertibility. This is fairly tri
       \end{center}
     \end{itemize}
 
-    From the bi-invertible structures on \(f\) and \(g\) we can obtain bi-invertible structures on \(f_L\), \(g_L\), \(f_R\), and \(g_R\). The associators and unitors used have bi-invertible structures by lemmas~\ref{inv-to-bi-inv} and~\ref{inverse-invert}. All identity morphisms can be equipped with a bi-invertible structure using lemmas~\ref{inv-to-bi-inv} and~\ref{identity}. Hence we have obtained collections of bi-invertible structures for morphisms which compose to \({(g \comp_0 f)}_R\) and \({(g \comp_0 f)}_R\).
+    From the bi-invertible structures on \(f\) and \(g\) we can obtain bi-invertible structures on \(f_L\), \(g_L\), \(f_R\), and \(g_R\). The associators and unitors used have bi-invertible structures by lemmas~\ref{inv-to-bi-inv} and~\ref{inverse-invert}. All identity morphisms can be equipped with a bi-invertible structure using lemmas~\ref{inv-to-bi-inv} and~\ref{identity}. Hence we have obtained collections of bi-invertible structures for morphisms which compose to \({(g \comp_0 f)}_R\) and \({(g \comp_0 f)}_L\).
   \item \(n > 0\): Suppose we have \(\alpha: f \to g\) and \(\beta: h \to j\) where \(f \comp_{n-1} h\) and \(g \comp_{n-1} j\) are both well defined. Further suppose
     \begin{itemize}
     \item \((\rinv \alpha, \linv \alpha, \alpha_R, \alpha_L, \alpha_R{}BI, \alpha_L{}BI)\) is a bi-invertible structure on \(\alpha\);
@@ -412,9 +416,9 @@ Another type of equivalence is a half-adjoint equivalence. Whereas being bi-inve
   Given a globular set \(G\) with identities and composition, with an \(n > 0\) cell \(f : x \to y\), a \emph{right-adjoint invertible} structure on \(f\) \comment{are these the right way round?} is a tuple \((f', \alpha_f, \beta_f, \gamma_f, \alpha_f{}RAI, \beta_f{}RAI, \gamma_f{}RAI)\) where:
   \begin{itemize}
   \item \(f'\) is an \(n\)-cell \(y \to x\);
-  \item \(\alpha_f\) is an \(n+1\)-cell \(f \comp_0 f' \to \id_y\);
-  \item \(\beta_f\) is an \(n+1\)-cell \(\id_x \to f' \comp_0 f\);
-  \item \(\gamma_f\) is an \(n+2\)-cell \((\lambda_{f'}^{-1} \comp_0 (\beta \comp_1 \id_{f'}) \comp_0 a_{f',f,f'} \comp_0 (\id_{f'} \comp_1 \alpha) \comp_0 \rho_{f'}) \to \id_{f'}\);
+  \item \(\alpha_f\) is an \((n+1)\)-cell \(f \comp_0 f' \to \id_y\);
+  \item \(\beta_f\) is an \((n+1)\)-cell \(\id_x \to f' \comp_0 f\);
+  \item \(\gamma_f\) is an \((n+2)\)-cell \((\lambda_{f'}^{-1} \comp_0 (\beta_f \comp_1 \id_{f'}) \comp_0 a_{f',f,f'} \comp_0 (\id_{f'} \comp_1 \alpha_f) \comp_0 \rho_{f'}) \to \id_{f'}\);
   \item \(\alpha_f{}RAI\) is a right-adjoint invertible structure on \(\alpha_f\);
   \item \(\beta_f{}RAI\) is a right-adjoint invertible structure on \(\beta_f\);
   \item \(\gamma_f{}RAI\) is a right-adjoint invertible structure on \(\gamma_f\).
@@ -439,12 +443,12 @@ Another type of equivalence is a half-adjoint equivalence. Whereas being bi-inve
     \end{tikzpicture}
   \end{center}
 
-  Dually an \emph{left-adjoint invertible} structure on \(f\) is a tuple \((f', \alpha_f, \beta_f, \gamma_f, \alpha_f{}LAI, \beta_f{}LAI, \gamma_f{}RAI)\) where:
+  Dually an \emph{left-adjoint invertible} structure on \(f\) is a tuple \((f', \alpha_f, \beta_f, \gamma_f, \alpha_f{}LAI, \beta_f{}LAI, \gamma_f{}LAI)\) where:
   \begin{itemize}
   \item \(f'\) is an \(n\)-cell \(y \to x\).
   \item \(\alpha_f\) is an \((n+1)\)-cell \(f' \comp_0 f \to \id_x\).
   \item \(\beta_f\) is an \((n+1)\)-cell \(\id_y \to f \comp_0 f'\).
-  \item \(\gamma_f\) is an \((n+2)\)-cell \((\rho_{f}^{-1} \comp_0 (\id_{f} \comp_1 \beta_f) \comp_0 \inv {a_{f',f,f'}} \comp_0 (\alpha_f \comp_1 \id_f) \comp_0 \lambda_f) \to \id_f\).
+  \item \(\gamma_f\) is an \((n+2)\)-cell \((\rho_{f'}^{-1} \comp_0 (\id_{f'} \comp_1 \beta_f) \comp_0 \inv {a_{f',f,f'}} \comp_0 (\alpha_f \comp_1 \id_{f'}) \comp_0 \lambda_{f'}) \to \id_{f'}\).
   \item \(\alpha_f{}LAI\) is a left-adjoint invertible structure on \(\alpha_f\).
   \item \(\beta_f{}LAI\) is a left-adjoint invertible structure on \(\beta_f\).
   \item \(\gamma_f{}LAI\) is a left-adjoint invertible structure on \(\gamma_f\).
@@ -561,7 +565,7 @@ Another type of equivalence is a half-adjoint equivalence. Whereas being bi-inve
     \end{center}
   \item \(f_R{}RAI\) can be generated by coinduction on \(f_R{}BI\).
   \item A bi-invertible structure can be formed for \(\beta_f\) as it is a composition of identities, morphisms with given bi-invertible structures and inverses of those morphisms. Then \(\beta_f{}RAI\) can be formed coinductively.
-  \item A bi-invertible structure can be put on \(\gamma\) as it is the composite of morphisms that have a given bi-invertible structure and an isotopy, which has a quasi-invertible structure given by \(G\) being a higher pre-category. Therefore, as before, \(\gamma_f{}RAI\) can be formed by coinduction.  \end{itemize}
+  \item A bi-invertible structure can be put on \(\gamma_f\) as it is the composite of morphisms that have a given bi-invertible structure and an isotopy, which has a quasi-invertible structure given by \(G\) being a higher pre-category. Therefore, as before, \(\gamma_f{}RAI\) can be formed by coinduction.  \end{itemize}
 \end{proof}
 
 \begin{theorem}
