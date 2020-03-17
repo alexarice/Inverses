@@ -1,0 +1,17 @@
+* Start with examples of higher category
+** Topological space
+** Type
+** Cat
+** \(\omega\)-cat
+* Discuss equality in
+** categories
+** Cat
+** Higher categories
+** Introduce quasi-invertibility
+* Introduce our notion of higher category
+** Motivate string diagrams
+** Discuss problem with quasi-invertibility
+** Compare to type theory
+** Add bi-invertibility and half-adjoint invertibility
+* Discuss results
+** Give some proofs if time
