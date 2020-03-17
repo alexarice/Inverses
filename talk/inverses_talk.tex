@@ -5,11 +5,18 @@
 \date{19/03/2020}
 \title{Coinductive Invertibility in Higher Categories}
 
+\DeclareMathOperator{\id}{id}
+
+\newcommand{\linv}[1]{{}^\star\!#1}
+\newcommand{\rinv}[1]{#1^\star}
+\newcommand{\inv}[1]{#1^{-1}}
+\newcommand{\comp}{\star}
+
 \begin{document}
 
 \maketitle
 \begin{frame}{Outline}
-\tableofcontents
+  \tableofcontents
 \end{frame}
 
 \section{Higher Categories}
@@ -51,6 +58,16 @@
 
 \begin{frame}
   \frametitle{Quasi-invertibility}
+  \begin{definition}
+    Given an \(n\)-cell \(f : x \to y\), a \emph{quasi-invertible} structure on \(f\) is a tuple \((\inv f, f_R, f_L, f_R{}I, f_L{}I)\) where:
+    \begin{itemize}
+    \item \(\inv f\) is an \(n\)-cell \(y \to x\);
+    \item \(f_R\) is an \((n+1)\)-cell \(f \comp_0 \inv f \to \id_y\);
+    \item \(f_L\) is an \((n+1)\)-cell \(\inv f \comp_0 f \to \id_x\).
+    \item \(f_R{}I\) is a quasi-invertible structure on \(f_R\).
+    \item \(f_L{}I\) is a quasi-invertible structure on \(f_L\).
+    \end{itemize}
+  \end{definition}
 \end{frame}
 
 \section{Forms of invertibility and results}
@@ -65,6 +82,10 @@
 
 \begin{frame}
   \frametitle{Properties of quasi-invertible structures}
+  \begin{itemize}
+  \item Given a quasi-invertible structure of \(f\), there exists a quasi-invertible structure on \(\inv f\).
+  \item There is a quasi-invertible structure on any identity morphism.
+  \end{itemize}
 \end{frame}
 
 \begin{frame}
@@ -73,6 +94,21 @@
 
 \begin{frame}
   \frametitle{Invertibility in type theory}
+  Inverses of \(f : A \to B\):
+  \begin{itemize}
+  \item Quasi-invertible:
+    \[ \mathsf{qinv}(f) : \Sigma_{g : B \to A} f \circ g \sim \id_B \times g \circ f \sim \id_A\]
+  \item Bi-invertible:
+    \begin{align*}
+      &\mathsf{binv}(f) : \mathsf{linv}(f) \times \mathsf{rinv}(f) \\
+      &\mathsf{linv}(f) : \Sigma_{g : B \to A} g \circ f \sim \id_A \\
+      &\mathsf{rinv}(f) : \Sigma_{g : B \to A} f \circ f \sim \id_B
+    \end{align*}
+  \item Half-adjoint invertible:
+    \[ \mathsf{ishai}(f) : \Sigma_{g : B \to A} \Sigma_{\eta : g \circ f \sim \id_A} \Sigma_{\epsilon : f \circ g \sim \id_B} \Pi_{x : A} f(\eta x) = \epsilon(f x) \]
+
+
+  \end{itemize}
 \end{frame}
 
 \begin{frame}
@@ -93,6 +129,7 @@
 
 \begin{frame}
   \frametitle{Results}
+
 \end{frame}
 
 \begin{frame}
