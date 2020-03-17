@@ -12,3 +12,7 @@ auto
 *.bbl
 *.out
 *.tdo
+*.nav
+*.snm
+*.toc
+ltximg
