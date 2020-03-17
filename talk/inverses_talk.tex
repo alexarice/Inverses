@@ -106,17 +106,31 @@
     \end{align*}
   \item Half-adjoint invertible:
     \[ \mathsf{ishai}(f) : \Sigma_{g : B \to A} \Sigma_{\eta : g \circ f \sim \id_A} \Sigma_{\epsilon : f \circ g \sim \id_B} \Pi_{x : A} f(\eta x) = \epsilon(f x) \]
-
-
   \end{itemize}
 \end{frame}
 
 \begin{frame}
   \frametitle{Bi-invertibility}
+    Given an \(n\)-cell \(f : x \to y\), a \emph{bi-invertible} structure on \(f\) is a tuple \((\rinv f, \linv f, f_R, f_L, f_R{}BI, f_L{}BI)\) where:
+  \begin{itemize}
+  \item \(\rinv f\) is an \(n\)-cell \(y \to x\);
+  \item \(\linv f\) is an \(n\)-cell \(y \to x\);
+  \item \(f_R\) is an \((n+1)\)-cell \(f \comp_0 \rinv f \to \id_y\);
+  \item \(f_L\) is an \((n+1)\)-cell \(\linv f \comp_0 f \to \id_x\).
+  \item \(f_R{}BI\) is a bi-invertible structure on \(f_R\).
+  \item \(f_L{}BI\) is a bi-invertible structure on \(f_L\).
+  \end{itemize}
 \end{frame}
 
 \begin{frame}
   \frametitle{Properties of bi-invertible structures}
+  \begin{itemize}
+  \item Any quasi-invertible structure can be converted to a bi-invertible structure.
+  \item Given a bi-invertible structures on a pair of compatible morphisms, there is a bi-invertible structure on their composite.
+  \item Given a bi-invertible structure on \(f\), \(f, \rinv f, \linv f, \dots\) there are bi-invertible structures on both \(\rinv f\) and \(\linv f\).
+  \end{itemize}
+  \pause{}
+  These are proved using coinduction and the results have been formalised in Agda using sized types.
 \end{frame}
 
 \begin{frame}
