@@ -1,0 +1,22 @@
+\frametitle{Composition in infinity categories}
+  \begin{block}{Composition of 1 cells}
+    \begin{tikzcd}
+      x \arrow[r, "f"] & y \arrow[r, "g"] & z
+    \end{tikzcd}
+  \end{block}
+  \begin{block}{Composition of 2 cells}
+    Codimension 1:
+    \begin{tikzcd}
+      \bullet \arrow[r, bend right=49, ""{name=S1}] \arrow[r, bend left=49, ""{name=T1, below}] & \bullet \arrow[r, bend right=49, ""{name=S2}] \arrow[r, bend left=49, ""{name=T2, below}] & \bullet
+      \arrow[Rightarrow, from=S1, to=T1]
+      \arrow[Rightarrow, from=S2, to=T2]
+    \end{tikzcd}
+    \pause{}
+
+    Codimension 2:
+    \begin{tikzcd}
+      \bullet \arrow[r, bend right=90, ""{name=S1}] \arrow[r, ""{name=T1,below}, ""{name=S2}] \arrow[r, bend left=90, ""{name=T2, below}] & \bullet
+      \arrow[Rightarrow, from=S1, to=T1]
+      \arrow[Rightarrow, from=S2, to=T2]
+    \end{tikzcd}
+  \end{block}

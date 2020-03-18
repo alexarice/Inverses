@@ -5,12 +5,17 @@
 \date{19/03/2020}
 \title{Coinductive Invertibility in Higher Categories}
 
+\usepackage{tikz-cd}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+
 \DeclareMathOperator{\id}{id}
 
 \newcommand{\linv}[1]{{}^\star\!#1}
 \newcommand{\rinv}[1]{#1^\star}
 \newcommand{\inv}[1]{#1^{-1}}
 \newcommand{\comp}{\star}
+
 
 \begin{document}
 
@@ -23,23 +28,130 @@
 
 \begin{frame}
   \frametitle{What is higher category?}
-
+  In a regular category there are:
+  \begin{itemize}
+  \item A collection of objects;
+  \item Between each pair objects there is a collection of morphisms between them.
+  \end{itemize}
+  \pause{}
+  In higher category theory, we study cases where there is more structure on the collections of morphisms.
 \end{frame}
 
 \begin{frame}
-  \frametitle{Composition in higher categories}
+  \frametitle{\(\omega\)-categories}
+  In a 2-category, the collections of morphisms form categories.
+  \pause{}
+
+  In a 3-category, the collections of morphisms form 2-categories.
+  \pause{}
+
+  In an \(\omega\)-category, this continues.
 \end{frame}
 
 \begin{frame}
-  \frametitle{Topological Spaces}
+  \frametitle{Globular Sets}
+  \(\omega\)-categories can take the shape of globular sets.
+  \pause{}
+
+  These are usually defined as presheafs.
+  \pause{}
+  \begin{definition}
+    A \emph{globular set} \(\mathcal{G}\) is a collection of objects \(|\mathcal{G}|\) and for each \(x,y \in \mathcal{G}\) a globular set \(\mathcal{G}_{x,y}\).
+  \end{definition}
+
+  \pause{}
+  An object \(f \in |\mathcal{G}_{x,y}|\) will be called a morphism between \(x\) and \(y\), and will be written \(f : x \to y\).
+
+  \pause{}
+  Let the objects of the globular set be it's \(0\)-cells, morphisms between these be \(1\)-cells, \(\dots\)
+
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Composition in infinity categories}
+  \begin{block}{Composition of 1 cells}
+    \begin{tikzcd}
+      x \arrow[r, "f"] & y \arrow[r, "g"] & z
+    \end{tikzcd}
+  \end{block}
+  \begin{block}{Composition of 2 cells}
+    Codimension 1:
+    \begin{tikzcd}
+      \bullet \arrow[r, bend right=49, ""{name=S1}] \arrow[r, bend left=49, ""{name=T1, below}] & \bullet \arrow[r, bend right=49, ""{name=S2}] \arrow[r, bend left=49, ""{name=T2, below}] & \bullet
+      \arrow[Rightarrow, from=S1, to=T1]
+      \arrow[Rightarrow, from=S2, to=T2]
+    \end{tikzcd}
+    \pause{}
+
+    Codimension 2:
+    \begin{tikzcd}
+      \bullet \arrow[r, bend right=90, ""{name=S1}] \arrow[r, ""{name=T1,below}, ""{name=S2}] \arrow[r, bend left=90, ""{name=T2, below}] & \bullet
+      \arrow[Rightarrow, from=S1, to=T1]
+      \arrow[Rightarrow, from=S2, to=T2]
+    \end{tikzcd}
+  \end{block}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Coherence for infinity categories}
+  Infinity categories also have identity cells.
+
+  For each \(n\)-cell \(f\) there is a cell \(\id_f : f \to f\).
+
+  \pause{}
+  Regular categories have associativity and unit laws. These are also present in \(\omega\)-categories.
+\end{frame}
+
+\begin{frame}
+  \frametitle{Topological spaces}
+  Topological spaces are nice examples of \(\omega\)-categories. Take a topological space \(X\).
+
+  \pause{}
+  \begin{itemize}
+  \item 0 cells: \(X\)
+  \item 1 cells: Paths between points
+  \item 2 cells: Homotopies between paths
+  \item \(\dots\)
+  \end{itemize}
+
+  \pause{}
+  Identities are given by constant paths/homotopies.
+
+  \pause{}
+  Composition is given by path composition.
 \end{frame}
 
 \begin{frame}
   \frametitle{Fundamental \(\omega\)-groupoid}
+  Similar to the topological space example, any type \(X\) forms an \(\omega\)-category.
+
+  \pause{}
+  \begin{itemize}
+  \item 0 cells: terms of type \(X\);
+  \item Higher cells: terms of equality types.
+  \end{itemize}
+
+  \pause{}
+  Identities given by reflexivity proofs.
+
+  \pause{}
+  Composition is transitivity of equality.
 \end{frame}
 
 \begin{frame}
-  \frametitle{\(\omega\)-\(\mathbf{Cat}\)}
+  \frametitle{\(\omega\)-\textbf{Cat}}
+  \textbf{Cat}, the category of (small) categories, forms a 2-category with:
+  \begin{itemize}
+  \item 0-cells: Categories;
+  \item 1-cells: Functors;
+  \item 2-cells: Natural transformations.
+  \end{itemize}
+
+  \pause{}
+  Similarly \textbf{2-Cat}, the category of 2-categories, forms a 3-categories.
+
+  \pause{}
+  The category of \(\omega\)-categories, \textbf{\(\omega\)-Cat}, is itself an \(\omega\)-category.
 \end{frame}
 
 \section{Equality in Higher Categories}
