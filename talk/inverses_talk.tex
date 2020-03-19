@@ -405,6 +405,95 @@
 
 \begin{frame}
   \frametitle{Bi-invertibility implies half-adjoint invertibility}
+  \begin{theorem}
+  A bi-invertible structure \((\rinv f, \linv f, f_R, f_L, \dots)\) of a cell \(f\) induces a half-adjoint invertible structure \((\rinv f, f_R, \dots)\) on \(f\).
+\end{theorem}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Proof}
+  Let \((\rinv f, \linv f, f_R, f_L, f_R{}BI, f_L{}BI)\) be a bi-invertible structure on \(f\). Then we give the right-adjoint invertible structure \((\rinv f, f_R, \alert<2>{\beta_f}, \alert<3>{\gamma_f}, \alert<4>{f_R{}HAI}, \alert<5>{\beta_f{}HAI}, \alert<6>{\gamma_f{}HAI})\) where:
+    \begin{columns}
+      \pause{}
+
+
+      \begin{column}{0.25\textwidth}
+
+
+        \begin{block}{\(\beta_f\)}
+          \begin{center}
+        \begin{tikzpicture}[scale=0.4, every node/.style={transform shape}]
+        \node (Finv) {\({\rinv f}\)};
+        \node [on grid, right=1cm of Finv] (F) {\(f\)};
+        \node [on grid, below left=2cm and 0.75cm of Finv, draw] (FRInv) {\(\rinv {f_R}\)};
+        \node [on grid, above left=1.5cm and 1.5cm of FRInv, draw] (FL) {\(f_L\)};
+        \node [on grid, below right=2.75cm and 1.25cm of FL, draw] (FLInv) {\(\linv {f_L}\)};
+        \draw (Finv) to ++(0,-1.25cm) to[out=-90,in=0] (FRInv);
+        \draw (FRInv) to[out=180,in=-90] ++(-0.75cm,0.75cm) to[out=90,in=0] (FL);
+        \draw (FL) to[out=180,in=90] ++(-0.75cm,-0.75cm) to[out=-90,in=180] (FLInv);
+        \draw (F) to ++(0,-1.25cm) to[out=-90,in=0] (FLInv);
+      \end{tikzpicture}
+    \end{center}
+
+    \end{block}
+
+    \end{column}
+    \pause{}
+    \begin{column}{0.7\textwidth}
+      \begin{block}{\(\gamma_f\)}
+      \begin{center}
+      \begin{tikzpicture}[scale=0.4,every node/.style={transform shape}]
+        \node (G) {\({\rinv f}\)};
+        \node [on grid, below right=0.25cm and 1.75cm of G, draw] (FR) {\(f_R\)};
+        \node [on grid, below right=4.75cm and 0.75cm of FR] (G') {\({\rinv f}\)};
+        \node [on grid, below left=3cm and 0.75cm of G, draw] (FRInv) {\(\rinv {(f_R)}\)};
+        \node [on grid, above left=1.5cm and 1.5cm of FRInv, draw] (FL) {\(f_L\)};
+        \node [on grid, below right=2.75cm and 1.25cm of FL, draw] (FLInv) {\(\linv {(f_L)}\)};
+        \draw (G) to ++(0,-2.25cm) to[out=-90,in=0] (FRInv);
+        \draw (FRInv) to[out=180,in=-90] ++(-0.75cm,0.75cm) to[out=90,in=0] (FL);
+        \draw (FL) to[out=180,in=90] ++(-0.75cm,-0.75cm) to[out=-90,in=180] (FLInv);
+        \draw (FR) to[out=180,in=90] ++(-0.75cm,-0.75cm) to ++(0,-1.25cm) to[out=-90,in=0] (FLInv);
+        \draw (FR) to[out=0,in=90] ++(0.75cm,-0.75cm) to (G');
+
+        \node [on grid, below right=2.75cm and 3.75cm of G,font=\fontsize{20}{24}\selectfont] (A1) {\(\Rightarrow\)};
+        \node [on grid, above=0.5cm of A1] (A1Text) {isotopy};
+
+        \node [on grid, right=8cm of G] (G1) {\({\rinv f}\)};
+        \node [on grid, below left=2cm and 0.75cm of G1, draw] (FRInv1) {\(\rinv {(f_R)}\)};
+        \node [on grid, below=1cm of FRInv1, draw] (FR1) {\(f_R\)};
+        \node [on grid, above left=1.5cm and 1.5cm of FRInv1, draw] (FL1) {\(f_L\)};
+        \node [on grid, below left=1.5cm and 1.5cm of FR1, draw] (FLInv1) {\(\linv {(f_L)}\)};
+        \node [on grid, below right=2cm and 0.75cm of FR1] (G'1) {\({\rinv f}\)};
+        \draw (G1) to ++(0,-1.25cm) to[out=-90,in=0] (FRInv1);
+        \draw (FRInv1) to[out=180,in=-90] ++(-0.75cm,0.75cm) to[out=90,in=0] (FL1);
+        \draw (FL1) to[out=180,in=90] ++(-0.75cm,-0.75cm) to ++(0,-2.5cm) to[out=-90,in=180] (FLInv1);
+        \draw (FR1) to[out=180,in=90] ++(-0.75cm,-0.75cm) to[out=-90,in=0] (FLInv1);
+        \draw (FR1) to[out=0,in=90] ++(0.75cm,-0.75cm) to (G'1);
+
+        \node [on grid, below right=2.75cm and 1cm of G1,font=\fontsize{20}{24}\selectfont] (A2) {\(\Rightarrow\)};
+        \node [on grid, above=0.5cm of A2] (A2Text) {\((f_R)_R\)};
+
+        \node [on grid, right=4.25cm of G1] (G2) {\({\rinv f}\)};
+        \node [on grid, below=5cm of G2] (G'2) {\({\rinv f}\)};
+        \node [on grid, below left=1.75cm and 1.5cm of G2, draw] (FL2) {\(f_L\)};
+        \node [on grid, below=1.5cm of FL2, draw] (FLInv2) {\(\linv {(f_L)}\)};
+        \draw (G2) to (G'2);
+        \draw (FL2) to[out=0,in=90] ++(0.75cm,-0.75cm) to[out=-90,in=0] (FLInv2);
+        \draw (FL2) to[out=180,in=90] ++(-0.75cm,-0.75cm) to[out=-90,in=180] (FLInv2);
+
+        \node [on grid, below right=2.75cm and 1cm of G2,font=\fontsize{20}{24}\selectfont] (A3) {\(\Rightarrow\)};
+        \node [on grid, above=0.5cm of A3] (A3Text) {\((f_L)_L\)};
+
+        \node [on grid, right=2cm of G2] (G3) {\({\rinv f}\)};
+        \node [on grid, below=5cm of G3] (G'3) {\({\rinv f}\)};
+        \draw (G3) to (G'3);
+      \end{tikzpicture}
+    \end{center}
+  \end{block}
+
+
+    \end{column}
+    \end{columns}
 \end{frame}
 
 \end{document}
