@@ -55,7 +55,7 @@
   \(\omega\)-categories can take the shape of globular sets.
   \pause{}
 
-  These are usually defined as presheafs.
+  These are usually defined as presheaves.
   \pause{}
   \begin{definition}
     A \emph{globular set} \(\mathcal{G}\) is a collection of objects \(|\mathcal{G}|\) and for each \(x,y \in \mathcal{G}\) a globular set \(\mathcal{G}_{x,y}\).
@@ -77,6 +77,7 @@
     \end{tikzcd}
     written \(f \comp_1 g\).
   \end{block}
+  \pause{}
   \begin{block}{Composition of 2 cells}
     Codimension 1:
     \begin{tikzcd}
@@ -101,7 +102,7 @@
   \frametitle{Coherence for infinity categories}
   Infinity categories also have identity cells.
 
-  For each \(n\)-cell \(f\) there is a cell \(\id_f : f \to f\).
+  For each \(n\)-cell \(f\) there is an \((n+1)\)-cell \(\id_f : f \to f\).
 
   \pause{}
   Regular categories have associativity and unit laws. These are also present in \(\omega\)-categories.
@@ -153,7 +154,7 @@
   \end{itemize}
 
   \pause{}
-  Similarly \textbf{2-Cat}, the category of 2-categories, forms a 3-categories.
+  Similarly \textbf{2-Cat}, the category of 2-categories, forms a 3-category.
 
   \pause{}
   The category of \(\omega\)-categories, \textbf{\(\omega\)-Cat}, is itself an \(\omega\)-category.
@@ -214,9 +215,9 @@
 
   \(\omega\)-categories have coherence properties. Here we specify a minimal set of properties required:
   \begin{itemize}
-  \item For \(n>0\) and each \(n\)-cell \(f: x \to y\), there are \(n+1\)-cells, known as unitors, \(\lambda_f: \id_x \comp_1 f \to f\) and \(\rho_f: f \comp_1 \id_y \to f\).
+  \item For \(n>0\) and each \(n\)-cell \(f: x \to y\), there are \((n+1)\)-cells, known as unitors, \(\lambda_f: \id_x \comp_1 f \to f\) and \(\rho_f: f \comp_1 \id_y \to f\).
   \item Given \(f,g,h\), \(n>1\)-cells with suitable composition defined, we have an associator \(a_{f,g,h} : (f \comp_1 g) \comp_1 h \to f \comp_1 (g \comp_1 h)\).
-  \item For compatible morphisms \(f,g,h,j\), we have an interchanger \(i_{f,g,h,j}(f \comp_n g) \comp_1 (h \comp_n j) \to (f \comp_1 h) \comp_n (g \comp_1 j)\).
+  \item For compatible morphisms \(f,g,h,j\), we have an interchanger \(i_{f,g,h,j} : (f \comp_n g) \comp_1 (h \comp_n j) \to (f \comp_1 h) \comp_n (g \comp_1 j)\).
   \item For suitable \(f,g\) and \(n > 1\), there is a cell \(\id_f \comp_{n+1} \id_g \to \id_{f \comp_n g}\).
   \end{itemize}
   \pause{}
@@ -297,15 +298,15 @@
   Inverses of \(f : A \to B\):
   \begin{itemize}
   \item Quasi-invertible:
-    \[ \mathsf{qinv}(f) : \Sigma_{g : B \to A} f \circ g \sim \id_B \times g \circ f \sim \id_A\]
+    \[ \mathsf{qinv}(f) : \Sigma_{g : B \to A}\,f \circ g \sim \id_B \times g \circ f \sim \id_A\]
   \item Bi-invertible:
     \begin{align*}
       &\mathsf{binv}(f) : \mathsf{linv}(f) \times \mathsf{rinv}(f) \\
-      &\mathsf{linv}(f) : \Sigma_{g : B \to A} g \circ f \sim \id_A \\
-      &\mathsf{rinv}(f) : \Sigma_{g : B \to A} f \circ f \sim \id_B
+      &\mathsf{linv}(f) : \Sigma_{g : B \to A}\,g \circ f \sim \id_A \\
+      &\mathsf{rinv}(f) : \Sigma_{g : B \to A}\,f \circ f \sim \id_B
     \end{align*}
   \item Half-adjoint invertible:
-    \[ \mathsf{ishai}(f) : \Sigma_{g : B \to A} \Sigma_{\eta : g \circ f \sim \id_A} \Sigma_{\epsilon : f \circ g \sim \id_B} \Pi_{x : A} f(\eta x) = \epsilon(f x) \]
+    \[ \mathsf{ishai}(f) : \Sigma_{g : B \to A}\,\Sigma_{\eta : g \circ f \sim \id_A}\,\Sigma_{\epsilon : f \circ g \sim \id_B}\,\Pi_{x : A}\,f(\eta x) = \epsilon(f x) \]
   \end{itemize}
 \end{frame}
 
