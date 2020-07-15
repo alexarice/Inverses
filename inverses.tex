@@ -22,11 +22,11 @@ uniquename=init ]{biblatex}
 \DefineBibliographyStrings{english}{%
   bibliography = {References}, }
 
-\newtheorem{theorem}{Theorem} \newtheorem{prop}{Proposition}
-\newtheorem{cor}{Corollary} \newtheorem{lemma}{Lemma}
-\theoremstyle{definition} \newtheorem{definition}{Definition}
-\theoremstyle{remark} \newtheorem{remark}{Remark}
-\newtheorem*{claim}{Claim}
+\newtheorem{theorem}{Theorem} \newtheorem{prop}[theorem]{Proposition}
+\newtheorem{cor}[theorem]{Corollary}
+\newtheorem{lemma}[theorem]{Lemma} \theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition} \theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark} \newtheorem*{claim}{Claim}
 
 \DeclareMathOperator{\id}{id}
 
@@ -534,34 +534,24 @@ coinduction.
 \end{proof}
 
 \noindent Next, one of the most important and complex theorems of the
-paper is proved. To prove this we introduce a new notion and prove a
-lemma.
+paper is proved.
 
-\begin{definition}
-  Let \(f : x \to y\) be an \(n\) cell. Then a
-  \emph{pseudo-bi-invertible} structure on \(f\) is a tuple \((\rinv
-  f, \linv f, f_R, f_L, f_R{}PBI, f_L{}PBI)\) where:
-  \begin{itemize}
-  \item \(\rinv f\), \(\linv f\), \(f_L\), and \(f_R\) are as in the
-    definition of bi-invertible.
-  \item \(f_R{}PBI\) is a collection of bi-invertible structures on
-    morphisms which compose (in any dimension) to give \(f_R\);
-  \item \(f_L{}PBI\) is the same for \(f_L\).
-  \end{itemize}
-\end{definition}
-
-\begin{lemma}\label{composition-lemma}
+\begin{theorem}\label{bi-inv-composition}
   For any \(n \in \mathbb{N}\) and cells \(f,g\) where \(f \comp_n g\)
   is well defined, given a bi-invertible structure on \(f\) and \(g\),
-  we can generate a pseudo-bi-invertible structure on \(f \comp_n g\).
-\end{lemma}
+  we can generate a bi-invertible structure on \(f \comp_n g\).
+\end{theorem}
 \begin{proof}
+  This will be proved by corecursion on the bi-invertible structure
+  that is being generated.
+
   Split into cases on \(n\):
   \begin{itemize}
-  \item \(n = 0\): Let \((\rinv f, \linv f, f_R, f_L, f_R{}BI,
-    f_L{}BI)\) and \((\rinv g, \linv g, g_R, g_L, g_R{}BI, g_L{}BI)\)
-    be bi-invertible structures for \(f\) and \(g\) respectively. We
-    define a pseudo-bi-invertible structure on \(g \comp_0 f\) where:
+  \item \(n = 0\): Let \((\rinv f, \linv f, f_R, f_L, f_R^{BI},
+    f_L^{BI})\) and \((\rinv g, \linv g, g_R, g_L, g_R^{BI},
+    g_L^{BI})\) be bi-invertible structures for \(f\) and \(g\)
+    respectively. We define a pseudo-bi-invertible structure on \(g
+    \comp_0 f\) where:
     \begin{itemize}
     \item \(\rinv {(g \comp_0 f)} = \rinv f \comp_0 \rinv g\)
     \item \(\linv {(g \comp_0 f)} = \linv f \comp_0 \linv g\)
@@ -608,24 +598,24 @@ lemma.
       \end{center}
     \end{itemize}
 
-    From the bi-invertible structures on \(f\) and \(g\) we can obtain
-    bi-invertible structures on \(f_L\), \(g_L\), \(f_R\), and
-    \(g_R\). The associators and unitors used have bi-invertible
-    structures by lemmas~\ref{inv-to-bi-inv} and~\ref{inverse-invert}.
-    All identity morphisms can be equipped with a bi-invertible
-    structure using lemmas~\ref{inv-to-bi-inv} and~\ref{identity}.
-    Hence we have obtained collections of bi-invertible structures for
-    morphisms which compose to \({(g \comp_0 f)}_R\) and \({(g \comp_0
-      f)}_L\).
+    From the bi-invertible structures on \(f\) and \(g\),
+    bi-invertible structures on \(f_L\), \(g_L\), \(f_R\), and \(g_R\)
+    can be obtained. The associators and unitors used have
+    bi-invertible structures by lemmas~\ref{inv-to-bi-inv}
+    and~\ref{inverse-invert}. All identity morphisms can be equipped
+    with a bi-invertible structure using lemmas~\ref{inv-to-bi-inv}
+    and~\ref{identity}. Then by coinductive hypothesis we can generate
+    bi-invertible structures on \({(g \star_0 f)}_R\) and \({(g
+      \star_0 f)}_L\).
   \item \(n > 0\): Suppose we have \(\alpha: f \to g\) and \(\beta: h
     \to j\) where \(f \comp_{n-1} h\) and \(g \comp_{n-1} j\) are both
     well defined. Further suppose
     \begin{itemize}
     \item \((\rinv \alpha, \linv \alpha, \alpha_R, \alpha_L,
-      \alpha_R{}BI, \alpha_L{}BI)\) is a bi-invertible structure on
+      \alpha_R^{BI}, \alpha_L^{BI})\) is a bi-invertible structure on
       \(\alpha\);
-    \item \((\rinv \beta, \linv \beta, \beta_R, \beta_L, \beta_R{}BI,
-      \beta_R{}BI)\) is a bi-invertible structure for \(\beta\).
+    \item \((\rinv \beta, \linv \beta, \beta_R, \beta_L, \beta_R^{BI},
+      \beta_R^{BI})\) is a bi-invertible structure for \(\beta\).
     \end{itemize}
     Then we can define the following pseudo-bi-invertible structure on
     \(\alpha \comp_n \beta\):
@@ -650,30 +640,10 @@ lemma.
     structures given by the higher pre-category structure (and so have
     bi-invertible structures given by \cref{inv-to-bi-inv}) and
     \(\alpha_L\), \(\alpha_R\), \(\beta_L\), and \(\beta_R\) which
-    have structures \(\alpha_L{}BI\), \(\alpha_R{}BI\),
-    \(\beta_L{}BI\), and \(\beta_R{}BI\).
+    have structures \(\alpha_L^{BI}\), \(\alpha_R^{BI}\),
+    \(\beta_L^{BI}\), and \(\beta_R^{BI}\). Therefore by coinductive
+    hypothesis
   \end{itemize}
-\end{proof}
-
-\begin{theorem}\label{bi-inv-composition}
-  For any \(n \in \mathbb{N}\) and cells \(f,g\) where \(f \comp_n g\)
-  is well defined, given a bi-invertible structure on \(f\) and \(g\),
-  we can generate a bi-invertible structure on \(f \comp_n g\).
-\end{theorem}
-\begin{proof}
-  Let \(h = f \comp_n g\). The bi-invertible structure on \(h\) will
-  be generated using corecursion. Using \cref{composition-lemma}, \(f
-  \comp_n g\) has a pseudo-bi-invertible structure:
-  \begin{equation*}
-    (\rinv h, \linv h, h_R, h_L, h_R{}PBI, h_L{}PBI)
-  \end{equation*}
-  Then a bi-invertible structure on \(h\) is given by:
-  \begin{equation*}
-    (\rinv h, \linv h, h_R, h_L, h_R{}BI, h_L{}BI)
-  \end{equation*}
-  where \(h_R{}BI\) and \(h_L{}BI\) are created by corecursively
-  applying the theorem to the components of \(h_R{}PBI\) and
-  \(h_L{}PBI\).
 \end{proof}
 
 \begin{lemma}\label{inverses}
