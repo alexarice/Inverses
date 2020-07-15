@@ -273,7 +273,7 @@ proved by corecursion.
 In this paper we want to talk about different structures on
 \(\omega\)-categories, however there are many different definitions of
 \(\omega\)-categories, a lot of which are very in depth and
-complicated \todo{add citation}. Therefore, similar in style to a
+complicated~\cite{leinster2001survey}. Therefore, similar in style to a
 paper by \textcite{Cheng2007}, we give a set of conditions that we
 expect to hold in any reasonable definition of a weak infinity
 category. We then prove results only using these conditions, and
@@ -376,15 +376,16 @@ properties that we expect an higher category to obey.
 \end{remark}
 
 Consider the standard string diagram diagrammatic calculus for
-bicategories. We can draw diagrams containing nodes, lines, and areas
-where areas represent \(0\)-cells, a line between areas representing
-cells \(x\) and \(y\) represents a \(1\)-cell between \(x\) and \(y\),
-and node between lines represent \(2\)-cells between the cells those
-lines represent. These diagrams still represent well formed morphisms
-in an globular set with identities and composition. In a bicategory
+bicategories~\cite{selinger2010survey}~\cite{heunen2019categories}. We
+can draw diagrams containing nodes, lines, and areas where areas
+represent \(0\)-cells, a line between areas representing cells \(x\)
+and \(y\) represents a \(1\)-cell between \(x\) and \(y\), and node
+between lines represent \(2\)-cells between the cells those lines
+represent. These diagrams still represent well formed morphisms in an
+globular set with identities and composition (at least in the presence
+of unitors and associators, which we introduce below). In a bicategory
 there exists the theorem that given a planar isotopy of string
-diagrams, the source and target morphisms are equal\todo{add
-  citation}\todo{add example}.
+diagrams, the source and target morphisms are equal\todo{add example}.
 
 \begin{definition}\label{def:higher-cat}
   Say that a globular set \emph{respects the graphical calculus} if
@@ -695,7 +696,7 @@ quasi-invertible. This is done by adding a coherence condition which
 effectively enforces \(f_L\) and \(f_R\) to work well together. It
 turns out that there are two such coherence conditions we can specify,
 yet each of these implies the other and so it sufficient to provide
-one of these\todo{Put a reference for this, or a proof, or both}. This
+one of these~\cite[Lemma 3.2]{nlab:adjoint_equivalence}. This
 is what gives rise to the name \emph{half}-adjoint invertible. In
 \Cref{sec:contractibility}, both coherence conditions will be useful
 so we will distinguish between them by calling one a left-adjoint
@@ -997,7 +998,7 @@ each such cell. The only oddity may be that we require these cells to
 be bi-invertible. This is simply so that \((\id_f \comp_1 \phi_R)
 \comp_0 f_R'\) has a canonical bi-invertible structure. Given this,
 the construction can be continued. Suppose we have \((\phi_R, \psi_R,
-BIC_R, \dots)\) and \((\phi_R', \psi_R', BIC_R', \dots)\). Then a cell
+ \dots)\) and \((\phi_R', \psi_R', \dots)\). Then a cell
 is:
 \begin{itemize}
 \item a bi-invertible cell \(\epsilon: \phi_R \to \phi_R'\);
@@ -1036,7 +1037,6 @@ is:
   \end{center}
   to \(\psi_R\);
 \item similar constructions for the remainder of the parts.
-  \todo{remove this?}
 \end{itemize}
 
 We conjecture that continuing in this way will generate a higher
@@ -1108,12 +1108,12 @@ contractibility, that there is a cell between each pair of
 \(0\)-cells. Whereas this layer used the adjoint coherences in its
 proof, the next layer, of which the proof is omitted as it requires 3
 dimensional reasoning that is not rigorous with the tools we have
-here, can be constructed with swallowtail equivalences
-\todo{citation}. These can be thought of as the next coherence up. It
-is expected that the layer after this could be nicely proved with the
-coherence condition after this one. We conjecture that given a
-suitable notion of higher category, it should be possible to show this
-structure is fully contractible.
+here, can be constructed with swallowtail
+equivalences~\cite{nlab:lax_2-adjunction}. These can be thought of as
+the next coherence up. It is expected that the layer after this could
+be nicely proved with the coherence condition after this one. We
+conjecture that given a suitable notion of higher category, it should
+be possible to show this structure is fully contractible.
 
 One might ask why a similar proof will not work for invertible cells.
 The reason for this is that the cells considered above are not the
@@ -1183,8 +1183,8 @@ of the formalisation was to show that coinductive elements of the
 arguments hold.
 
 The code is publicly available~\cite{rice_agda} and has been tested
-with Agda version 2.6.0.1 and standard library version
-1.2.\todo{update to 2.6.1}
+with Agda version 2.6.1 and standard library version
+1.3.
 
 \section{Conclusion}\label{sec:conclusion}
 
