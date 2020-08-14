@@ -808,48 +808,6 @@ is what gives rise to the name \emph{half}-adjoint invertible.
       \draw (L1) to (L2);
     \end{tikzpicture}
   \end{center}
-
-  Dually an \emph{left-adjoint invertible} structure on \(f\) is a
-  tuple \((f', \alpha_f, \beta_f, \gamma_f, \alpha_f^{LAI},
-  \beta_f^{LAI}, \gamma_f^{LAI})\) where:
-  \begin{itemize}
-  \item \(f'\) is an \(n\)-cell \(y \to x\).
-  \item \(\alpha_f\) is an \((n+1)\)-cell \(f' \comp_0 f \to \id_x\).
-  \item \(\beta_f\) is an \((n+1)\)-cell \(\id_y \to f \comp_0 f'\).
-  \item \(\gamma_f\) is an \((n+2)\)-cell \((\rho_{f'}^{-1} \comp_0
-    (\id_{f'} \comp_1 \beta_f) \comp_0 \inv {a_{f',f,f'}} \comp_0
-    (\alpha_f \comp_1 \id_{f'}) \comp_0 \lambda_{f'}) \to \id_{f'}\).
-  \item \(\alpha_f^{LAI}\) is a left-adjoint invertible structure on
-    \(\alpha_f\).
-  \item \(\beta_f^{LAI}\) is a left-adjoint invertible structure on
-    \(\beta_f\).
-  \item \(\gamma_f^{LAI}\) is a left-adjoint invertible structure on
-    \(\gamma_f\).
-  \end{itemize}
-
-  So that \(\gamma_f\) is:
-  \begin{center}
-    \begin{tikzpicture}
-      \node (Bottom) {\({f'}\)}; \node[on grid, above right=1cm and
-      2.25cm of Bottom, draw] (Cup){\(\beta_f\)}; \node[on grid, above
-      left=2cm and 1.5cm of Cup,draw] (Cap){\(\alpha_f\)}; \node[on
-      grid, above right=1cm and 2.25cm of Cap] (Top) {\({f'}\)}; \draw
-      (Bottom) to++(0,2) to[out=90,in=180] (Cap); \draw (Cup)
-      to[out=180,in=-90] ++(-0.75,1) to[out=90,in=0] (Cap); \draw
-      (Cup) to[out=0,in=-90] ++(0.75,1) to (Top);
-
-      \node[on grid, below right=2cm and 1cm of Top,
-      font=\fontsize{20}{24}\selectfont] (Eq) {\(\Rightarrow\)};
-      \node[above=0cm of Eq,font=\fontsize{15}{19}\selectfont] (Gamma)
-      {\(\gamma_f\)}; \node[on grid, right=2cm of Top] (L1)
-      {\({f'}\)}; \node[on grid, below=4cm of L1] (L2) {\({f'}\)};
-      \draw (L1) to (L2);
-    \end{tikzpicture}
-  \end{center}
-
-  We say that \(f\) has a \emph{half-adjoint invertible} structure to
-  mean that it has either a left-adjoint or right-adjoint invertible
-  structure.
 \end{definition}
 
 \begin{theorem}
@@ -869,7 +827,6 @@ is what gives rise to the name \emph{half}-adjoint invertible.
   quasi-invertible structure on \(f_R\) and \(\beta_f^{HAI}\) can be
   restricted to quasi-invertible structure on \(\beta_f\) which
   induces a structure on \(\inv {\beta_f}\) by \cref{inverse-invert}.
-  The case where \(f\) is left-adjoint invertible is similar.
 \end{proof}
 
 \begin{cor}
@@ -879,7 +836,7 @@ is what gives rise to the name \emph{half}-adjoint invertible.
 
 \begin{theorem}\label{bi-inv-to-hai}
   A bi-invertible structure \((\rinv f, \linv f, f_R, f_L, \dots)\) on
-  a cell \(f\) induces a right-adjoint invertible structure \((\rinv
+  a cell \(f\) induces a half-adjoint invertible structure \((\rinv
   f, f_R, \dots)\) on \(f\).
 \end{theorem}
 \begin{proof}
@@ -891,20 +848,19 @@ is what gives rise to the name \emph{half}-adjoint invertible.
   \item \(\beta_f\) is given by the following diagram:
     \begin{center}
       \begin{tikzpicture}
-        \node (Finv) {\({\rinv f}\)}; \node [on grid, right=1cm of
-        Finv] (F) {\(f\)}; \node [on grid, below left=2cm and 0.75cm
-        of Finv, draw] (FRInv) {\(\rinv {f_R}\)}; \node [on grid,
-        above left=1.5cm and 1.5cm of FRInv, draw] (FL) {\(f_L\)};
-        \node [on grid, below right=2.75cm and 1.25cm of FL, draw]
-        (FLInv) {\(\linv {f_L}\)}; \draw (Finv) to ++(0,-1.25cm)
-        to[out=-90,in=0] (FRInv); \draw (FRInv) to[out=180,in=-90]
-        ++(-0.75cm,0.75cm) to[out=90,in=0] (FL); \draw (FL)
-        to[out=180,in=90] ++(-0.75cm,-0.75cm) to[out=-90,in=180]
-        (FLInv); \draw (F) to ++(0,-1.25cm) to[out=-90,in=0] (FLInv);
+        \node (Finv) {\(f\)};
+        \node [on grid, left=20pt of Finv] (F) {\({\rinv f}\)};
+        \node [on grid, below right=40pt and 15pt of Finv, draw] (FRInv) {\(\rinv {f_R}\)};
+        \node [on grid, above right=30pt and 30pt of FRInv, draw] (FL) {\(f_L\)};
+        \node [on grid, below left=55pt and 25pt of FL, draw] (FLInv) {\(\linv {f_L}\)};
+        \draw (Finv) to ++(0,-25pt) to[out=-90,in=180] (FRInv);
+        \draw (FRInv) to[out=0,in=-90] ++(15pt,15pt) to[out=90,in=180] (FL);
+        \draw (FL) to[out=0,in=90] ++(15pt,-15pt) to[out=-90,in=0] (FLInv);
+        \draw (F) to ++(0,-30pt) to[out=-90,in=180] (FLInv);
       \end{tikzpicture}
     \end{center}
   \item \(\gamma_f\) is given by the following diagram:
-    \begin{center}\comment{possible improvements to this diagram}
+    \begin{center}
       \begin{tikzpicture}
         \node (G) {\({\rinv f}\)}; \node [on grid, below right=0.25cm
         and 1.75cm of G, draw] (FR) {\(f_R\)}; \node [on grid, below
@@ -960,7 +916,7 @@ is what gives rise to the name \emph{half}-adjoint invertible.
         \node [on grid, below=8cm of G] (G3) {\({\rinv f}\)}; \node
         [on grid, below=3.5cm of G3] (G'3) {\({\rinv f}\)}; \draw (G3)
         to (G'3);
-      \end{tikzpicture}
+      \end{tikzpicture}\todo{this diagram}
 
     \end{center}
   \item \(f_R^{HAI}\) can be generated by coinduction hypothesis on
@@ -977,15 +933,6 @@ is what gives rise to the name \emph{half}-adjoint invertible.
   \end{itemize}
   Hence, \((\rinv f, f_R, \beta_f, \gamma_f, f_R^{HAI},
   \beta_f^{HAI}, \gamma_f^{HAI})\) is in the form required.
-\end{proof}
-
-\begin{theorem}
-  A bi-invertible structure \((\rinv f, \linv f, f_R, f_L, \dots)\) on
-  a cell \(f\) induces a left-adjoint invertible structure \((\linv f,
-  f_L, \dots)\) on \(f\).
-\end{theorem}
-\begin{proof}
-  Dual to \Cref{bi-inv-to-hai}.
 \end{proof}
 
 \begin{cor}\label{cor:equiv}
@@ -1073,36 +1020,35 @@ the construction can be continued. Suppose we have \((\phi_R, \psi_R,
 \item a bi-invertible 1-morphism from:
   \begin{center}
     \begin{tikzpicture}
-      \node (Base1) {\(f\)}; \node [on grid, right=1.5cm of Base1]
-      (Base2) {\(\rinv f\)}; \node [on grid, above=1cm of Base2, draw]
-      (G1) {\(\phi_R\)}; \node [on grid, above left= 1cm and 0.75cm of
-      G1, draw] (Top1) {\(f_R'\)}; \draw (Base1) to
-      ++(0cm,1cm)[out=90,in=180] to (Top1); \draw (Base2) to (G1);
+      \node (Base1) {\(f\)};
+      \node [on grid, right=45pt of Base1] (Base2) {\(\rinv f\)};
+      \node [on grid, above=30pt of Base2, draw] (G1) {\(\phi_R\)};
+      \node [on grid, above left=30pt and 22.5pt of G1, draw] (Top1) {\(f_R'\)};
+      \draw (Base1) to ++(0,30pt)[out=90,in=180] to (Top1);
+      \draw (Base2) to (G1);
       \draw (G1) to[out=90, in=0] (Top1);
 
-      \node [on grid, right=1cm of
-      G1,font=\fontsize{20}{24}\selectfont](M1){\(\Rightarrow\)};
-      \node [on grid, above=0.5cm of M1]{\(\epsilon\)};
+      \node [on grid, right=30pt of G1,font=\fontsize{15}{24}\selectfont](M1){\(\Rightarrow\)};
+      \node [above=0pt of M1]{\(\epsilon\)};
 
-      \node [on grid, below right=1cm and 1cm of M1](Base3) {\(f\)};
-      \node [on grid, right=1.5cm of Base3] (Base4) {\(\rinv f\)};
-      \node [on grid, above=1cm of Base4, draw] (G2) {\(\phi_R'\)};
-      \node [on grid, above left= 1cm and 0.75cm of G2, draw] (Top2)
-      {\(f_R'\)}; \draw (Base3) to ++(0cm,1cm)[out=90,in=180] to
-      (Top2); \draw (Base4) to (G2); \draw (G2) to[out=90, in=0]
-      (Top2);
+      \node [on grid, below right=30pt and 30pt of M1](Base3) {\(f\)};
+      \node [on grid, right=45pt of Base3] (Base4) {\(\rinv f\)};
+      \node [on grid, above=30pt of Base4, draw] (G2) {\(\phi_R'\)};
+      \node [on grid, above left=30pt and 22.5pt of G2, draw] (Top2) {\(f_R'\)};
+      \draw (Base3) to ++(0,30pt)[out=90,in=180] to (Top2);
+      \draw (Base4) to (G2);
+      \draw (G2) to[out=90, in=0] (Top2);
 
-      \node [on grid, right=1cm of
-      G2,font=\fontsize{20}{24}\selectfont](M2){\(\Rightarrow\)};
-      \node [on grid, above=0.5cm of M2] {\(\psi_R'\)};
+      \node [on grid, right=30pt of G2,font=\fontsize{15}{24}\selectfont](M2){\(\Rightarrow\)};
+      \node [above=0pt of M2] {\(\psi_R'\)};
 
-      \node [on grid, below right=1cm and 1cm of M2](Base5) {\(f\)};
-      \node [on grid, right=1.5cm of Base5] (Base6) {\(\rinv f\)};
-      \node [on grid, above right=2cm and 0.75cm of Base5,draw] (Top3)
-      {\(f_R\)}; \draw (Base5) to ++(0cm,1cm)[out=90,in=180] to
-      (Top3); \draw (Base6) to ++(0cm,1cm)[out=90,in=0] to (Top3);
+      \node [on grid, below right=30pt and 30pt of M2](Base5) {\(f\)};
+      \node [on grid, right=45pt of Base5] (Base6) {\(\rinv f\)};
+      \node [on grid, above right=60pt and 22.5pt of Base5,draw] (Top3) {\(f_R\)};
+      \draw (Base5) to ++(0cm,30pt)[out=90,in=180] to (Top3);
+      \draw (Base6) to ++(0cm,30pt)[out=90,in=0] to (Top3);
     \end{tikzpicture}
-  \end{center}
+  \end{center}\todo{resize diagram}
   to \(\psi_R\);
 \item similar constructions for the remainder of the parts.
 \end{itemize}
@@ -1123,19 +1069,18 @@ category structure. Next is the main result of this section.
   obtained by coinductive hypothesis and the rest of the data follows
   from symmetry.
 
-  Using \Cref{bi-inv-to-hai}, we can obtain a right-adjoint invertible
-  structure \((\rinv f{}', f_R', \beta, f_R^{HAI}{}', \beta^{HAI})\).
+  Using \Cref{bi-inv-to-hai}, a half-adjoint invertible
+  structure \((\rinv f{}', f_R', \beta, \gamma, f_R^{HAI}{}', \beta^{HAI}, \gamma^{HAI})\) can be obtained.
   Then let \(\phi_R\) be the cell given by the diagram:
   \begin{center}
     \begin{tikzpicture}
-      \node (Bottom) {\(\rinv f\)}; \node [on grid, above left=1cm and
-      2.25cm of Bottom,draw](Cup){\(\beta\)}; \node [on grid, above
-      left=2.5cm and 0.75cm of Bottom, draw](Cap){\(f_R\)}; \node [on
-      grid, above left=1cm and 2.25cm of Cap](Top){\(\rinv f{}'\)};
-      \draw (Bottom) to ++(0cm,1.5cm) to[out=90,in=0] (Cap); \draw
-      (Cap) to[out=180,in=90] ++(-0.75cm,-0.75cm) to[out=-90,in=0]
-      (Cup); \draw (Cup) to[out=180,in=-90] ++(-0.75cm,0.75cm) to
-      (Top);
+      \node (Bottom) {\(\rinv f\)};
+      \node [on grid, above left=20pt and 45pt of Bottom,draw](Cup){\(\beta\)};
+      \node [on grid, above left=50pt and 15pt of Bottom, draw](Cap){\(f_R\)};
+      \node [on grid, above left=20pt and 45pt of Cap](Top){\(\rinv f{}'\)};
+      \draw (Bottom) to ++(0,30pt) to[out=90,in=0] (Cap);
+      \draw (Cap) to[out=180,in=90] ++(-15pt,-15pt) to[out=-90,in=0] (Cup);
+      \draw (Cup) to[out=180,in=-90] ++(-15pt,15pt) to (Top);
     \end{tikzpicture}
   \end{center}
   There is a clear bi-invertible structure on this morphism as it a
@@ -1143,32 +1088,31 @@ category structure. Next is the main result of this section.
   \(\psi_R\) be:
   \begin{center}
     \begin{tikzpicture}
-      \node (Bottom) {\(\rinv f\)}; \node [on grid, above left=1cm and
-      2.25cm of Bottom,draw](Cup){\(\beta\)}; \node [on grid, above
-      right=1.5cm and 1.5cm of Cup, draw](Cap){\(f_R\)}; \node [on
-      grid, above left=1.5cm and 1.5cm of Cup,draw](Top){\(f_R'\)};
-      \node [on grid, left=4.5cm of Bottom] (End) {\(f\)}; \draw
-      (Bottom) to ++(0cm,1.5cm) to[out=90,in=0] (Cap); \draw (Cap)
-      to[out=180,in=90] ++(-0.75cm,-0.75cm) to[out=-90,in=0] (Cup);
-      \draw (Cup) to[out=180,in=-90] ++(-0.75cm,0.75cm)
-      to[out=90,in=0] (Top); \draw (Top) to[out=180,in=90]
-      ++(-0.75cm,-0.75cm) to (End);
+      \node (Bottom) {\(\rinv f\)};
+      \node [on grid, above left=20pt and 45pt of Bottom,draw](Cup){\(\beta\)};
+      \node [on grid, above right=30pt and 30pt of Cup, draw](Cap){\(f_R\)};
+      \node [on grid, above left=30pt and 30pt of Cup,draw](Top){\(f_R'\)};
+      \node [on grid, left=90pt of Bottom] (End) {\(f\)};
+      \draw (Bottom) to ++(0,30pt) to[out=90,in=0] (Cap);
+      \draw (Cap) to[out=180,in=90] ++(-15pt,-15pt) to[out=-90,in=0] (Cup);
+      \draw (Cup) to[out=180,in=-90] ++(-15pt,15pt) to[out=90,in=0] (Top);
+      \draw (Top) to[out=180,in=90] ++(-15pt,-15pt) to (End);
 
-      \node [on grid, above right=1cm and 1cm of
-      Bottom,font=\fontsize{20}{24}\selectfont] (M1)
+      \node [on grid, above right=20pt and 20pt of
+      Bottom,font=\fontsize{15}{24}\selectfont] (M1)
       {\(\Rightarrow\)};
+      \node [above=0pt of M1] {\(\gamma_f\)};
 
-      \node [on grid, below right=1cm and 1cm of M1](Base5) {\(f\)};
-      \node [on grid, right=1.5cm of Base5] (Base6) {\(\rinv f\)};
-      \node [on grid, above right=2cm and 0.75cm of Base5,draw] (Top3)
-      {\(f_R\)}; \draw (Base5) to ++(0cm,1cm)[out=90,in=180] to
-      (Top3); \draw (Base6) to ++(0cm,1cm)[out=90,in=0] to (Top3);
+      \node [on grid, below right=20pt and 20pt of M1](Base5) {\(f\)};
+      \node [on grid, right=30pt of Base5] (Base6) {\(\rinv f\)};
+      \node [on grid, above right=40pt and 15pt of Base5,draw] (Top3)
+      {\(f_R\)}; \draw (Base5) to ++(0,20pt)[out=90,in=180] to
+      (Top3); \draw (Base6) to ++(0cm,20pt)[out=90,in=0] to (Top3);
     \end{tikzpicture}
   \end{center}
 
-  Which is the morphism from the proof that a right-adjoint invertible
-  cell is also left-adjoint invertible.\todo{Add proof of
-    this}\todo{why is it invertible}
+  Which is bi-invertible by composition of bi-invertible structures
+  \(\gamma_f\) and the bi-invertible structure on identities.
 \end{proof}
 
 This theorem effectively proves the first ``layer'' of
@@ -1203,7 +1147,7 @@ have, and so a proof is not attempted.
 Another contractibility question that can be asked is the following:
 Let \(\mathcal{C}\) be the infinity category freely generated by two
 \(0\)-cells, a single \(1\)-cell between them and an invertibility
-structure on this morphism. Is \(\mathcal{C}\) contractible.
+structure on this morphism. Is \(\mathcal{C}\) contractible?
 
 We know that this is certainly not true for quasi-invertible
 structures. Suppose we start with \(0\)-cells \(x\) and \(y\) and a
