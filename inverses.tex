@@ -861,62 +861,52 @@ is what gives rise to the name \emph{half}-adjoint invertible.
     \end{center}
   \item \(\gamma_f\) is given by the following diagram:
     \begin{center}
-      \begin{tikzpicture}
-        \node (G) {\({\rinv f}\)}; \node [on grid, below right=0.25cm
-        and 1.75cm of G, draw] (FR) {\(f_R\)}; \node [on grid, below
-        right=5cm and 0.75cm of FR] (G') {\({\rinv f}\)}; \node [on
-        grid, below left=3cm and 0.75cm of G, draw] (FRInv) {\(\rinv
-          {(f_R)}\)}; \node [on grid, above left=1.5cm and 1.5cm of
-        FRInv, draw] (FL) {\(f_L\)}; \node [on grid, below
-        right=2.75cm and 1.25cm of FL, draw] (FLInv) {\(\linv
-          {(f_L)}\)}; \draw (G) to ++(0,-2.25cm) to[out=-90,in=0]
-        (FRInv); \draw (FRInv) to[out=180,in=-90] ++(-0.75cm,0.75cm)
-        to[out=90,in=0] (FL); \draw (FL) to[out=180,in=90]
-        ++(-0.75cm,-0.75cm) to[out=-90,in=180] (FLInv); \draw (FR)
-        to[out=180,in=90] ++(-0.75cm,-0.75cm) to ++(0,-1.25cm)
-        to[out=-90,in=0] (FLInv); \draw (FR) to[out=0,in=90]
-        ++(0.75cm,-0.75cm) to (G');
+      \begin{tikzpicture}[rounded corners=5pt]
+        \node (G) {\(f\)};
+        \node [on grid, below left=30pt and 35pt of G, draw] (FR) {\(f_R\)};
+        \node [on grid, below left=80pt and 15pt of FR] (G') {\(f\)};
+        \node [on grid, below right=60pt and 20pt of G, draw] (FRInv) {\(\rinv {(f_R)}\)};
+        \node [on grid, above right=30pt and 35pt of FRInv, draw] (FL) {\(f_L\)};
+        \node [on grid, below left=55pt and 30pt of FL, draw] (FLInv) {\(\linv {(f_L)}\)};
+        \draw (G) to ++(0,-60pt) to (FRInv);
+        \draw (FRInv) to ++(20pt,0pt) to ++(0pt,30pt) to (FL);
+        \draw (FL) to ++(15pt,0) to[rounded corners=20pt] ++(0pt,-55pt) to (FLInv);
+        \draw (FR) to ++(15pt,0pt) to[rounded corners=20pt] ++(0,-55pt) to (FLInv);
+        \draw (FR) to ++(-15pt,0pt) to (G');
 
-        \node [on grid, below right=2.75cm and 3.75cm of
-        G,font=\fontsize{20}{24}\selectfont] (A1) {\(\Rightarrow\)};
-        \node [on grid, above=0.5cm of A1] (A1Text) {isotopy};
+        \node [on grid, below right=50pt and 90pt of G,font=\fontsize{15}{24}\selectfont] (A1) {\(\Rightarrow\)};
+        \node [above=0pt of A1] (A1Text) {isotopy};
 
-        \node [on grid, right=8cm of G] (G1) {\({\rinv f}\)}; \node
-        [on grid, below left=2cm and 0.75cm of G1, draw] (FRInv1)
-        {\(\rinv {(f_R)}\)}; \node [on grid, below=1cm of FRInv1,
-        draw] (FR1) {\(f_R\)}; \node [on grid, above left=1.5cm and
-        1.5cm of FRInv1, draw] (FL1) {\(f_L\)}; \node [on grid, below
-        left=1.5cm and 1.5cm of FR1, draw] (FLInv1) {\(\linv
-          {(f_L)}\)}; \node [on grid, below right=2cm and 0.75cm of
-        FR1] (G'1) {\({\rinv f}\)}; \draw (G1) to ++(0,-1.25cm)
-        to[out=-90,in=0] (FRInv1); \draw (FRInv1) to[out=180,in=-90]
-        ++(-0.75cm,0.75cm) to[out=90,in=0] (FL1); \draw (FL1)
-        to[out=180,in=90] ++(-0.75cm,-0.75cm) to ++(0,-2.5cm)
-        to[out=-90,in=180] (FLInv1); \draw (FR1) to[out=180,in=90]
-        ++(-0.75cm,-0.75cm) to[out=-90,in=0] (FLInv1); \draw (FR1)
-        to[out=0,in=90] ++(0.75cm,-0.75cm) to (G'1);
+        \node [on grid, right=110pt of G] (G1) {\(f\)};
+        \node [on grid, below right=40pt and 20pt of G1, draw] (FRInv1) {\(\rinv {(f_R)}\)};
+        \node [on grid, below=20pt of FRInv1, draw] (FR1) {\(f_R\)};
+        \node [on grid, above right=30pt and 40pt of FRInv1, draw] (FL1) {\(f_L\)};
+        \node [on grid, below right=30pt and 40pt of FR1, draw] (FLInv1) {\(\linv {(f_L)}\)};
+        \node [on grid, below left=40pt and 20pt of FR1] (G'1) {\(f\)};
+        \draw (G1) to ++(0,-40pt) to (FRInv1);
+        \draw (FRInv1) to ++(20pt,0pt) to ++(0pt,30pt) to (FL1);
+        \draw (FL1) to ++(20pt,0pt) to ++(0,-80pt) to (FLInv1);
+        \draw (FR1) to ++(20pt,0pt) to ++(0,-30pt) to (FLInv1);
+        \draw (FR1) to ++(-20pt,0pt) to (G'1);
 
-        \node [on grid, rotate=-90, below left=1.5cm and 1.5cm of
-        G'1,font=\fontsize{20}{24}\selectfont] (A2) {\(\Rightarrow\)};
-        \node [on grid, left=1cm of A2] (A2Text) {\((f_R)_R\)};
+        \node [on grid, below right=50pt and 100pt of G1,font=\fontsize{15}{24}\selectfont] (A2) {\(\Rightarrow\)};
+        \node [above=0pt of A2] (A2Text) {\((f_R)_R\)};
 
-        \node [on grid, below=8cm of G1] (G2) {\({\rinv f}\)}; \node
-        [on grid, below=3.5cm of G2] (G'2) {\({\rinv f}\)}; \node [on
-        grid, below left=1cm and 2.25cm of G2, draw] (FL2) {\(f_L\)};
-        \node [on grid, below=1.5cm of FL2, draw] (FLInv2) {\(\linv
-          {(f_L)}\)}; \draw (G2) to (G'2); \draw (FL2) to[out=0,in=90]
-        ++(0.75cm,-0.75cm) to[out=-90,in=0] (FLInv2); \draw (FL2)
-        to[out=180,in=90] ++(-0.75cm,-0.75cm) to[out=-90,in=180]
-        (FLInv2);
+        \node [on grid, right=120pt of G1] (G2) {\(f\)};
+        \node [on grid, below=100pt of G2] (G'2) {\(f\)};
+        \node [on grid, below right=35pt and 35pt of G2, draw] (FL2) {\(f_L\)};
+        \node [on grid, below=30pt of FL2, draw] (FLInv2) {\(\linv {(f_L)}\)};
+        \draw (G2) to (G'2);
+        \draw (FL2) to ++(20pt,0) to ++(0pt,-30pt) to (FLInv2);
+        \draw (FL2) to ++(-20pt,0) to ++(0pt,-30pt) to (FLInv2);
 
-        \node [on grid, below left=0.75cm and 2.5cm of
-        FL2,font=\fontsize{20}{24}\selectfont] (A3) {\(\Leftarrow\)};
-        \node [on grid, above=0.5cm of A3] (A3Text) {\((f_L)_L\)};
+        \node [on grid, below right=50pt and 80pt of G2,font=\fontsize{15}{24}\selectfont] (A3) {\(\Rightarrow\)};
+        \node [above=0pt of A3] (A3Text) {\((f_L)_L\)};
 
-        \node [on grid, below=8cm of G] (G3) {\({\rinv f}\)}; \node
-        [on grid, below=3.5cm of G3] (G'3) {\({\rinv f}\)}; \draw (G3)
-        to (G'3);
-      \end{tikzpicture}\todo{this diagram}
+        \node [on grid, right=100pt of G2] (G3) {\(f\)};
+        \node [on grid, below=100pt of G3] (G'3) {\(f\)};
+        \draw (G3) to (G'3);
+      \end{tikzpicture}
 
     \end{center}
   \item \(f_R^{HAI}\) can be generated by coinduction hypothesis on
@@ -1021,34 +1011,34 @@ the construction can be continued. Suppose we have \((\phi_R, \psi_R,
   \begin{center}
     \begin{tikzpicture}
       \node (Base1) {\(f\)};
-      \node [on grid, right=45pt of Base1] (Base2) {\(\rinv f\)};
-      \node [on grid, above=30pt of Base2, draw] (G1) {\(\phi_R\)};
-      \node [on grid, above left=30pt and 22.5pt of G1, draw] (Top1) {\(f_R'\)};
-      \draw (Base1) to ++(0,30pt)[out=90,in=180] to (Top1);
+      \node [on grid, right=30pt of Base1] (Base2) {\(\rinv f\)};
+      \node [on grid, above=20pt of Base2, draw] (G1) {\(\phi_R\)};
+      \node [on grid, above left=20pt and 15pt of G1, draw] (Top1) {\(f_R'\)};
+      \draw (Base1) to ++(0,20pt)[out=90,in=180] to (Top1);
       \draw (Base2) to (G1);
       \draw (G1) to[out=90, in=0] (Top1);
 
-      \node [on grid, right=30pt of G1,font=\fontsize{15}{24}\selectfont](M1){\(\Rightarrow\)};
+      \node [on grid, right=25pt of G1,font=\fontsize{15}{24}\selectfont](M1){\(\Rightarrow\)};
       \node [above=0pt of M1]{\(\epsilon\)};
 
-      \node [on grid, below right=30pt and 30pt of M1](Base3) {\(f\)};
-      \node [on grid, right=45pt of Base3] (Base4) {\(\rinv f\)};
-      \node [on grid, above=30pt of Base4, draw] (G2) {\(\phi_R'\)};
-      \node [on grid, above left=30pt and 22.5pt of G2, draw] (Top2) {\(f_R'\)};
-      \draw (Base3) to ++(0,30pt)[out=90,in=180] to (Top2);
+      \node [on grid, below right=20pt and 25pt of M1](Base3) {\(f\)};
+      \node [on grid, right=30pt of Base3] (Base4) {\(\rinv f\)};
+      \node [on grid, above=20pt of Base4, draw] (G2) {\(\phi_R'\)};
+      \node [on grid, above left=20pt and 15pt of G2, draw] (Top2) {\(f_R'\)};
+      \draw (Base3) to ++(0,20pt)[out=90,in=180] to (Top2);
       \draw (Base4) to (G2);
       \draw (G2) to[out=90, in=0] (Top2);
 
-      \node [on grid, right=30pt of G2,font=\fontsize{15}{24}\selectfont](M2){\(\Rightarrow\)};
+      \node [on grid, right=25pt of G2,font=\fontsize{15}{24}\selectfont](M2){\(\Rightarrow\)};
       \node [above=0pt of M2] {\(\psi_R'\)};
 
-      \node [on grid, below right=30pt and 30pt of M2](Base5) {\(f\)};
-      \node [on grid, right=45pt of Base5] (Base6) {\(\rinv f\)};
-      \node [on grid, above right=60pt and 22.5pt of Base5,draw] (Top3) {\(f_R\)};
-      \draw (Base5) to ++(0cm,30pt)[out=90,in=180] to (Top3);
-      \draw (Base6) to ++(0cm,30pt)[out=90,in=0] to (Top3);
+      \node [on grid, below right=20pt and 25pt of M2](Base5) {\(f\)};
+      \node [on grid, right=30pt of Base5] (Base6) {\(\rinv f\)};
+      \node [on grid, above right=40pt and 15pt of Base5,draw] (Top3) {\(f_R\)};
+      \draw (Base5) to ++(0cm,20pt)[out=90,in=180] to (Top3);
+      \draw (Base6) to ++(0cm,20pt)[out=90,in=0] to (Top3);
     \end{tikzpicture}
-  \end{center}\todo{resize diagram}
+  \end{center}
   to \(\psi_R\);
 \item similar constructions for the remainder of the parts.
 \end{itemize}
