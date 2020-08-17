@@ -743,11 +743,11 @@ paper is proved.
         \node (Finv) {\(\rinv f\)};
         \node [on grid, right=20pt of Finv] (F) {\(f\)};
         \node [on grid, above left=40pt and 15pt of Finv, draw] (FR) {\(f_R\)};
-        \node [on grid, below left=30pt and 30pt of FR, draw] (FLInv) {\(\rinv {f_L}\)};
+        \node [on grid, below left=30pt and 35pt of FR, draw] (FLInv) {\(\rinv {(f_L)}\)};
         \node [on grid, above right=55pt and 25pt of FLInv, draw] (FL) {\(f_L\)};
-        \draw (Finv) to ++(0,25pt) to[out=90,in=0] (FR);
-        \draw (FR) to[out=180,in=90] ++(-15pt,-15pt) to[out=-90,in=0] (FLInv);
-        \draw (FLInv) to[out=180,in=-90] ++(-15pt,15pt) to ++(0pt,5pt) to[out=90,in=180] (FL);
+        \draw (Finv) to ++(0,25pt) to[out=90,in=0,looseness=0.8] (FR);
+        \draw (FR) to[out=180,in=90,looseness=0.8] ++(-15pt,-15pt) to[out=-90,in=0,looseness=0.8] (FLInv);
+        \draw (FLInv) to[out=180,in=-90,looseness=0.8] ++(-20pt,15pt) to ++(0pt,5pt) to[out=90,in=180] (FL);
         \draw (F) to ++(0,30pt) to[out=90,in=0] (FL);
       \end{tikzpicture}
     \end{center}
@@ -782,9 +782,8 @@ is what gives rise to the name \emph{half}-adjoint invertible.
   \item \(f'\) is an \(n\)-cell \(y \to x\);
   \item \(\alpha_f\) is an \((n+1)\)-cell \(f \comp_0 f' \to \id_y\);
   \item \(\beta_f\) is an \((n+1)\)-cell \(\id_x \to f' \comp_0 f\);
-  \item \(\gamma_f\) is an \((n+2)\)-cell \((\lambda_{f'}^{-1} \comp_0
-    (\beta_f \comp_1 \id_{f'}) \comp_0 a_{f',f,f'} \comp_0 (\id_{f'}
-    \comp_1 \alpha_f) \comp_0 \rho_{f'}) \to \id_{f'}\);
+  \item \(\gamma_f\) is an \((n+2)\)-cell \((\lambda_{f}^{-1} \comp_0
+    (\id_f \comp_1 \beta_f) \comp_0 a_{f,f',f} \comp_0 (\alpha_f \comp_1 \id_f) \comp_0 \rho_{f}) \to \id_{f}\);
   \item \(\alpha_f^{HAI}\) is a half-adjoint invertible structure on
     \(\alpha_f\);
   \item \(\beta_f^{HAI}\) is a half-adjoint invertible structure on
