@@ -33,6 +33,12 @@ uniquename=init ]{biblatex}
 \newcommand{\linv}[1]{{}^\star\!#1} \newcommand{\rinv}[1]{#1^\star}
 \newcommand{\inv}[1]{#1^{-1}} \newcommand{\comp}{\star}
 
+\tikzset{
+  every node/.style={
+    rounded corners=5pt,
+    fill=white
+  }
+}
 
 \begin{document}
 \maketitle
@@ -632,17 +638,17 @@ paper is proved.
       This may be easier to understand from its string diagram, which
       is given below:
       \begin{center}
-        \begin{tikzpicture}
-          \node[draw] (GR) {\(g_R\)}; \node[on grid, below=20pt of GR,
-          draw] (FR) {\(f_R\)}; \node[on grid, below left=30pt and
-          45pt of FR] (Base1) {\(g\)}; \node[on grid, right=15pt
-          of Base1] (Base2) {\(f\)}; \node[on grid, right=60pt of
-          Base2] (Base3) {\(\rinv f\)}; \node[on grid, right=15pt of
-          Base3] (Base4) {\(\rinv g\)}; \draw (Base1) to ++(0,20pt) to
-          [out=90,in=180] (GR); \draw (Base4) to ++(0,20pt) to
-          [out=90,in=0] (GR); \draw (Base2) to ++(0,15pt) to
-          [out=90,in=180] (FR); \draw (Base3) to ++(0,15pt) to
-          [out=90,in=0] (FR);
+        \begin{tikzpicture}[every node/.style={rounded corners=5pt}]
+          \node[draw] (GR) {\(g_R\)};
+          \node[on grid, below=20pt of GR, draw] (FR) {\(f_R\)};
+          \node[on grid, below left=30pt and 45pt of FR] (Base1) {\(g\)};
+          \node[on grid, right=15pt of Base1] (Base2) {\(f\)};
+          \node[on grid, right=60pt of Base2] (Base3) {\(\rinv f\)};
+          \node[on grid, right=15pt of Base3] (Base4) {\(\rinv g\)};
+          \draw (Base1) to ++(0,20pt) to [out=90,in=180] (GR);
+          \draw (Base4) to ++(0,20pt) to [out=90,in=0] (GR);
+          \draw (Base2) to ++(0,15pt) to [out=90,in=180] (FR);
+          \draw (Base3) to ++(0,15pt) to [out=90,in=0] (FR);
         \end{tikzpicture}
       \end{center}
     \item \({(g \comp_0 f)}_L : \linv g \comp_0 \linv f \comp_0 f
@@ -741,7 +747,7 @@ paper is proved.
         \node [on grid, above right=55pt and 25pt of FLInv, draw] (FL) {\(f_L\)};
         \draw (Finv) to ++(0,25pt) to[out=90,in=0] (FR);
         \draw (FR) to[out=180,in=90] ++(-15pt,-15pt) to[out=-90,in=0] (FLInv);
-        \draw (FLInv) to[out=180,in=-90] ++(-15pt,15pt) to[out=90,in=180] (FL);
+        \draw (FLInv) to[out=180,in=-90] ++(-15pt,15pt) to ++(0pt,5pt) to[out=90,in=180] (FL);
         \draw (F) to ++(0,30pt) to[out=90,in=0] (FL);
       \end{tikzpicture}
     \end{center}
@@ -793,18 +799,18 @@ is what gives rise to the name \emph{half}-adjoint invertible.
     \begin{tikzpicture}
       \node (Bottom) {\(f\)};
       \node[on grid, above right=20pt and 45pt of Bottom, draw] (Cup){\(\beta_f\)};
-      \node[on grid, above left=40pt and 30pt of Cup,draw] (Cap){\(\alpha_f\)};
+      \node[on grid, above left=30pt and 30pt of Cup,draw] (Cap){\(\alpha_f\)};
       \node[on grid, above right=20pt and 45pt of Cap] (Top) {\(f\)};
-      \draw (Bottom) to++(0,40pt) to[out=90,in=180] (Cap);
-      \draw (Cup) to[out=180,in=-90] ++(-15pt,20pt) to[out=90,in=0] (Cap);
-      \draw (Cup) to[out=0,in=-90] ++(15pt,20pt) to (Top);
+      \draw (Bottom) to++(0,35pt) to[out=90,in=180,looseness=0.8] (Cap);
+      \draw (Cup) to[out=180,in=-90,looseness=0.8] ++(-15pt,15pt) to[out=90,in=0,looseness=0.8] (Cap);
+      \draw (Cup) to[out=0,in=-90,looseness=0.8] ++(15pt,15pt) to (Top);
 
       \node[on grid, below right=40pt and 20pt of Top,
       font=\fontsize{15}{24}\selectfont] (Eq) {\(\Rightarrow\)};
       \node[above=0cm of Eq] (Gamma)
       {\(\gamma_f\)};
       \node[on grid, right=40pt of Top] (L1)
-      {\(f\)}; \node[on grid, below=80pt of L1] (L2) {\(f\)};
+      {\(f\)}; \node[on grid, below=70pt of L1] (L2) {\(f\)};
       \draw (L1) to (L2);
     \end{tikzpicture}
   \end{center}
@@ -850,29 +856,29 @@ is what gives rise to the name \emph{half}-adjoint invertible.
       \begin{tikzpicture}
         \node (Finv) {\(f\)};
         \node [on grid, left=20pt of Finv] (F) {\({\rinv f}\)};
-        \node [on grid, below right=40pt and 15pt of Finv, draw] (FRInv) {\(\rinv {f_R}\)};
-        \node [on grid, above right=30pt and 30pt of FRInv, draw] (FL) {\(f_L\)};
-        \node [on grid, below left=55pt and 25pt of FL, draw] (FLInv) {\(\linv {f_L}\)};
-        \draw (Finv) to ++(0,-25pt) to[out=-90,in=180] (FRInv);
-        \draw (FRInv) to[out=0,in=-90] ++(15pt,15pt) to[out=90,in=180] (FL);
-        \draw (FL) to[out=0,in=90] ++(15pt,-15pt) to[out=-90,in=0] (FLInv);
+        \node [on grid, below right=40pt and 20pt of Finv, draw] (FRInv) {\(\rinv {(f_R)}\)};
+        \node [on grid, above right=30pt and 35pt of FRInv, draw] (FL) {\(f_L\)};
+        \node [on grid, below left=55pt and 30pt of FL, draw] (FLInv) {\(\linv {(f_L)}\)};
+        \draw (Finv) to ++(0,-25pt) to[out=-90,in=180,looseness=0.9] (FRInv);
+        \draw (FRInv) to[out=0,in=-90,looseness=0.6] ++(20pt,15pt) to ++(0,5pt) to[out=90,in=180] (FL);
+        \draw (FL) to[out=0,in=90] ++(15pt,-15pt) to ++(0pt,-5pt) to[out=-90,in=0] (FLInv);
         \draw (F) to ++(0,-30pt) to[out=-90,in=180] (FLInv);
       \end{tikzpicture}
     \end{center}
   \item \(\gamma_f\) is given by the following diagram:
     \begin{center}
-      \begin{tikzpicture}[rounded corners=5pt]
+      \begin{tikzpicture}
         \node (G) {\(f\)};
         \node [on grid, below left=30pt and 35pt of G, draw] (FR) {\(f_R\)};
         \node [on grid, below left=80pt and 15pt of FR] (G') {\(f\)};
         \node [on grid, below right=60pt and 20pt of G, draw] (FRInv) {\(\rinv {(f_R)}\)};
         \node [on grid, above right=30pt and 35pt of FRInv, draw] (FL) {\(f_L\)};
         \node [on grid, below left=55pt and 30pt of FL, draw] (FLInv) {\(\linv {(f_L)}\)};
-        \draw (G) to ++(0,-60pt) to (FRInv);
-        \draw (FRInv) to ++(20pt,0pt) to ++(0pt,30pt) to (FL);
-        \draw (FL) to ++(15pt,0) to[rounded corners=20pt] ++(0pt,-55pt) to (FLInv);
-        \draw (FR) to ++(15pt,0pt) to[rounded corners=20pt] ++(0,-55pt) to (FLInv);
-        \draw (FR) to ++(-15pt,0pt) to (G');
+        \draw (G) to ++(0,-45pt) to[out=-90,in=180,looseness=0.8] (FRInv);
+        \draw (FRInv) to[out=0,in=-90,looseness=0.8] ++(20pt,15pt) to[out=90,in=180,looseness=0.9] (FL);
+        \draw (FL) to[out=0,in=90,looseness=0.9] ++(15pt,-15pt) to[out=-90,in=0] (FLInv);
+        \draw (FR) to[out=0,in=90,looseness=0.9] ++(15pt,-15pt) to[out=-90,in=180] (FLInv);
+        \draw (FR) to[out=180,in=90,looseness=0.9] ++(-15pt,-15pt) to (G');
 
         \node [on grid, below right=50pt and 90pt of G,font=\fontsize{15}{24}\selectfont] (A1) {\(\Rightarrow\)};
         \node [above=0pt of A1] (A1Text) {isotopy};
@@ -883,11 +889,11 @@ is what gives rise to the name \emph{half}-adjoint invertible.
         \node [on grid, above right=30pt and 40pt of FRInv1, draw] (FL1) {\(f_L\)};
         \node [on grid, below right=30pt and 40pt of FR1, draw] (FLInv1) {\(\linv {(f_L)}\)};
         \node [on grid, below left=40pt and 20pt of FR1] (G'1) {\(f\)};
-        \draw (G1) to ++(0,-40pt) to (FRInv1);
-        \draw (FRInv1) to ++(20pt,0pt) to ++(0pt,30pt) to (FL1);
-        \draw (FL1) to ++(20pt,0pt) to ++(0,-80pt) to (FLInv1);
-        \draw (FR1) to ++(20pt,0pt) to ++(0,-30pt) to (FLInv1);
-        \draw (FR1) to ++(-20pt,0pt) to (G'1);
+        \draw (G1) to ++(0,-25pt) to[out=-90,in=180,looseness=0.8] (FRInv1);
+        \draw (FRInv1) to[out=0,in=-90,looseness=0.8] ++(20pt,15pt) to[out=90,in=180] (FL1);
+        \draw (FL1) to[out=0,in=90] ++(20pt,-15pt) to ++(0,-50pt) to[out=-90,in=0,looseness=0.8] (FLInv1);
+        \draw (FR1) to[out=0,in=90] ++(20pt,-15pt) to[out=-90,in=180,looseness=0.8] (FLInv1);
+        \draw (FR1) to[out=180,in=90] ++(-20pt,-15pt) to (G'1);
 
         \node [on grid, below right=50pt and 100pt of G1,font=\fontsize{15}{24}\selectfont] (A2) {\(\Rightarrow\)};
         \node [above=0pt of A2] (A2Text) {\((f_R)_R\)};
@@ -897,8 +903,8 @@ is what gives rise to the name \emph{half}-adjoint invertible.
         \node [on grid, below right=35pt and 35pt of G2, draw] (FL2) {\(f_L\)};
         \node [on grid, below=30pt of FL2, draw] (FLInv2) {\(\linv {(f_L)}\)};
         \draw (G2) to (G'2);
-        \draw (FL2) to ++(20pt,0) to ++(0pt,-30pt) to (FLInv2);
-        \draw (FL2) to ++(-20pt,0) to ++(0pt,-30pt) to (FLInv2);
+        \draw (FL2) to[out=0,in=90] ++(20pt,-15pt) to[out=-90,in=0,looseness=0.8] (FLInv2);
+        \draw (FL2) to[out=180,in=90] ++(-20pt,-15pt) to[out=-90,in=180,looseness=0.8] (FLInv2);
 
         \node [on grid, below right=50pt and 80pt of G2,font=\fontsize{15}{24}\selectfont] (A3) {\(\Rightarrow\)};
         \node [above=0pt of A3] (A3Text) {\((f_L)_L\)};
@@ -1014,9 +1020,9 @@ the construction can be continued. Suppose we have \((\phi_R, \psi_R,
       \node [on grid, right=30pt of Base1] (Base2) {\(\rinv f\)};
       \node [on grid, above=20pt of Base2, draw] (G1) {\(\phi_R\)};
       \node [on grid, above left=20pt and 15pt of G1, draw] (Top1) {\(f_R'\)};
-      \draw (Base1) to ++(0,20pt)[out=90,in=180] to (Top1);
+      \draw (Base1) to ++(0,20pt)[out=90,in=180,looseness=0.8] to (Top1);
       \draw (Base2) to (G1);
-      \draw (G1) to[out=90, in=0] (Top1);
+      \draw (G1) to[out=90, in=0,looseness=0.9] (Top1);
 
       \node [on grid, right=25pt of G1,font=\fontsize{15}{24}\selectfont](M1){\(\Rightarrow\)};
       \node [above=0pt of M1]{\(\epsilon\)};
@@ -1025,9 +1031,9 @@ the construction can be continued. Suppose we have \((\phi_R, \psi_R,
       \node [on grid, right=30pt of Base3] (Base4) {\(\rinv f\)};
       \node [on grid, above=20pt of Base4, draw] (G2) {\(\phi_R'\)};
       \node [on grid, above left=20pt and 15pt of G2, draw] (Top2) {\(f_R'\)};
-      \draw (Base3) to ++(0,20pt)[out=90,in=180] to (Top2);
+      \draw (Base3) to ++(0,20pt)[out=90,in=180,looseness=0.8] to (Top2);
       \draw (Base4) to (G2);
-      \draw (G2) to[out=90, in=0] (Top2);
+      \draw (G2) to[out=90, in=0,looseness=0.9] (Top2);
 
       \node [on grid, right=25pt of G2,font=\fontsize{15}{24}\selectfont](M2){\(\Rightarrow\)};
       \node [above=0pt of M2] {\(\psi_R'\)};
@@ -1035,8 +1041,8 @@ the construction can be continued. Suppose we have \((\phi_R, \psi_R,
       \node [on grid, below right=20pt and 25pt of M2](Base5) {\(f\)};
       \node [on grid, right=30pt of Base5] (Base6) {\(\rinv f\)};
       \node [on grid, above right=40pt and 15pt of Base5,draw] (Top3) {\(f_R\)};
-      \draw (Base5) to ++(0cm,20pt)[out=90,in=180] to (Top3);
-      \draw (Base6) to ++(0cm,20pt)[out=90,in=0] to (Top3);
+      \draw (Base5) to ++(0cm,20pt)[out=90,in=180,looseness=0.8] to (Top3);
+      \draw (Base6) to ++(0cm,20pt)[out=90,in=0,looseness=0.8] to (Top3);
     \end{tikzpicture}
   \end{center}
   to \(\psi_R\);
@@ -1066,11 +1072,11 @@ category structure. Next is the main result of this section.
     \begin{tikzpicture}
       \node (Bottom) {\(\rinv f\)};
       \node [on grid, above left=20pt and 45pt of Bottom,draw](Cup){\(\beta\)};
-      \node [on grid, above left=50pt and 15pt of Bottom, draw](Cap){\(f_R\)};
+      \node [on grid, above right=30pt and 30pt of Cup, draw](Cap){\(f_R\)};
       \node [on grid, above left=20pt and 45pt of Cap](Top){\(\rinv f{}'\)};
-      \draw (Bottom) to ++(0,30pt) to[out=90,in=0] (Cap);
-      \draw (Cap) to[out=180,in=90] ++(-15pt,-15pt) to[out=-90,in=0] (Cup);
-      \draw (Cup) to[out=180,in=-90] ++(-15pt,15pt) to (Top);
+      \draw (Bottom) to ++(0,30pt) to[out=90,in=0,looseness=0.8] (Cap);
+      \draw (Cap) to[out=180,in=90,looseness=0.8] ++(-15pt,-15pt) to[out=-90,in=0,looseness=0.9] (Cup);
+      \draw (Cup) to[out=180,in=-90,looseness=0.9] ++(-15pt,15pt) to (Top);
     \end{tikzpicture}
   \end{center}
   There is a clear bi-invertible structure on this morphism as it a
@@ -1083,21 +1089,21 @@ category structure. Next is the main result of this section.
       \node [on grid, above right=30pt and 30pt of Cup, draw](Cap){\(f_R\)};
       \node [on grid, above left=30pt and 30pt of Cup,draw](Top){\(f_R'\)};
       \node [on grid, left=90pt of Bottom] (End) {\(f\)};
-      \draw (Bottom) to ++(0,30pt) to[out=90,in=0] (Cap);
-      \draw (Cap) to[out=180,in=90] ++(-15pt,-15pt) to[out=-90,in=0] (Cup);
-      \draw (Cup) to[out=180,in=-90] ++(-15pt,15pt) to[out=90,in=0] (Top);
-      \draw (Top) to[out=180,in=90] ++(-15pt,-15pt) to (End);
+      \draw (Bottom) to ++(0,35pt) to[out=90,in=0,looseness=0.8] (Cap);
+      \draw (Cap) to[out=180,in=90,looseness=0.8] ++(-15pt,-15pt) to[out=-90,in=0,looseness=0.9] (Cup);
+      \draw (Cup) to[out=180,in=-90,looseness=0.9] ++(-15pt,15pt) to[out=90,in=0,looseness=0.8] (Top);
+      \draw (Top) to[out=180,in=90,looseness=0.8] ++(-15pt,-15pt) to (End);
 
-      \node [on grid, above right=20pt and 20pt of
+      \node [on grid, above right=25pt and 20pt of
       Bottom,font=\fontsize{15}{24}\selectfont] (M1)
       {\(\Rightarrow\)};
       \node [above=0pt of M1] {\(\gamma_f\)};
 
-      \node [on grid, below right=20pt and 20pt of M1](Base5) {\(f\)};
+      \node [on grid, below right=25pt and 20pt of M1](Base5) {\(f\)};
       \node [on grid, right=30pt of Base5] (Base6) {\(\rinv f\)};
-      \node [on grid, above right=40pt and 15pt of Base5,draw] (Top3)
-      {\(f_R\)}; \draw (Base5) to ++(0,20pt)[out=90,in=180] to
-      (Top3); \draw (Base6) to ++(0cm,20pt)[out=90,in=0] to (Top3);
+      \node [on grid, above right=50pt and 15pt of Base5,draw] (Top3) {\(f_R\)};
+      \draw (Base5) to ++(0,35pt) to[out=90,in=180,looseness=0.8] (Top3);
+      \draw (Base6) to ++(0cm,35pt) [out=90,in=0,looseness=0.8] to (Top3);
     \end{tikzpicture}
   \end{center}
 
