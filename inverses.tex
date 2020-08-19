@@ -5,7 +5,7 @@
 
 \usepackage{verbatim} \usepackage{geometry} \usepackage{amsmath}
 \usepackage{amssymb} \usepackage{amsfonts} \usepackage{mathtools}
-\usepackage{amsthm} \usepackage{hyperref} \usepackage{cleveref}
+\usepackage{amsthm} \usepackage{hyperref} \usepackage{cleveref}[capitalise]
 \usepackage{tikz} \usepackage{listings} \usepackage{color}
 \usepackage[colorinlistoftodos,obeyDraft]{todonotes}
 \renewcommand{\comment}[1]{\todo[color=green!40]{#1}}
@@ -51,15 +51,15 @@ uniquename=init ]{biblatex}
   invertibility is, as extra coherence conditions can become necessary
   for invertible structures to have desirable properties.
 
-  We define some properties we expect any reasonable definition of a
-  weak \(\omega\)-category to possess. With these properties we define
-  3 notions of invertibility inspired by type theory. These are
+  We define some properties we expect to hold in any reasonable definition of a
+  weak \(\omega\)-category. With these properties we define
+  three= notions of invertibility inspired by homotopy type theory. These are
   \emph{quasi-invertibility}, where a two sided inverse is required,
   \emph{bi-invertibility}, where a separate left and right inverse is
   given, and \emph{half-adjoint inverse}, which is a quasi-inverse
   with an extra coherence condition. These definitions take the form
   of coinductive data structures. Using coinductive proofs we are able
-  to show that these 3 notions are all equivalent in that given any
+  to show that these three notions are all equivalent in that given any
   one of these invertibility structures, the others can be obtained.
   The methods used to do this are generic and it is expected that the
   results should be applicable to any reasonable model of higher
@@ -83,7 +83,7 @@ intention that given objects \(A\), \(B\) and \(C\) that \(A \otimes
 (B \otimes C)\) and \((A \otimes B) \otimes C\) represent the same
 object. However it is often the case that requiring equality between
 these objects (as in a strict monoidal category) is too restrictive
-and so the usual definition states that there is a natural isomorphism
+and so the more general definition states that there is a natural isomorphism
 between them.
 
 This is our first example of invertibility. An isomorphism between
@@ -104,7 +104,7 @@ higher morphism \(\alpha : g \circ f \to \id_A\) and an inverse
 However, this generates an unwieldy set of data that is difficult to
 describe.
 
-A natural way we can talk about data structures like this is through
+A natural way we can talk about infinite data structures like this is through
 coinduction. The definition of equivalence above can be written nicely
 by saying that \(f : A \to B\) is an equivalence if there exists a \(g
 : B \to A\) and equivalences \(f \circ g \to \id_B\) and \(g \circ f
@@ -144,11 +144,52 @@ propositional equality.
 Although it seems that these three are not applicable to higher
 categories due to the use of equality in their definitions, they can
 nonetheless be modified into coinductive definitions suitable for such
-a category. This paper will present those definitions and show that
-they are all equivalent. Further we present an analogue to
-contractibility which is suitable for higher categories and prove a
-partial contractibility result on bi-invertible structures as well as
-suggest how this result could be extended.
+a category.
+
+\subsection{Contributions and further work}\label{sec:conclusion}
+
+This paper explores the equivalence of various types of invertible
+cells, using coinductive proof techniques. The aim is that these
+techniques make managing the data of a cell being invertible easier
+and the proofs simpler.
+
+Given a setting of higher category theory which we believe is
+sufficiently general, we have managed to prove many properties of
+bi-invertible structures, which we believe have not been studied in
+great depth before. We have shown that, using coinductive techniques,
+one can work with these structures using only 2-dimensional reasoning.
+Further we have shown that these structures work nicely with inverses
+and composition as expected.
+
+These results have been used to show that the 3 definitions of
+invertibility given in the paper all imply each other, in that given
+one of these structures we can construct the others. This mirrors
+similar proofs in lower dimensional category theory that were already
+known well.
+
+Going further, we would like to be able to prove some of the
+contractibility results that have been conjectured. It is possible
+that this either requires a lot more structure than we have postulated
+that any weak higher category should have. Nevertheless, we believe
+that contractibility results for bi-invertible structures could have
+large implications on ways in which higher categories can be defined
+and worked with. It would also have implications on the study of
+\(\infty\)-groupoids, where every morphism is invertible.
+
+Lastly, this paper also contributes a large amount of Agda
+formalisation for all the structures mentioned. With a little work,
+much of the code could be reused for proving similar facts about
+\(\omega\)-categories. The power of this formalisation technique would
+be largely increased if the condition of ``respecting the graphical
+calculus'' could be removed, which is hard to express in Agda. We believe that
+just as the correctness of string diagrams for bi-categories follows
+from the existence of associators, unitors and some coherence
+conditions, there should be a similar set of conditions on
+\(\omega\)-category which at least allows up to 2-dimensional
+graphical reasoning. The ability to automate a translation from the
+graphical calculus to a proof system such as Agda would allow very
+complex proofs, including all the proofs in this paper, to be
+formalised with ease.
 
 \subsection{Related Work}\label{sec:related}
 
@@ -204,52 +245,9 @@ The code is publicly available~\cite{rice_agda} and has been tested
 with Agda version 2.6.1 and standard library version
 1.3.
 
-\subsection{Contributions and further work}\label{sec:conclusion}
-
-This paper explores the equivalence of various types of invertible
-cells, using coinductive proof techniques. The aim is that these
-techniques make managing the data of a cell being invertible easier
-and the proofs simpler.
-
-Given a setting of higher category theory which we believe is
-sufficiently general, we have managed to prove many properties of
-bi-invertible structures, which we believe have not been studied in
-great depth before. We have shown that, using coinductive techniques,
-one can work with these structures using only 2-dimensional reasoning.
-Further we have shown that these structures work nicely with inverses
-and composition as expected.
-
-These results have been used to show that the 3 definitions of
-invertibility given in the paper all imply each other, in that given
-one of these structures we can construct the others. This mirrors
-similar proofs in lower dimensional category theory that were already
-known well.
-
-Going further, we would like to be able to prove some of the
-contractibility results that have been conjectured. It is possible
-that this either requires a lot more structure than we have postulated
-that any weak higher category should have. Nevertheless, we believe
-that contractibility results for bi-invertible structures could have
-large implications on ways in which higher categories can be defined
-and worked with. It would also have implications on the study of
-\(\infty\)-groupoids, where every morphism is invertible.
-
-Lastly, this paper also contributes a large amount of Agda
-formalisation for all the structures mentioned. With a little work,
-much of the code could be reused for proving similar facts about
-\(\omega\)-categories. The power of this formalisation technique would
-be largely increased if the condition of ``respecting the graphical
-calculus'' could be removed, which is slightly vague. We believe that
-just as the correctness of string diagrams for bi-categories follows
-from the existence of associators, unitors and some coherence
-conditions, there should be a similar set of conditions on
-\(\omega\)-category which at least allows up to 2-dimensional
-graphical reasoning. The ability to automate a translation from the
-graphical calculus to a proof system such as Agda would allow very
-complex proofs, including all the proofs in this paper, to be
-formalised with ease.
-
 \subsection{Background}\label{sec:background}
+
+This background section will give a quick introduction to coinduction and some of the ideas behind \(\omega\)-categories required for the paper as well as introducing the first notion on invertibility.
 
 \subsubsection{Coinduction}\label{sec:coinduction}
 
@@ -264,14 +262,13 @@ concept~\cite{10.1007/3-540-58085-9_72}~\cite{gimenez1995codifying}.
 Below, a summary of coinduction is given, all of which is standard.
 
 Categorically, coinduction forms the categorical dual of induction.
-Whereas inductive data structures can be thought of as initial
-algebras, coinductive data structures may be thought of as terminal
+Whereas inductive data structures can be represented as initial
+algebras, coinductive data structures may be represented as terminal
 coalgebras~\cite{jacobs1997tutorial}. To see the differences clearly
 between these two constructions and how they relate, it will be
 helpful to go through an example. Since a lot of the language used
 throughout this paper is type-theoretic, induction and coinduction
-will be explained in the same way. This has the added benefit of being
-very precise.
+will be explained in the same way.
 
 When a type is introduced in type theory, there are four parts of its
 definition: type formation, term formation, a recursion principle, and
@@ -285,7 +282,7 @@ lists.
   \(\mathsf{nil} : \mathsf{List}(A)\), which is a constructor with no
   arguments and \(\mathsf{cons} : A \to \mathsf{List}(A) \to
   \mathsf{List}(A)\), which takes two.
-\item Recursion lets us form functions out of an inductive type. For
+\item Recursion lets us form functions from an inductive type. For
   lists this says that to form a function \(f : \mathsf{List}(A) \to
   B\), it suffices to define \(f(\mathsf{nil}) : B\) and define
   \(f(\mathsf{cons}(a)(xs))\) given the value of \(f(xs)\).
@@ -322,12 +319,11 @@ which are infinite lists.
   : \mathsf{Stream}(A) \to A\) and \(\mathsf{tail} :
   \mathsf{Stream}(A) \to \mathsf{Stream}(A)\).
 \item Instead of recursion, we have corecursion, which specifies how
-  to build functions \(f : B \to Stream(A)\). Whereas in recursion, we
+  to build functions \(f : B \to \mathsf{Stream}(A)\). Whereas in recursion, we
   specified the behaviour of the function on each constructor, in
   corecursion we specify how to deconstruct the value returned.
   Therefore it suffices to provide \(\mathsf{head}(f(b)) : A\) and to
-  provide \(\mathsf{tail}(f(b)) : \mathsf{Stream}(A)\), where we can
-  use the function \(f\) when defining \(\mathsf{tail}(f(b))\).
+  provide \(\mathsf{tail}(f(b)) : \mathsf{Stream}(A)\), where \(\mathsf{tail}(f(b))\) can be defined by either by providing a stream or by providing a \(c : B\) (which may or may not equal \(b\)) such that \(\mathsf{tail}(f(b)) = f(c)\).
 \item Coinduction does not work quite the same as induction, as
   flipping the arrow no longer works due to the dependency in the
   type. Instead, if we are trying to prove a predicate \(P :
@@ -340,7 +336,7 @@ which are infinite lists.
 As an example of coinduction, suppose we wanted to prove every element
 of a stream was even. First we construct the predicate \(P :
 \mathsf{Stream}(\mathbb{N}) \to \mathcal{U}\) as having deconstructors
-\(\mathsf{headProof}(xs) = \mathsf{is{-}even}(\mathsf{head}(xs))\) and
+\(\mathsf{headProof}(xs) = \mathsf{is{\text -}even}(\mathsf{head}(xs))\) and
 \(\mathsf{tailProof}(xs) = P(\mathsf{tail}(xs))\). This could then be
 proved by corecursion.
 
@@ -348,13 +344,12 @@ proved by corecursion.
 
 In this paper we want to talk about different structures on
 \(\omega\)-categories, however there are many different definitions of
-\(\omega\)-categories, a lot of which are very in depth and
-complicated~\cite{leinster2001survey}. Therefore, similar in style to a
+\(\omega\)-categories~\cite{leinster2001survey}. Therefore, similar in style to a
 paper by \textcite{Cheng2007}, we give a set of conditions that we
 expect to hold in any reasonable definition of a weak infinity
-category. We then prove results only using these conditions, and
-reason that given a precise definition of an \(\omega\)-category, if
-one could show that these conditions hold, then our results should
+category. Results are then proved using only these conditions, and
+we reason that given a precise definition of an \(\omega\)-category, if
+one could show that these conditions hold, then the results should
 follow for free.
 
 \begin{definition}
@@ -400,14 +395,12 @@ follow for free.
       \to (g \comp_n j)\)
     \end{itemize}
   \end{itemize}
-  Composition is defined such that the subscript represents the
-  codimension of the composition (i.e. the dimension of the boundary they share).
 \end{definition}
-\comment{should regular composition be \(\comp_1\)} Once we have a
-globular set with identities and composition, we have enough to define
-a notion of equivalence. The most basic notion of invertibility will
-be given here, as it will be needed to state the remainder of
-properties that we expect an higher category to obey.
+
+Once we have a globular set with identities and composition, we have
+enough to define a notion of equivalence. The most basic notion of
+invertibility will be given here, as it will be needed to state the
+remainder of properties that we expect an higher category to obey.
 
 \begin{definition}
   Given a globular set \(G\) with identities and composition, with an
@@ -461,7 +454,25 @@ represent. These diagrams still represent well formed morphisms in an
 globular set with identities and composition (at least in the presence
 of unitors and associators, which we introduce below). In a bicategory
 there exists the theorem that given a planar isotopy of string
-diagrams, the source and target morphisms are equal\todo{add example}.
+diagrams, the source and target morphisms are equal. In this paper, string diagrams are written bottom to top and right to left, like in \cref{fig:example-string}.
+
+\begin{figure}
+  \centering
+  \begin{tikzpicture}
+    \node (Base1) {};
+    \node [on grid, draw, above=20pt of Base1] (A) {\(\alpha\)};
+    \node [on grid, above=40pt of A] (Top1) {};
+    \node [on grid, right=30pt of Base1](Base2) {};
+    \node [on grid, draw, above=40pt of Base2] (B) {\(\beta\)};
+    \node [on grid, above=20pt of B] (Top2) {};
+    \draw (Base1) to (A);
+    \draw (A) to (Top1);
+    \draw (Base2) to (B);
+    \draw (B) to (Top2);
+  \end{tikzpicture}
+  \caption{\((\alpha \comp_1 \id) \comp_0 (\id \comp_1 \beta)\)}
+  \label{fig:example-string}
+\end{figure}
 
 \begin{definition}\label{def:higher-cat}
   Say that a globular set \emph{respects the graphical calculus} if
@@ -482,9 +493,9 @@ diagrams, the source and target morphisms are equal\todo{add example}.
     defined, we have an associator \(a_{f,g,h} : (f \comp_0 g) \comp_0
     h \to f \comp_0 (g \comp_0 h)\).
   \item For compatible morphisms \(f,g,h,j\), we have an interchanger
-    \(i_{f,g,h,j}(f \comp_n g) \comp_0 (h \comp_n j) \to (f \comp_0 h)
+    \(i_{f,g,h,j} : (f \comp_n g) \comp_0 (h \comp_n j) \to (f \comp_0 h)
     \comp_n (g \comp_0 j)\).
-  \item For suitable \(f,g\) and \(n > 1\), there is a cell \(\id_f
+  \item For suitable \(f,g\) and \(n\), there is a cell \(\id_f
     \comp_{n+1} \id_g \to \id_{f \comp_n g}\).
   \end{itemize}
   All these further morphisms must be equipped with a quasi-invertible
@@ -497,11 +508,7 @@ diagrams, the source and target morphisms are equal\todo{add example}.
   Instead, this is just a list of properties that are expected to hold
   in any realistic definition of a higher category. The definition is
   made to be as general as possible so that the results can be as
-  applicable as possible.
-\end{remark}
-
-\begin{remark}
-  It is worth stressing that while this definition seems to imply that
+  applicable as possible. Further, while this definition seems to imply that
   we require our definition of \(\omega\)-category to be enriched over
   \(\omega\)-categories, this is not the case. If \(G\) is a globular
   set then \(G_{x,y}\) will also be a globular set with no extra
@@ -525,7 +532,7 @@ use of these higher pre-categories and will also be invaluable later.
 \end{proof}
 
 \begin{lemma}\label{inverse-invert}
-  Suppose \(f\) is quasi-invertible structure. This induces a
+  Suppose \(f\) has a quasi-invertible structure. This induces a
   quasi-invertible structure on \(\inv f\).
 \end{lemma}
 
@@ -537,8 +544,8 @@ use of these higher pre-categories and will also be invaluable later.
 
 \section{Types of Invertibility}\label{sec:invertibility}
 
-In this section we introduce 2 more types of invertibility. Some
-theorems are proved that help us to work with them and finally all 3
+In this section we introduce two more types of invertibility. Some
+lemmas are proved that help us to work with them and finally all three
 types of invertibility are shown to imply each other. Throughout this
 section it will be assumed that we are working in a higher
 pre-category \(G\).
@@ -570,7 +577,7 @@ of the idea in type theory.
 \begin{definition}
   Given a globular set \(G\) with identities and composition, with an
   \(n > 0\) cell \(f : x \to y\), a \emph{bi-invertible} structure on
-  \(f\) is a tuple \((\rinv f, \linv f, f_R, f_L, f_R{}BI, f_L{}BI)\)
+  \(f\) is a tuple \((\rinv f, \linv f, f_R, f_L, f_R^{BI}, f_L^{BI})\)
   where:
   \begin{itemize}
   \item \(\rinv f\) is an \(n\)-cell \(y \to x\);
@@ -595,7 +602,7 @@ coinduction.
   \(\mathsf{invToBiInv} : \Pi_{f : x \to y} (\mathsf{Invertible}(f)
   \to \mathsf{BiInvertible}(f))\). Given \(I = (\inv
   f,f_R^i,f_L^i,f_R^{QI}, f_L^{QI}) : \mathsf{Invertible}(f)\) we can
-  construct \(\mathsf{invToBiInv}(f)(I)\) by:
+  construct \(\mathsf{invToBiInv}(f)(I)\):
   \begin{itemize}
   \item \(\rinv f = \inv f\);
   \item \(\linv f = \inv f\);
@@ -614,9 +621,9 @@ coinduction.
 paper is proved.
 
 \begin{theorem}\label{bi-inv-composition}
-  For any \(n \in \mathbb{N}\) and cells \(f,g\) where \(f \comp_n g\)
+  For any \(n \in \mathbb{N}\) and cells \(f,g\) where \(g \comp_n f\)
   is well-defined, given a bi-invertible structure on \(f\) and \(g\),
-  we can generate a bi-invertible structure on \(f \comp_n g\).
+  we can generate a bi-invertible structure on \(g \comp_n f\).
 \end{theorem}
 \begin{proof}
   This will be proved by corecursion on the bi-invertible structure
@@ -625,7 +632,7 @@ paper is proved.
   Suppose \(n = 0\). Let \((\rinv f, \linv f, f_R, f_L, f_R^{BI},
     f_L^{BI})\) and \((\rinv g, \linv g, g_R, g_L, g_R^{BI},
     g_L^{BI})\) be bi-invertible structures for \(f\) and \(g\)
-    respectively. We define a pseudo-bi-invertible structure on \(g
+    respectively. We define a bi-invertible structure on \(g
     \comp_0 f\) where:
     \begin{itemize}
     \item \(\rinv {(g \comp_0 f)} = \rinv f \comp_0 \rinv g\)
@@ -680,8 +687,8 @@ paper is proved.
     and~\ref{inverse-invert}. All identity morphisms can be equipped
     with a bi-invertible structure using lemmas~\ref{inv-to-bi-inv}
     and~\ref{identity}. Then by coinductive hypothesis we can generate
-    bi-invertible structures on \({(g \star_0 f)}_R\) and \({(g
-      \star_0 f)}_L\).
+    bi-invertible structures on \({(g \comp_0 f)}_R\) and \({(g
+      \comp_0 f)}_L\).
 
     Instead suppose \(n > 0\). Suppose we have \(\alpha: f \to g\) and \(\beta: h
     \to j\) where \(f \comp_{n-1} h\) and \(g \comp_{n-1} j\) are both
@@ -718,7 +725,7 @@ paper is proved.
     \(\alpha_L\), \(\alpha_R\), \(\beta_L\), and \(\beta_R\) which
     have structures \(\alpha_L^{BI}\), \(\alpha_R^{BI}\),
     \(\beta_L^{BI}\), and \(\beta_R^{BI}\). Therefore by coinductive
-    hypothesis
+    hypothesis there are bi-invertible structures on both \(\rinv {(\alpha \comp_n \beta)}\) and \(\linv {(\alpha \comp_n \beta)}\).
 \end{proof}
 
 \begin{lemma}\label{inverses}
@@ -735,7 +742,7 @@ paper is proved.
   \item \(\linv {(\rinv f)} = f\)
   \item \({(\rinv f)}_R: \rinv f \comp_0 f \to \id\) is the morphism:
     \begin{equation*}
-      \lambda_{\rinv f \comp_0 f}^{-1} \comp_0 (\rinv {f_L} \comp_1 \id_{\rinv f} \comp_1 \id_f) \comp_0 a_{\linv f, f, \rinv f \comp_0 f} \comp_0 (\id_{\linv f} \comp_1 a_{f, \rinv f, f}^{-1}) \comp_0 (\id_{\linv f} \comp_1 f_R \comp_1 \id_f) \comp_0 (\id_{\linv f} \comp_1 \lambda_f) \comp_0 f_L
+      \lambda_{\rinv f \comp_0 f}^{-1} \comp_0 (\rinv {f_L} \comp_1 \id_{\rinv f \comp_0 f}) \comp_0 a_{\linv f, f, \rinv f \comp_0 f} \comp_0 (\id_{\linv f} \comp_1 a_{f, \rinv f, f}^{-1}) \comp_0 (\id_{\linv f} \comp_1 (f_R \comp_1 \id_f)) \comp_0 (\id_{\linv f} \comp_1 \lambda_f) \comp_0 f_L
     \end{equation*}
     given by the string diagram:
     \begin{center}
@@ -762,15 +769,17 @@ paper is proved.
 
 \subsection{Half-Adjoint Inverses}\label{sec:hai}
 
-Another type of equivalence is a half-adjoint equivalence. Whereas
-being bi-invertible was a weakening of being quasi-invertible, being
-half-adjoint invertible is a strict strengthening of being an
-quasi-invertible. This is done by adding a coherence condition which
-effectively enforces \(f_L\) and \(f_R\) to work well together. It
-turns out that there are two such coherence conditions, known as snake equations or zigzag identities, we can specify,
-yet each of these implies the other and so it sufficient to provide
-one of these~\cite[Lemma 3.2]{nlab:adjoint_equivalence}. This
-is what gives rise to the name \emph{half}-adjoint invertible.
+Another type of equivalence is a half-adjoint equivalence. Whereas a
+bi-invertible structure was a weakening of a quasi-invertible
+structure, a half-adjoint invertible structure is a strict
+strengthening of a quasi-invertible structure. This is done by adding
+a coherence condition which effectively enforces \(f_L\) and \(f_R\)
+to work ``nicely'' together. It turns out that there are two such
+coherence conditions, known as snake equations or zigzag identities,
+that can be required, yet each of these implies the other and so it
+sufficient to provide one of these~\cite[Lemma
+3.2]{nlab:adjoint_equivalence}. This is what gives rise to the name
+\emph{half}-adjoint invertible.
 
 \begin{definition}
   Given a globular set \(G\) with identities and composition, with an
@@ -782,8 +791,8 @@ is what gives rise to the name \emph{half}-adjoint invertible.
   \item \(f'\) is an \(n\)-cell \(y \to x\);
   \item \(\alpha_f\) is an \((n+1)\)-cell \(f \comp_0 f' \to \id_y\);
   \item \(\beta_f\) is an \((n+1)\)-cell \(\id_x \to f' \comp_0 f\);
-  \item \(\gamma_f\) is an \((n+2)\)-cell \((\lambda_{f}^{-1} \comp_0
-    (\id_f \comp_1 \beta_f) \comp_0 a_{f,f',f} \comp_0 (\alpha_f \comp_1 \id_f) \comp_0 \rho_{f}) \to \id_{f}\);
+  \item \(\gamma_f\) is an \((n+2)\)-cell \((\rho_{f}^{-1} \comp_0
+    (\id_f \comp_1 \beta_f) \comp_0 a_{f,f',f} \comp_0 (\alpha_f \comp_1 \id_f) \comp_0 \lambda_{f}) \to \id_{f}\);
   \item \(\alpha_f^{HAI}\) is a half-adjoint invertible structure on
     \(\alpha_f\);
   \item \(\beta_f^{HAI}\) is a half-adjoint invertible structure on
@@ -816,7 +825,7 @@ is what gives rise to the name \emph{half}-adjoint invertible.
 \end{definition}
 
 \begin{theorem}
-  Any half-adjoint invertible structure can be restricted to a
+  A half-adjoint invertible structure can be restricted to a
   quasi-invertible structure on the same morphism.
 \end{theorem}
 \begin{proof}
@@ -835,7 +844,7 @@ is what gives rise to the name \emph{half}-adjoint invertible.
 \end{proof}
 
 \begin{cor}
-  Any half-adjoint invertible structure can be restricted to a
+  A half-adjoint invertible structure can be restricted to a
   bi-invertible structure on the same morphism.
 \end{cor}
 
@@ -895,7 +904,7 @@ is what gives rise to the name \emph{half}-adjoint invertible.
         \draw (FR1) to[out=180,in=90] ++(-20pt,-15pt) to (G'1);
 
         \node [on grid, below right=50pt and 100pt of G1,font=\fontsize{15}{24}\selectfont] (A2) {\(\Rightarrow\)};
-        \node [above=0pt of A2] (A2Text) {\((f_R)_R\)};
+        \node [above=0pt of A2] (A2Text) {\((f_R)_L\)};
 
         \node [on grid, right=120pt of G1] (G2) {\(f\)};
         \node [on grid, below=100pt of G2] (G'2) {\(f\)};
@@ -906,7 +915,7 @@ is what gives rise to the name \emph{half}-adjoint invertible.
         \draw (FL2) to[out=180,in=90] ++(-20pt,-15pt) to[out=-90,in=180,looseness=0.8] (FLInv2);
 
         \node [on grid, below right=50pt and 80pt of G2,font=\fontsize{15}{24}\selectfont] (A3) {\(\Rightarrow\)};
-        \node [above=0pt of A3] (A3Text) {\((f_L)_L\)};
+        \node [above=0pt of A3] (A3Text) {\((f_L)_R\)};
 
         \node [on grid, right=100pt of G2] (G3) {\(f\)};
         \node [on grid, below=100pt of G3] (G'3) {\(f\)};
@@ -945,7 +954,7 @@ transformations are in any way inverses to each other.
 
 \section{Towards Contractibility}\label{sec:contractibility}
 
-\Cref{sec:hai} (in particular \cref{cor:equiv}) achieves one of the
+\Cref{sec:hai} (in particular \Cref{cor:equiv}) achieves one of the
 goals set out in the introduction. The other property stated was that
 bi-invertibility and half-adjoint invertibility should be contractible
 types. In type theory, a type is contractible if there is an element
@@ -972,7 +981,7 @@ done. Due to the simplicity of the terminal category it is highly
 likely that this is a sufficient condition for contractibility.
 
 \begin{definition}
-  Let \(G\) be a globular set with identities and composition. \(G\)
+  Let \(G\) be a globular set. \(G\)
   is \emph{contractible} if given any parallel cells \(f\) and \(g\)
   there is a cell \(f \to g\)
 \end{definition}
@@ -1065,7 +1074,7 @@ category structure. Next is the main result of this section.
   from symmetry.
 
   Using \Cref{bi-inv-to-hai}, a half-adjoint invertible
-  structure \((\rinv f{}', f_R', \beta, \gamma, f_R^{HAI}{}', \beta^{HAI}, \gamma^{HAI})\) can be obtained.
+  structure \((\rinv f{}', f_R', \beta_{f'}, \gamma_{f'}, {f_R'}^{HAI}, \beta_{f'}^{HAI}, \gamma_{f'}^{HAI})\) can be obtained.
   Then let \(\phi_R\) be the cell given by the diagram:
   \begin{center}
     \begin{tikzpicture}
@@ -1149,9 +1158,9 @@ structures. Suppose we start with \(0\)-cells \(x\) and \(y\) and a
 morphism \(f : x \to y\) and quasi-invertibility structure \((\inv f,
 f_R, f_L, f_R^{QI}, f_L^{QI})\). Then the contractibility condition
 effectively tells us that the cell required for a half-adjoint
-invertibility structure should exist. In general this cell does not
-exist. If we consider \(\mathbf{Cat}\) as a \(\omega\)-category (by
-considering the 2-category letting each higher globular set be either
+invertibility structure should exist. However, this cell need not exist.
+If we consider \(\mathbf{Cat}\) as a \(\omega\)-category (by
+considering the 2-category and letting each higher globular set be either
 empty or terminal), then we get that a quasi-invertible structure is
 an equivalence and a half-adjoint invertible structure is an adjoint
 equivalence. It is well known that not all equivalences are adjoint
