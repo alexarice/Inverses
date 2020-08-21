@@ -1,4 +1,4 @@
-\documentclass[draft]{article}
+\documentclass{article}
 
 \title{Coinductive Invertibility in Higher Categories} \author{Alex
   Rice}
@@ -6,9 +6,11 @@
 \usepackage{verbatim} \usepackage{geometry} \usepackage{amsmath}
 \usepackage{amssymb} \usepackage{amsfonts} \usepackage{mathtools}
 \usepackage{amsthm} \usepackage{hyperref} \usepackage{cleveref}[capitalise]
-\usepackage{tikz} \usepackage{listings} \usepackage{color}
+\usepackage{tikz}
+\usepackage{listings} \usepackage{color}
 \usepackage[colorinlistoftodos,obeyDraft]{todonotes}
 \renewcommand{\comment}[1]{\todo[color=green!40]{#1}}
+
 
 
 \usetikzlibrary{positioning}
@@ -53,7 +55,7 @@ uniquename=init ]{biblatex}
 
   We define some properties we expect to hold in any reasonable definition of a
   weak \(\omega\)-category. With these properties we define
-  three= notions of invertibility inspired by homotopy type theory. These are
+  three notions of invertibility inspired by homotopy type theory. These are
   \emph{quasi-invertibility}, where a two sided inverse is required,
   \emph{bi-invertibility}, where a separate left and right inverse is
   given, and \emph{half-adjoint inverse}, which is a quasi-inverse
@@ -96,7 +98,7 @@ However if higher categories are considered, it can be seen that the
 problem has just been pushed into the higher structure of the
 category. We have specified that \(g \circ f\) and \(\id_A\) should be
 equal, yet have already stated that equality is not the best notion of
-two objects in a higher category. Ideally we want a collection of data
+two objects in a higher category being the same. Ideally we want a collection of data
 that specifies that \(f\) has an inverse \(g\), and that there is a
 higher morphism \(\alpha : g \circ f \to \id_A\) and an inverse
 \(\beta : \id_A \to g \circ f\), and that there exists a morphism
@@ -302,7 +304,7 @@ that given a type \(A\) we can get a type \(\mathsf{Vec}(A) :
 \mathbb{N} \to \mathcal{U}\). Further the term formation rules become
 \(\mathsf{nil} : \mathsf{Vec}(A)(0)\) and \(\mathsf{cons} : \Pi_{n :
   \mathbb{N}} A \to \mathsf{Vec}(A)(n) \to
-\mathsf{Vec}(A)(\mathsf{succ}(n))\). Notice that unlike with lists,
+\mathsf{Vec}(A)(n + 1)\). Notice that unlike with lists,
 which also took a parameter, vectors can not be defined by considering
 each element of the parameter separately. The recursion and induction
 rules also need to modified.
@@ -336,9 +338,10 @@ which are infinite lists.
 As an example of coinduction, suppose we wanted to prove every element
 of a stream was even. First we construct the predicate \(P :
 \mathsf{Stream}(\mathbb{N}) \to \mathcal{U}\) as having deconstructors
-\(\mathsf{headProof}(xs) = \mathsf{is{\text -}even}(\mathsf{head}(xs))\) and
-\(\mathsf{tailProof}(xs) = P(\mathsf{tail}(xs))\). This could then be
-proved by corecursion.
+\(\mathsf{headProof}(xs) = \mathsf{is{\text
+    -}even}(\mathsf{head}(xs))\) and \(\mathsf{tailProof}(xs) =
+P(\mathsf{tail}(xs))\). An element of \(P(xs)\) (a proof that every
+element of the stream is even) could then be formed by corecursion.
 
 \subsubsection{\(\omega\)-Categories}\label{sec:categories}
 
@@ -349,7 +352,7 @@ paper by \textcite{Cheng2007}, we give a set of conditions that we
 expect to hold in any reasonable definition of a weak infinity
 category. Results are then proved using only these conditions, and
 we reason that given a precise definition of an \(\omega\)-category, if
-one could show that these conditions hold, then the results should
+one could show that these conditions hold, the results should
 follow for free.
 
 \begin{definition}
@@ -405,7 +408,7 @@ remainder of properties that we expect an higher category to obey.
 \begin{definition}
   Given a globular set \(G\) with identities and composition, with an
   \(n\)-cell \(f : x \to y\), a \emph{quasi-invertible} structure on
-  \(f\) is a tuple \((\inv f, f_R, f_L, f_R{}I, f_L{}I)\) where:
+  \(f\) is a tuple \((\inv f, f_R, f_L, f_R^{QI}, f_L^{QI})\) where:
   \begin{itemize}
   \item \(\inv f\) is an \(n\)-cell \(y \to x\);
   \item \(f_R\) is an \((n+1)\)-cell \(f \comp_0 \inv f \to \id_y\);
@@ -418,7 +421,7 @@ remainder of properties that we expect an higher category to obey.
 \begin{remark}
   The previous definition is a coinductive one. Formally, we have
   defined a coinductive data type, which we could call
-  \(\mathsf{QuasiInvertible}(f)\), which references itself (in saying
+  \(\mathsf{QuasiInvertible}(f)\), which references itself (by saying
   that \(f_R\) and \(f_L\) themselves have a quasi-invertible
   structure). Note that as \(\mathsf{QuasiInvertible}\) is dependent
   on the parameter \(f\), it is in fact a coinductive type family as
@@ -433,7 +436,7 @@ remainder of properties that we expect an higher category to obey.
 \begin{remark}\label{descendants}
   Notice that in a globular set \(G\) with identities and composition,
   given two \(n\)-cells \(x\) and \(y\) with the same source and
-  target, we can define a new globular set \(G_{x,y}\) as follows:
+  target, a new globular set \(G_{x,y}\) can be defined:
   \begin{itemize}
   \item the \(0\)-cells are the \((n+1)\)-cells in \(G\) with source
     \(x\) and target \(y\);
@@ -445,11 +448,11 @@ remainder of properties that we expect an higher category to obey.
 \end{remark}
 
 Consider the standard string diagram diagrammatic calculus for
-bicategories~\cite{selinger2010survey}~\cite{heunen2019categories}. We
+bicategories~\cite{heunen2019categories,selinger2010survey}. We
 can draw diagrams containing nodes, lines, and areas where areas
 represent \(0\)-cells, a line between areas representing cells \(x\)
 and \(y\) represents a \(1\)-cell between \(x\) and \(y\), and node
-between lines represent \(2\)-cells between the cells those lines
+between lines represent \(2\)-cells between the cells which those lines
 represent. These diagrams still represent well formed morphisms in an
 globular set with identities and composition (at least in the presence
 of unitors and associators, which we introduce below). In a bicategory
@@ -459,18 +462,23 @@ diagrams, the source and target morphisms are equal. In this paper, string diagr
 \begin{figure}
   \centering
   \begin{tikzpicture}
-    \node (Base1) {};
+    \node (Base1) {\(f\)};
     \node [on grid, draw, above=20pt of Base1] (A) {\(\alpha\)};
-    \node [on grid, above=40pt of A] (Top1) {};
-    \node [on grid, right=30pt of Base1](Base2) {};
-    \node [on grid, draw, above=40pt of Base2] (B) {\(\beta\)};
-    \node [on grid, above=20pt of B] (Top2) {};
+    \node [on grid, above left=40pt and 15pt of A] (Top1) {\(g\)};
+    \node [on grid, draw, above right=20pt and 15pt of A] (B) {\(\beta\)};
     \draw (Base1) to (A);
-    \draw (A) to (Top1);
-    \draw (Base2) to (B);
-    \draw (B) to (Top2);
+    \draw (A) to[out=180,in=-90,looseness=0.9] ++(-15pt,20pt) to (Top1);
+    \draw (A) to[out=0,in=-90,looseness=0.9] (B);
+    \matrix [right=20pt] at (current bounding box.east) {
+      \node [] {\(f : x \to y\)};\\
+      \node [] {\(g : x \to y\)};\\
+      \node [] {\(h : y \to y\)};\\
+      \node [] {\(\alpha : f \to g \comp_0 h\)};\\
+      \node [] {\(\beta : h \to \id_y\)};\\
+    };
   \end{tikzpicture}
-  \caption{\((\alpha \comp_1 \id) \comp_0 (\id \comp_1 \beta)\)}
+
+  \caption{The morphism \(\alpha \comp_0 (\id \comp_1 \beta)\)}
   \label{fig:example-string}
 \end{figure}
 
@@ -479,11 +487,11 @@ diagrams, the source and target morphisms are equal. In this paper, string diagr
   for any well typed string diagram and any planar isotopy of this
   diagram, there exists a \(3\)-cell from the source of the isotopy to
   the target. Further, it is required that there is a quasi-invertible
-  structure on this morphism..
+  structure on this morphism.
 
   We define a \emph{higher pre-category} to be a globular set with
-  identities and composition such that given any globular set
-  generated as in \cref{descendants} respects the graphical calculus.
+  identities and composition such that any globular set
+  generated as in \Cref{descendants} respects the graphical calculus.
   Further we assume the existence of the following morphisms:
   \begin{itemize}
   \item For \(n>0\) and each \(n\)-cell \(f: x \to y\), there are
@@ -555,8 +563,8 @@ pre-category \(G\).
 Normally throughout mathematics, when saying a map is invertible a
 single inverse is specified, and it is shown that this cancels the
 function when composed on the left and the right. Instead we can
-consider a function either having a left inverse or a right inverse,
-meaning the inverse only cancels the function on when composed on the
+consider a function that has a left inverse and right inverse,
+an inverse only cancels the function on when composed on the
 left (or right respectively). It usually does not make sense to
 consider functions which have both a separate left and right inverse
 as in most scenarios it can be proved that these are equal and any
@@ -590,7 +598,7 @@ of the idea in type theory.
 \end{definition}
 
 Next it is shown that invertibility implies bi-invertibility. This is
-fairly trivial though it will be written out to demonstrate proof by
+fairly trivial though it will be written out in full to demonstrate proof by
 coinduction.
 
 \begin{lemma}\label{inv-to-bi-inv}
@@ -692,7 +700,7 @@ paper is proved.
 
     Instead suppose \(n > 0\). Suppose we have \(\alpha: f \to g\) and \(\beta: h
     \to j\) where \(f \comp_{n-1} h\) and \(g \comp_{n-1} j\) are both
-    well-defined. Further suppose
+    well-defined. Further suppose:
     \begin{itemize}
     \item \((\rinv \alpha, \linv \alpha, \alpha_R, \alpha_L,
       \alpha_R^{BI}, \alpha_L^{BI})\) is a bi-invertible structure on
@@ -700,7 +708,7 @@ paper is proved.
     \item \((\rinv \beta, \linv \beta, \beta_R, \beta_L, \beta_R^{BI},
       \beta_R^{BI})\) is a bi-invertible structure for \(\beta\).
     \end{itemize}
-    Then we can define the following pseudo-bi-invertible structure on
+    Then we can define the following bi-invertible structure on
     \(\alpha \comp_n \beta\):
     \begin{itemize}
     \item \(\rinv {(\alpha \comp_n \beta)} = \rinv \alpha \comp_n
@@ -721,7 +729,7 @@ paper is proved.
     Now, both \({(\alpha \comp_n \beta)}_R\) and \({(\alpha \comp_n
       \beta)}_L\) are the composition of cells with quasi-invertible
     structures given by the higher pre-category structure (and so have
-    bi-invertible structures given by \cref{inv-to-bi-inv}) and
+    bi-invertible structures given by \Cref{inv-to-bi-inv}) and
     \(\alpha_L\), \(\alpha_R\), \(\beta_L\), and \(\beta_R\) which
     have structures \(\alpha_L^{BI}\), \(\alpha_R^{BI}\),
     \(\beta_L^{BI}\), and \(\beta_R^{BI}\). Therefore by coinductive
@@ -764,7 +772,7 @@ paper is proved.
   Let \({(\rinv f)}_L\) be given \(f_R^{BI}\) as its bi-invertible
   structure. A bi-invertible structure on \({(\rinv f)}_R\) can be
   formed using \Cref{bi-inv-composition}, using that \(\rinv {f_L}\)
-  has a bi-invertible structure given by corecursion.
+  has a bi-invertible structure given by coinductive hypothesis.
 \end{proof}
 
 \subsection{Half-Adjoint Inverses}\label{sec:hai}
@@ -776,14 +784,14 @@ strengthening of a quasi-invertible structure. This is done by adding
 a coherence condition which effectively enforces \(f_L\) and \(f_R\)
 to work ``nicely'' together. It turns out that there are two such
 coherence conditions, known as snake equations or zigzag identities,
-that can be required, yet each of these implies the other and so it
+that can be added, yet each of these implies the other and so it
 sufficient to provide one of these~\cite[Lemma
 3.2]{nlab:adjoint_equivalence}. This is what gives rise to the name
 \emph{half}-adjoint invertible.
 
 \begin{definition}
   Given a globular set \(G\) with identities and composition, with an
-  \(n > 0\) cell \(f : x \to y\), a \emph{half-adjoint invertible}
+  \(n\)-cell \(f : x \to y\), a \emph{half-adjoint invertible}
   structure on \(f\) is a
   tuple \((f', \alpha_f, \beta_f, \gamma_f, \alpha_f^{HAI},
   \beta_f^{HAI}, \gamma_f^{HAI})\) where:
@@ -840,7 +848,7 @@ sufficient to provide one of these~\cite[Lemma
   By coinduction, \(\alpha_f^{HAI}\) can be restricted to a
   quasi-invertible structure on \(f_R\) and \(\beta_f^{HAI}\) can be
   restricted to quasi-invertible structure on \(\beta_f\) which
-  induces a structure on \(\inv {\beta_f}\) by \cref{inverse-invert}.
+  induces a structure on \(\inv {\beta_f}\) by \Cref{inverse-invert}.
 \end{proof}
 
 \begin{cor}
@@ -940,7 +948,7 @@ sufficient to provide one of these~\cite[Lemma
 \end{proof}
 
 \begin{cor}\label{cor:equiv}
-  Let \(G\) be a higher category. Let \(n > 0\) and \(f\) be an
+  Let \(G\) be a higher pre-category. Let \(n > 0\) and \(f\) be an
   \(n\)-cell of \(G\). Then the following are equivalent:
   \begin{itemize}
   \item \(f\) has a bi-invertible structure.
@@ -1074,7 +1082,7 @@ category structure. Next is the main result of this section.
   from symmetry.
 
   Using \Cref{bi-inv-to-hai}, a half-adjoint invertible
-  structure \((\rinv f{}', f_R', \beta_{f'}, \gamma_{f'}, {f_R'}^{HAI}, \beta_{f'}^{HAI}, \gamma_{f'}^{HAI})\) can be obtained.
+  structure \((\rinv f{}', f_R', \beta_{f'}, \gamma_{f'}, {f_R'}^{HAI}, \beta_{f'}^{HAI}, \gamma_{f'}^{HAI})\) on \(f\) can be obtained.
   Then let \(\phi_R\) be the cell given by the diagram:
   \begin{center}
     \begin{tikzpicture}
@@ -1088,7 +1096,7 @@ category structure. Next is the main result of this section.
     \end{tikzpicture}
   \end{center}
   There is a clear bi-invertible structure on this morphism as it a
-  composition of various types of bi-invertible cells. We now let
+  composition of various bi-invertible cells. We now let
   \(\psi_R\) be:
   \begin{center}
     \begin{tikzpicture}
@@ -1143,8 +1151,7 @@ proof.
 It is expected that adding the structure of the half adjoint inverse
 adds the exactly the kind of coherence we need to get the proof to
 work. In the half-adjoint case we also have that \(\phi_L\) and
-\(\phi_R\) must be equal (and so for ease this cell will be called
-\(\phi\)). However a coherence for \(\gamma\) would also be necessary.
+\(\phi_R\) must be equal. However a coherence for \(\gamma\) would also be necessary.
 This higher dimensional cell makes it hard to work with the tools we
 have, and so a proof is not attempted.
 
