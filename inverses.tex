@@ -1,12 +1,16 @@
 \documentclass{article}
-
+\pdfoutput=1
 \title{Coinductive Invertibility in Higher Categories} \author{Alex
   Rice}
 
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{csquotes}
+\usepackage{lmodern}
 \usepackage{verbatim} \usepackage{geometry} \usepackage{amsmath}
 \usepackage{amssymb} \usepackage{amsfonts} \usepackage{mathtools}
-\usepackage{amsthm} \usepackage{hyperref} \usepackage{cleveref}
-\usepackage{tikz}
+\usepackage{amsthm}
+\usepackage{tikz} \usepackage{hyperref}
 \usepackage{listings} \usepackage{color}
 \usepackage[colorinlistoftodos,obeyDraft]{todonotes}
 \renewcommand{\comment}[1]{\todo[color=green!40]{#1}}
@@ -15,14 +19,15 @@
 
 \usetikzlibrary{positioning}
 
-\usepackage[ backend=biber, style=numeric, citestyle=numeric,
-maxbibnames=99, isbn=false, doi=false, eprint=false, block=ragged,
-uniquename=init ]{biblatex}
+\usepackage[ style=numeric, citestyle=numeric,
+maxbibnames=99, url=false ]{biblatex}
 
 \addbibresource{./citations/citations.bib}
 
 \DefineBibliographyStrings{english}{%
   bibliography = {References}, }
+
+\usepackage[capitalize]{cleveref}
 
 \newtheorem{theorem}{Theorem} \newtheorem{prop}[theorem]{Proposition}
 \newtheorem{cor}[theorem]{Corollary}
@@ -203,8 +208,8 @@ equivalence of some forms of weak inverse in strict \(n\)-categories.
 The result that an equivalence implies an adjoint equivalence in
 bicategories is well known and this has been extended to tricategories
 by
-\citeauthor{gurski2012biequivalences}~\cite{gurski2012biequivalences}.
-\citeauthor*{lafont2010folk}~\cite{lafont2010folk} construct the idea
+\citeauthor{gurski2011biequivalences}~\cite{gurski2011biequivalences}.
+\citeauthor*{Lafont_2010}~\cite{Lafont_2010} construct the idea
 of a quasi-invertible structure in precisely the same way as in this
 paper, and proves some of the same results, though these are done in
 the setting of a strict \(\omega\)-category, where some of the
@@ -223,14 +228,14 @@ formalisation~\cite{rice_agda} in \Cref{sec:formalisation}.
 It may at first appear that a lot of the coinductive proofs in this
 paper work by ``magic'' in that they seem like non-well founded
 induction. To remedy this all the definitions and results from
-sections~\ref{sec:categories} and~\ref{sec:bi-invertibility} have
+~\cref{sec:categories,sec:bi-invertibility} have
 been formalised in the proof assistant
 Agda\footnote{\url{https://github.com/agda/agda}} with use of the
 standard library\footnote{\url{https://github.com/agda/agda-stdlib}}.
 The formalisation uses sized types~\cite{Abel_2010} to ensure
 productivity of the functions defined and makes heavy use of
 coinductive record types and
-copatterns~\cite{10.1145/2480359.2429075}.
+copatterns~\cite{Abel_2013}.
 
 The notion of higher pre-category introduced in this paper is very
 set-theoretic and becomes messy in the world of type theory. Because
@@ -260,7 +265,7 @@ structures are able to reference themselves in their definition. Many
 of the coinductive results in this paper are proved in a style similar
 to that given in \citetitle{kozen_silva_2017}~\cite{kozen_silva_2017},
 and are justified by \emph{guardedness} which is a well-known
-concept~\cite{10.1007/3-540-58085-9_72}~\cite{gimenez1995codifying}.
+concept~\cite{Coquand_1994,Gim_nez_1995}.
 Below, a summary of coinduction is given, all of which is standard.
 
 Categorically, coinduction forms the categorical dual of induction.
@@ -448,7 +453,7 @@ remainder of properties that we expect an higher category to obey.
 \end{remark}
 
 Consider the standard string diagram diagrammatic calculus for
-bicategories~\cite{heunen2019categories,selinger2010survey}. We
+bicategories~\cite{Heunen_2019,selinger2010survey}. We
 can draw diagrams containing nodes, lines, and areas where areas
 represent \(0\)-cells, a line between areas representing cells \(x\)
 and \(y\) represents a \(1\)-cell between \(x\) and \(y\), and node
@@ -691,10 +696,9 @@ paper is proved.
     From the bi-invertible structures on \(f\) and \(g\),
     bi-invertible structures on \(f_L\), \(g_L\), \(f_R\), and \(g_R\)
     can be obtained. The associators and unitors used have
-    bi-invertible structures by lemmas~\ref{inv-to-bi-inv}
+    bi-invertible structures by \cref{inv-to-bi-inv}
     and~\ref{inverse-invert}. All identity morphisms can be equipped
-    with a bi-invertible structure using lemmas~\ref{inv-to-bi-inv}
-    and~\ref{identity}. Then by coinductive hypothesis we can generate
+    with a bi-invertible structure using \cref{inv-to-bi-inv,identity}. Then by coinductive hypothesis we can generate
     bi-invertible structures on \({(g \comp_0 f)}_R\) and \({(g
       \comp_0 f)}_L\).
 
